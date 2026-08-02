@@ -1,0 +1,3286 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guía de estudio para los parciales y el final de EBT II (Empresas de Base Tecnológica), FIUBA: teoría, diagramas y machete.">
+  <link rel="icon" href="pwa-icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="pwa-icon.svg">
+  <meta name="theme-color" content="#0d9488">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="EBT II">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>EBT II | Empresas de Base Tecnológica</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f6;
+      --surface: #ffffff;
+      --surface-2: #eaf1ef;
+      --ink: #14201d;
+      --muted: #5d6b66;
+      --line: #dbe6e2;
+      --accent: #0d9488;
+      --accent-2: #d2efe9;
+      --accent-ink: #0f766e;
+      --warm: #9b5f1d;
+      --warm-bg: #fbe4c9;
+      --danger: #a23b3b;
+      --danger-bg: #fbe3e0;
+      --blue: #3f5bb2;
+      --blue-bg: #e7ecfb;
+      --hl-yellow: #ffe08a;
+      --hl-mint: #b7ecc6;
+      --hl-pink: #ffc1d2;
+      --hl-blue: #bcd7ff;
+      --shadow: 0 18px 55px rgba(15, 60, 50, .10);
+      --radius: 18px;
+      --sidebar: 300px;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0e1614;
+      --surface: #14201d;
+      --surface-2: #1c2a27;
+      --ink: #eef4f1;
+      --muted: #9fb1ab;
+      --line: #26332f;
+      --accent: #2dd4bf;
+      --accent-2: #123029;
+      --accent-ink: #99f6e4;
+      --warm: #f0b766;
+      --warm-bg: #3b2c19;
+      --danger: #f3a29a;
+      --danger-bg: #3e2422;
+      --blue: #9bb0f7;
+      --blue-bg: #1e2440;
+      --hl-yellow: #725d19;
+      --hl-mint: #1f5a37;
+      --hl-pink: #71384b;
+      --hl-blue: #294f78;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .30);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.68;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    code, .formula {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
+    }
+
+    .progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      height: 3px;
+      background: transparent;
+    }
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .layout { min-height: 100vh; }
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar);
+      padding: 26px 20px 24px;
+      border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(18px);
+      overflow-y: auto;
+      z-index: 30;
+    }
+
+    .brand {
+      margin: 0 8px 14px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand strong { display: block; line-height: 1.2; }
+    #menu-close { display: none; }
+
+    .search-wrap { position: relative; margin-bottom: 18px; }
+    .search-wrap svg {
+      position: absolute;
+      left: 13px;
+      top: 12px;
+      width: 18px;
+      color: var(--muted);
+    }
+    #search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px 10px 39px;
+      color: var(--ink);
+      background: var(--surface);
+      outline: none;
+    }
+    #search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-2); }
+    .search-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 60;
+      max-height: min(440px, 62vh);
+      overflow-y: auto;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .search-results[hidden] { display: none; }
+    .search-summary {
+      padding: 7px 9px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .search-result {
+      display: block;
+      width: 100%;
+      padding: 10px 9px;
+      border: 0;
+      border-radius: 9px;
+      color: var(--ink);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .search-result:hover,
+    .search-result.active { background: var(--surface-2); }
+    .search-result small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent-ink);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .search-result span {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+    .search-result mark {
+      padding: 0 2px;
+      border-radius: 3px;
+      color: var(--ink);
+      background: var(--accent-2);
+    }
+    .search-empty {
+      padding: 14px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .search-target { animation: search-pulse 2.2s ease; }
+    @keyframes search-pulse {
+      0%, 35% { background: var(--accent-2); box-shadow: 0 0 0 5px var(--accent-2); }
+      100% { background: transparent; box-shadow: none; }
+    }
+
+    .nav-title {
+      margin: 18px 10px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .toc { display: grid; gap: 3px; }
+    .toc-item {
+      position: relative;
+      border-radius: 9px;
+      transition: .18s ease;
+    }
+    .toc a {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 7px;
+      align-items: baseline;
+      padding: 7px 9px 7px 36px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      text-decoration: none;
+      transition: .18s ease;
+    }
+    .toc a span { color: color-mix(in srgb, var(--muted) 70%, transparent); font-variant-numeric: tabular-nums; }
+    .toc-item:hover, .toc-item.active { background: var(--surface-2); }
+    .toc a:hover, .toc a.active { color: var(--ink); }
+    .toc a.active span { color: var(--accent); }
+    .nav-check {
+      position: absolute;
+      top: 50%;
+      left: 9px;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      color: var(--surface);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: .18s ease;
+    }
+    .nav-check:hover { border-color: var(--accent); }
+    .toc-item.prepared .nav-check { border-color: var(--accent); background: var(--accent); }
+    .toc-item.prepared a {
+      opacity: .58;
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .side-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .icon-button:hover { border-color: var(--accent); }
+    .icon-button.active { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-2); }
+    .icon-button[hidden] { display: none; }
+    .icon-button svg { width: 17px; }
+    .icon-button.wide { grid-column: 1 / -1; }
+    .side-actions a { text-decoration: none; }
+
+    mark.user-highlight {
+      padding: .04em .05em;
+      border-radius: 4px;
+      color: inherit;
+      cursor: pointer;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    mark.user-highlight[data-color="yellow"] { background: var(--hl-yellow); }
+    mark.user-highlight[data-color="mint"] { background: var(--hl-mint); }
+    mark.user-highlight[data-color="pink"] { background: var(--hl-pink); }
+    mark.user-highlight[data-color="blue"] { background: var(--hl-blue); }
+    mark.user-highlight.selected { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .highlight-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: calc(100vw - 28px);
+      padding: 9px 10px 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow: 0 16px 48px rgba(15, 25, 22, .2);
+      backdrop-filter: blur(16px);
+      transform: translateX(-50%);
+    }
+    .highlight-toolbar[hidden] { display: none; }
+    .highlight-label {
+      margin-right: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .highlight-colors { display: flex; gap: 6px; }
+    .highlight-color {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 2px solid var(--surface);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px var(--line);
+      cursor: pointer;
+    }
+    .highlight-color[data-color="yellow"] { background: var(--hl-yellow); }
+    .highlight-color[data-color="mint"] { background: var(--hl-mint); }
+    .highlight-color[data-color="pink"] { background: var(--hl-pink); }
+    .highlight-color[data-color="blue"] { background: var(--hl-blue); }
+    .highlight-color:hover { transform: translateY(-1px) scale(1.06); }
+    .highlight-color.active { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .highlight-color:disabled { opacity: .35; cursor: default; transform: none; }
+    .highlight-tool-button {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+    }
+    .highlight-tool-button.active { color: var(--surface); background: var(--accent); }
+    .highlight-pin { width: auto; padding: 0 9px; font-size: 11px; font-weight: 800; }
+    .highlight-tool-button:hover { color: var(--ink); background: var(--surface-2); }
+    .highlight-tool-button svg { width: 17px; height: 17px; }
+    #highlight-remove { color: var(--danger); }
+
+    .main { margin-left: var(--sidebar); transition: margin-left .22s ease; }
+    .content { width: min(1080px, calc(100% - 64px)); margin: 0 auto; padding: 54px 0 110px; }
+
+    .desktop-nav-toggle { display: none; }
+
+    .notes-panel { display: none; }
+    @media (min-width: 1051px) {
+      .sidebar { transition: transform .22s ease; }
+      body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
+      body.sidebar-collapsed .main { margin-left: 0; }
+      .desktop-nav-toggle {
+        position: fixed;
+        top: 24px;
+        left: calc(var(--sidebar) - 48px);
+        z-index: 35;
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: var(--muted);
+        background: var(--surface);
+        box-shadow: none;
+        cursor: pointer;
+        transition: left .22s ease, color .15s ease, border-color .15s ease;
+      }
+      .desktop-nav-toggle:hover { color: var(--ink); border-color: var(--accent); }
+      .desktop-nav-toggle svg {
+        display: block;
+        width: 16px;
+        height: 16px;
+        transition: transform .22s ease;
+      }
+      body.sidebar-collapsed .desktop-nav-toggle {
+        left: 14px;
+        box-shadow: 0 6px 18px rgba(18, 44, 58, .1);
+      }
+      body.sidebar-collapsed .desktop-nav-toggle svg { transform: rotate(180deg); }
+      .notes-panel {
+        position: fixed;
+        right: 18px;
+        bottom: 0;
+        z-index: 40;
+        display: flex;
+        height: min(430px, calc(100vh - 36px));
+        width: clamp(280px, 24vw, 340px);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        border-radius: 16px 16px 0 0;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .notes-panel-content {
+        display: flex;
+        min-width: 0;
+        width: 100%;
+        flex-direction: column;
+      }
+      body.notes-opening .notes-panel { animation: notes-rise-in .2s ease-out both; }
+      body.notes-closing .notes-panel { animation: notes-drop-out .18s ease-in both; }
+      @keyframes notes-rise-in {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      @keyframes notes-drop-out {
+        from { transform: translateY(0); }
+        to { transform: translateY(100%); }
+      }
+      .notes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 7px 9px 7px 14px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+      .notes-heading strong { line-height: 1.25; }
+      .notes-header-actions { display: flex; gap: 6px; }
+      .notes-saved {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        color: var(--accent);
+        place-items: center;
+      }
+      .notes-saved .notes-saving-icon { display: none; }
+      .notes-saved.is-saving .notes-saved-icon { display: none; }
+      .notes-saved.is-saving .notes-saving-icon {
+        display: block;
+        animation: notes-spin .7s linear infinite;
+      }
+      @keyframes notes-spin { to { transform: rotate(360deg); } }
+      .notes-collapse,
+      .notes-import,
+      .notes-download,
+      .notes-tab {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--surface);
+        cursor: pointer;
+      }
+      .notes-collapse {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 auto;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-download {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-import {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-collapse:hover,
+      .notes-import:hover,
+      .notes-download:hover,
+      .notes-tab:hover { color: var(--ink); border-color: var(--accent); }
+      .notes-collapse svg,
+      .notes-import svg,
+      .notes-download svg,
+      .notes-tab svg { width: 17px; }
+      .notes-collapse svg,
+      .notes-import svg,
+      .notes-download svg,
+      .notes-saved svg { display: block; width: 16px; height: 16px; }
+      .notes-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 7px 10px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-2);
+      }
+      .notes-tool-button {
+        display: grid;
+        min-width: 30px;
+        height: 30px;
+        padding: 0 7px;
+        place-items: center;
+        border: 0;
+        border-radius: 7px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .notes-tool-button:hover,
+      .notes-tool-button.active { color: var(--accent-ink); background: var(--accent-2); }
+      .notes-tool-button svg { width: 16px; }
+      .notes-preview-toggle { margin-left: auto; font-weight: 650; }
+      .notes-editor { min-height: 0; flex: 1; }
+      .notes-textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        border: 0;
+        padding: 18px;
+        outline: 0;
+        color: var(--ink);
+        background: var(--surface);
+        font: inherit;
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .notes-textarea::placeholder { color: var(--muted); opacity: .72; }
+      .notes-textarea[hidden] { display: none; }
+      .notes-preview {
+        height: 100%;
+        overflow-y: auto;
+        padding: 15px 18px 22px;
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .notes-preview[hidden] { display: none; }
+      .notes-preview > :first-child { margin-top: 0; }
+      .notes-preview > :last-child { margin-bottom: 0; }
+      .notes-preview h1,
+      .notes-preview h2,
+      .notes-preview h3 { margin: 16px 0 7px; line-height: 1.25; }
+      .notes-preview h1 { font-size: 20px; }
+      .notes-preview h2 { font-size: 17px; }
+      .notes-preview h3 { font-size: 15px; }
+      .notes-preview p,
+      .notes-preview ul,
+      .notes-preview ol,
+      .notes-preview pre,
+      .notes-preview blockquote { margin: 8px 0; }
+      .notes-preview ul,
+      .notes-preview ol { padding-left: 21px; }
+      .notes-preview blockquote { padding-left: 11px; border-left: 3px solid var(--accent); color: var(--muted); }
+      .notes-preview code { padding: 1px 4px; border-radius: 4px; background: var(--surface-2); }
+      .notes-preview pre { overflow-x: auto; padding: 10px; border-radius: 8px; background: var(--surface-2); }
+      .notes-preview pre code { padding: 0; background: transparent; }
+      .notes-task { display: flex; align-items: flex-start; gap: 7px; list-style: none; }
+      .notes-task input { margin-top: 5px; }
+      .notes-tab {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 0 14px;
+        border-bottom: 0;
+        border-radius: 11px 11px 0 0;
+        color: var(--ink);
+        font-weight: 750;
+        box-shadow: var(--shadow);
+      }
+      body.notes-collapsed .notes-panel {
+        height: auto;
+        width: auto;
+        border: 0;
+        overflow: visible;
+        background: transparent;
+        box-shadow: none;
+      }
+      body.notes-collapsed .notes-panel-content { display: none; }
+      body.notes-collapsed .notes-tab { display: flex; }
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(30px, 5vw, 54px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -180px;
+      top: -220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-2), transparent 68%);
+      pointer-events: none;
+    }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .chapter {
+      padding-top: 82px;
+      scroll-margin-top: 10px;
+    }
+    .chapter-head {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 28px;
+    }
+    .chapter-number {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      color: var(--accent);
+      background: var(--surface);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -.038em;
+    }
+    h3 { margin: 34px 0 13px; font-size: 23px; line-height: 1.25; letter-spacing: -.02em; }
+    h4 { margin: 24px 0 9px; font-size: 17px; }
+    p { margin: 0 0 14px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    strong { letter-spacing: -.01em; }
+
+    .study-list { margin: 10px 0 22px; }
+    .study-list li { margin: 10px 0; padding-left: 3px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--accent-ink);
+      background: var(--accent-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .tag.warm { color: var(--warm); background: var(--warm-bg); }
+    .tag.blue { color: var(--blue); background: var(--blue-bg); }
+    .tag.red { color: var(--danger); background: var(--danger-bg); }
+
+    .callout {
+      margin: 20px 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-2);
+      color: var(--accent-ink);
+    }
+    .callout.warning { border-color: var(--warm); background: var(--warm-bg); color: var(--warm); }
+    .callout.danger { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+    .callout.blue { border-color: var(--blue); background: var(--blue-bg); color: var(--blue); }
+    .callout strong { color: inherit; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    .table-wrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--line); border-radius: 15px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); font-size: 14px; }
+    th, td { padding: 13px 15px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); background: var(--surface-2); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: 0; }
+
+    .formula { display: inline-block; padding: 7px 9px; border-radius: 8px; color: var(--accent-ink); background: var(--accent-2); }
+
+    details {
+      margin: 10px 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      overflow: clip;
+    }
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 17px 19px;
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:after { content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; }
+    details[open] summary:after { content: "x"; font-size: 15px; }
+    .details-body { padding: 0 20px 20px; color: var(--muted); }
+    .details-body strong { color: var(--ink); }
+
+    .exam-answer {
+      position: relative;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .top-mobile { display: none; }
+    .nav-backdrop { display: none; }
+    @media (max-width: 1050px) {
+      .sidebar { transform: translateX(-100%); transition: transform .22s ease; box-shadow: var(--shadow); }
+      body.nav-open .sidebar { transform: translateX(0); }
+      body.nav-open { overflow: hidden; }
+      .main { margin-left: 0; }
+      .nav-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 25;
+        background: rgba(7, 23, 31, .36);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .22s ease;
+      }
+      body.nav-open .nav-backdrop { opacity: 1; pointer-events: auto; }
+      .top-mobile {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--bg) 90%, transparent);
+        backdrop-filter: blur(16px);
+      }
+      .top-mobile button { border: 0; background: transparent; cursor: pointer; }
+      .top-mobile strong { font-size: 14px; }
+      #menu-close {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 4px 8px;
+        color: var(--muted);
+        background: var(--surface);
+        font-size: 12px;
+        line-height: 1.2;
+        cursor: pointer;
+      }
+      #menu-close:hover { color: var(--ink); border-color: var(--accent); }
+    }
+
+    @media (max-width: 720px) {
+      .content { width: min(100% - 28px, 1080px); padding-top: 20px; }
+      .hero { padding: 32px 24px; border-radius: 21px; }
+      .chapter { padding-top: 62px; }
+      .chapter-head { grid-template-columns: 44px 1fr; gap: 12px; }
+      .chapter-number { width: 42px; height: 42px; border-radius: 12px; }
+      .highlight-toolbar { bottom: 14px; flex-wrap: wrap; justify-content: center; }
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 15mm 16mm 17mm;
+    }
+
+    @media print {
+      :root {
+        --bg: #fff;
+        --surface: #fff;
+        --surface-2: #f2f5f7;
+        --ink: #101820;
+        --muted: #384650;
+        --line: #cbd4da;
+        --accent: #176b87;
+        --accent-2: #eaf4f7;
+        --accent-ink: #164f62;
+        --warm-bg: #fbf4e5;
+        --danger-bg: #f9eded;
+        --blue-bg: #edf3fa;
+      }
+      *, *:before, *:after {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      html { font-size: 9.5pt; }
+      body {
+        color: var(--ink);
+        background: #fff;
+        font-size: 9.5pt;
+        line-height: 1.43;
+      }
+      .sidebar, .desktop-nav-toggle, .top-mobile, .progress, .side-actions, .search-wrap,
+      .highlight-toolbar, .nav-backdrop, .notes-panel { display: none !important; }
+      .main { margin: 0; }
+      .content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+      .hero {
+        overflow: visible;
+        margin: 0 0 7mm;
+        padding: 0 0 5mm;
+        border: 0;
+        border-bottom: 1.5pt solid var(--accent);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      .hero:after, .hero p { display: none; }
+      h1 {
+        max-width: none;
+        font-size: 25pt;
+        line-height: 1.05;
+        letter-spacing: -.025em;
+      }
+      .chapter {
+        padding-top: 7mm;
+        break-before: auto;
+      }
+      .hero + .chapter { padding-top: 0; }
+      .chapter-head {
+        grid-template-columns: 8mm 1fr;
+        gap: 3mm;
+        align-items: center;
+        margin: 0 0 4mm;
+        break-after: avoid-page;
+      }
+      .chapter-number {
+        width: 8mm;
+        height: 8mm;
+        border: 1pt solid var(--line);
+        border-radius: 2mm;
+        font-size: 8pt;
+      }
+      h2 {
+        font-size: 16pt;
+        line-height: 1.12;
+        letter-spacing: -.02em;
+      }
+      h3 {
+        margin: 5mm 0 1.8mm;
+        font-size: 12pt;
+        line-height: 1.2;
+      }
+      h4 {
+        margin: 3.5mm 0 1.2mm;
+        font-size: 10pt;
+      }
+      h1, h2, h3, h4 { break-after: avoid-page; }
+      p { margin: 0 0 2.3mm; orphans: 3; widows: 3; }
+      ul, ol { margin: 1.5mm 0 3mm; padding-left: 5mm; }
+      li { margin: 1.1mm 0; orphans: 2; widows: 2; }
+      .study-list { margin: 1.5mm 0 3.5mm; }
+      .study-list li { margin: 1.4mm 0; padding-left: 0; }
+      a { color: inherit; text-decoration: none; }
+      .tag {
+        padding: .6mm 1.5mm;
+        font-size: 7pt;
+        letter-spacing: .04em;
+      }
+      .callout {
+        margin: 3mm 0;
+        padding: 2.5mm 3mm;
+        border-left-width: 2.5pt;
+        border-radius: 0 2mm 2mm 0;
+        break-inside: avoid-page;
+      }
+      .table-wrap {
+        overflow: visible;
+        margin: 3mm 0 4mm;
+        border: 1pt solid var(--line);
+        border-radius: 0;
+      }
+      table { font-size: 8pt; line-height: 1.3; }
+      thead { display: table-header-group; }
+      tfoot { display: table-footer-group; }
+      tr { break-inside: avoid-page; }
+      th, td { padding: 1.7mm 2mm; }
+      th { font-size: 7pt; letter-spacing: .045em; }
+      .formula { padding: 1mm 1.4mm; border-radius: 1mm; }
+      details {
+        margin: 2mm 0;
+        border-radius: 2mm;
+        overflow: visible;
+      }
+      summary {
+        padding: 2.5mm 3mm 1.5mm;
+        break-after: avoid-page;
+      }
+      summary:after { display: none; }
+      .details-body { padding: 0 3mm 2.5mm; }
+      details > .details-body,
+      details:not([open]) > .details-body { display: block !important; }
+      .exam-answer {
+        padding: 2.5mm 3mm;
+        border-radius: 2mm;
+        break-inside: avoid-page;
+      }
+      mark.user-highlight {
+        color: inherit;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+  <style>
+    pre.code { margin: 16px 0; padding: 15px 18px; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); font-size: 13.5px; line-height: 1.55; -webkit-overflow-scrolling: touch; }
+    pre.code code { padding: 0; background: transparent; font-size: inherit; }
+    .diagram { margin: 22px 0; padding: 16px 14px 12px; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; }
+    .diagram .mermaid { display: flex; justify-content: center; min-width: 0; text-align: center; }
+    .diagram img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+    .diagram figcaption { margin-top: 10px; color: #4a5a55; font-size: 12.5px; line-height: 1.45; text-align: center; }
+    html[data-theme="dark"] .diagram { background: #eef4f1; border-color: #b9c8c3; }
+    html[data-theme="dark"] .diagram figcaption { color: #4a5a55; }
+    .exam-answer { margin: 18px 0; padding: 15px 18px; border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0; background: var(--accent-2); color: var(--accent-ink); }
+    .exam-answer strong { color: inherit; }
+    .cmp { display: grid; gap: 12px; margin: 18px 0; }
+    @media (min-width: 720px) { .cmp.two { grid-template-columns: 1fr 1fr; } }
+    .formula { margin: 14px 0; padding: 12px 16px; border: 1px dashed var(--accent); border-radius: 12px; background: var(--surface-2); font-size: 15px; text-align: center; }
+    .example-box { margin: 18px 0; padding: 14px 18px; border-left: 4px solid var(--warm); border-radius: 0 12px 12px 0; background: var(--warm-bg); color: var(--ink); }
+    .example-box strong { color: inherit; }
+    .cmp.two > figure.diagram { margin: 0; }
+    /* Circulos concentricos TAM/SAM/SOM */
+    .circles { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; display: grid; gap: 16px; align-items: center; }
+    html[data-theme="dark"] .circles { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    @media (min-width: 720px) { .circles { grid-template-columns: 260px 1fr; } }
+    .circles svg { width: 100%; height: auto; max-width: 260px; margin: 0 auto; display: block; }
+    .circles ul { margin: 0; }
+    /* Grafico de linea (oferta/demanda) */
+    .chart { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; }
+    html[data-theme="dark"] .chart { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    .chart svg { width: 100%; height: auto; max-width: 460px; display: block; margin: 0 auto; }
+    /* Piramide inline con hover */
+    .pyramid-block { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; display: grid; gap: 18px; align-items: center; overflow: visible; }
+    html[data-theme="dark"] .pyramid-block { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    @media (min-width: 720px) { .pyramid-block { grid-template-columns: 1fr 1fr; } }
+    .pyr { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .pyr-band { position: relative; padding: 12px 10px; text-align: center; color: #fff; font-weight: 600; border-radius: 6px; cursor: help; transition: transform .15s; }
+    .pyr-band:hover { transform: scale(1.03); }
+    .pyr-tip { display: none; position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); width: 160px; background: #fff; color: #14201d; border: 1px solid #cbd5d1; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 400; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,.15); z-index: 6; }
+    .pyr-band:hover .pyr-tip { display: block; }
+    .pyr-desc p { margin: .35em 0; }
+    @media (max-width: 719px) { .pyr-tip { display: none !important; } }
+    /* Taza de cafe (estructura de costos) */
+    .cup-block { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; overflow: visible; }
+    html[data-theme="dark"] .cup-block { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    .cup-top { text-align: center; font-weight: 700; color: var(--accent-ink); border: 2px dashed #7fbdb3; border-radius: 10px; padding: 8px; margin: 0 auto 8px; max-width: 340px; }
+    .cup { max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .cup-lid { width: 100%; height: 14px; background: #dfece9; border: 1px solid #b9c8c3; border-radius: 8px 8px 3px 3px; }
+    .cup-band { position: relative; text-align: center; color: #fff; font-weight: 600; font-size: 13px; padding: 12px 8px; cursor: help; border-radius: 3px; }
+    .cup-band:hover { filter: brightness(1.08); }
+    .cup-tip { display: none; position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); width: 190px; background: #fff; color: #14201d; border: 1px solid #cbd5d1; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 400; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,.15); z-index: 6; }
+    .cup-band:hover .cup-tip { display: block; }
+    @media (max-width: 719px) { .cup-tip { left: auto; right: 4px; top: 108%; transform: none; width: auto; max-width: 78vw; } }
+    /* Tarjetas TRL */
+    .trl-row { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 12px; -webkit-overflow-scrolling: touch; }
+    .trl-card { flex: 0 0 150px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface-2); }
+    .trl-card .trl-n { display: inline-block; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; font-size: 13px; }
+    .trl-card p { margin: 0; font-size: 12.5px; line-height: 1.4; }
+    /* Matriz ERIC 2x2 */
+    .eric { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+    .eric .q { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface-2); }
+    .eric .q h4 { margin: 0 0 .3em; }
+    body.hide-code pre.code { display: none; }
+    body.hide-code pre.code + p { margin-top: 0; }
+  </style>
+</head>
+<body class="notes-open">
+  <div class="progress" aria-hidden="true"><span id="reading-progress"></span></div>
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-row">
+        <strong>EBT II</strong>
+        <button id="menu-close" type="button" aria-label="Cerrar navegación">Cerrar</button>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input id="search" type="search" placeholder="Buscar concepto..." autocomplete="off" aria-label="Buscar en el apunte" aria-controls="search-results" aria-expanded="false">
+      <div class="search-results" id="search-results" role="listbox" aria-label="Resultados de búsqueda" hidden></div>
+    </div>
+
+    <div class="nav-title">Panorama</div>
+    <nav class="toc" aria-label="Panorama">
+      <a href="#panorama"><span>00</span>Cómo se rinde EBT II</a>
+    </nav>
+    <div class="nav-title">Primer parcial</div>
+    <nav class="toc" aria-label="Primer parcial">
+      <a href="#comercio"><span>01</span>Comercio internacional</a>
+      <a href="#empresa"><span>02</span>Empresa</a>
+      <a href="#impuestos"><span>03</span>Impuestos y tributos</a>
+      <a href="#contratos"><span>04</span>Contratos</a>
+      <a href="#derecho"><span>05</span>Derecho comercial y PI</a>
+      <a href="#datos"><span>06</span>Datos personales</a>
+      <a href="#rse"><span>07</span>RSE y sostenibilidad</a>
+    </nav>
+    <div class="nav-title">Segundo parcial</div>
+    <nav class="toc" aria-label="Segundo parcial">
+      <a href="#economia"><span>08</span>Economía</a>
+      <a href="#evaluacion"><span>09</span>Evaluación de negocio</a>
+      <a href="#planificacion"><span>10</span>Planificación y administración</a>
+      <a href="#startups"><span>11</span>Start-ups e innovación</a>
+    </nav>
+
+    <div class="side-actions">
+      <button class="icon-button" id="theme-toggle" type="button" title="Cambiar tema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+        Tema
+      </button>
+      <button class="icon-button" id="print-button" type="button" title="Imprimir o guardar como PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+        PDF
+      </button>
+      <button class="icon-button wide" id="highlight-help" type="button" title="Seleccioná texto para resaltarlo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 11-6 6v4h4l6-6"></path><path d="m14 4 6 6-7 7-6-6z"></path><path d="M3 21h18"></path></svg>
+        Resaltador
+      </button>
+      <button class="icon-button wide" id="install-app" type="button" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+        Instalar app
+      </button>
+      <button class="icon-button wide" id="code-toggle" type="button" aria-pressed="false" title="Mostrar u ocultar los bloques de fórmulas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 6-6 6 6 6"></path><path d="m16 6 6 6-6 6"></path></svg>
+        <span id="code-toggle-label">Fórmulas</span>
+      </button>
+      <a class="icon-button wide" href="repaso-final.html" title="Repaso compacto: el mínimo para el final">Repaso final</a>
+    </div>
+  </aside>
+
+  <button class="desktop-nav-toggle" id="desktop-nav-toggle" type="button" aria-label="Contraer navegación" aria-expanded="true" title="Contraer navegación">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+  </button>
+
+  <aside class="notes-panel" id="notes-panel" aria-label="Mis notas de estudio">
+    <button class="notes-tab" id="notes-expand" type="button" aria-label="Abrir mis notas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4z"></path><path d="M8 9h8M8 13h8M8 17h5"></path></svg>
+      Notas
+    </button>
+    <div class="notes-panel-content">
+      <div class="notes-header" id="notes-header" title="Contraer notas">
+        <div class="notes-heading">
+          <strong>Mis notas</strong>
+        </div>
+        <div class="notes-header-actions">
+          <span class="notes-saved" aria-label="Guardado automáticamente" title="Guardado automáticamente">
+            <svg class="notes-saved-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+            <svg class="notes-saving-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path></svg>
+          </span>
+          <button class="notes-import" id="notes-import" type="button" aria-label="Importar notas desde Markdown" title="Importar Markdown">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21V9"></path><path d="m7 14 5-5 5 5"></path><path d="M5 3h14"></path></svg>
+          </button>
+          <input id="notes-file" type="file" accept=".md,text/markdown,text/plain" hidden>
+          <button class="notes-download" id="notes-download" type="button" aria-label="Descargar notas en Markdown" title="Descargar Markdown">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+          </button>
+          <button class="notes-collapse" id="notes-collapse" type="button" aria-label="Contraer mis notas" title="Contraer notas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 12h10"></path></svg>
+          </button>
+        </div>
+      </div>
+      <div class="notes-toolbar" aria-label="Formato Markdown">
+        <button class="notes-tool-button" type="button" data-note-command="heading" title="Título">H</button>
+        <button class="notes-tool-button" type="button" data-note-command="bold" title="Negrita">B</button>
+        <button class="notes-tool-button" type="button" data-note-command="italic" title="Cursiva"><em>I</em></button>
+        <button class="notes-tool-button" type="button" data-note-command="list" title="Lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+        </button>
+        <button class="notes-tool-button" type="button" data-note-command="task" title="Tarea">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        </button>
+        <button class="notes-tool-button" type="button" data-note-command="code" title="Código">&lt;/&gt;</button>
+        <button class="notes-tool-button notes-preview-toggle" id="notes-preview-toggle" type="button">Vista</button>
+      </div>
+      <div class="notes-editor">
+        <textarea class="notes-textarea" id="study-notes" aria-label="Notas de estudio en Markdown" placeholder="Escribí tus notas en Markdown..." spellcheck="true"></textarea>
+        <div class="notes-preview" id="notes-preview" aria-label="Vista previa de las notas" hidden></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="top-mobile">
+      <button id="menu-toggle" type="button" aria-label="Abrir navegación" aria-expanded="false">Menu</button>
+      <strong>EBT II</strong>
+      <button id="mobile-theme" type="button" aria-label="Cambiar tema">Tema</button>
+    </div>
+
+    <main class="content" id="content">
+<header class="hero">
+        <h1>EBT II · Empresas de Base Tecnológica</h1>
+        <p>Guía completa para los parciales y el final de FIUBA: teoría, tablas, diagramas y el machete de fórmulas. ¿Poco tiempo? Abrí el <a href="repaso-final.html">repaso final</a>: el mínimo indispensable para aprobar.</p>
+        <p><span class="tag">Comercio</span> <span class="tag blue">Impuestos</span> <span class="tag warm">Contratos</span> <span class="tag">Derecho / PI</span> <span class="tag red">Datos personales</span> <span class="tag blue">Economía</span> <span class="tag warm">Negocio</span> <span class="tag">Start-ups</span></p>
+      </header>
+
+      <section class="chapter" id="panorama" data-title="panorama como se rinde ebt ii empresas base tecnologica primer parcial segundo parcial temario materia derecho negocio finanzas fiuba estudiar">
+        <div class="chapter-head">
+          <div class="chapter-number">00</div>
+          <div><h2>Cómo se rinde EBT II</h2></div>
+        </div>
+        <p>EBT II mezcla <strong>derecho aplicado a la tecnología</strong>, <strong>impuestos</strong>, <strong>economía</strong> y <strong>gestión / evaluación de negocios</strong>. No se codea: se trata de <strong>definir con precisión, comparar, clasificar y justificar</strong>. El material se organiza en dos bloques, uno por parcial.</p>
+
+        <div class="cmp two">
+          <div class="callout"><strong>Primer parcial</strong> — el «lado legal y fiscal».
+            <ol>
+              <li>Comercio internacional (Incoterms, aduana, balanza de pagos)</li>
+              <li>Empresa (sociedad vs empresa, modelo y plan de negocio)</li>
+              <li>Impuestos y tributos (IVA, IIBB, BBPP, Sellos, IDCB, IIGG)</li>
+              <li>Contratos (tipos y cláusulas)</li>
+              <li>Derecho comercial y propiedad intelectual</li>
+              <li>Datos personales (ley, habeas data, consentimiento)</li>
+              <li>RSE y sostenibilidad</li>
+            </ol>
+          </div>
+          <div class="callout blue"><strong>Segundo parcial</strong> — el «lado económico y de negocio».
+            <ol>
+              <li>Economía (macro, micro, mercados)</li>
+              <li>Evaluación de negocio (Porter, Canvas, costeo, VAN, punto de equilibrio)</li>
+              <li>Planificación y administración (FODA, presupuesto, estado de resultados)</li>
+              <li>Start-ups e innovación (Lean Startup, MVP, financiamiento)</li>
+            </ol>
+          </div>
+        </div>
+
+        <p class="exam-answer"><strong>Cómo estudiar:</strong> primero fijá las <em>definiciones exactas</em> (la cátedra puntúa las palabras precisas), después las <em>clasificaciones</em> (cada impuesto: jurisdicción / directo-indirecto / trasladable / progresivo-regresivo; cada instrumento de PI: qué protege y su vigencia) y por último las <em>fórmulas</em> (balanza de pagos, punto de equilibrio, VAN, salario real). Todo eso condensado está en el <a href="repaso-final.html">repaso final</a>.</p>
+        <p><strong>Fuente:</strong> todo el contenido de esta guía proviene de los apuntes de la materia en Notion. Donde el original tenía un diagrama de las diapositivas, se reprodujo con un esquema equivalente o se dejó indicado.</p>
+      </section>
+
+<section class="chapter" id="comercio" data-title="comercio internacional exterior importacion exportacion aduana delitos aduaneros contrabando despachante freight forwarder broker trader incoterms ventaja competitiva comparativa costo oportunidad balanza de pagos cuenta corriente capital financiera saldo comercial cuotas de importacion">
+        <div class="chapter-head">
+          <div class="chapter-number">01</div>
+          <div><h2>Comercio internacional</h2></div>
+        </div>
+
+        <div class="callout"><strong>Comercio internacional:</strong> analiza el intercambio de bienes y servicios (ByS) entre países y la interacción de las distintas economías. Estudia tratados internacionales, políticas comerciales globales e implicancias económicas y políticas del intercambio.</div>
+
+        <div class="callout blue"><strong>No es lo mismo que comercio exterior:</strong> este enfoca el intercambio de ByS de <strong>un país en particular</strong> con el resto del mundo — sus actividades comerciales, políticas y prácticas de expo/impo, regulaciones aduaneras y tarifas, y tratados bi/multilaterales.</div>
+
+        <h3>Beneficios del comercio internacional</h3>
+        <ul class="study-list">
+          <li><strong>Acceso a mercados más amplios:</strong> expansión de oportunidades.</li>
+          <li><strong>Especialización y eficiencia:</strong> ventajas comparativas y economías de escala.</li>
+          <li><strong>Diversificación de ByS:</strong> más variedad para los consumidores.</li>
+          <li><strong>Inversión y desarrollo económico:</strong> inversión extranjera directa y desarrollo regional.</li>
+          <li><strong>Transferencia de tecnología y conocimiento:</strong> innovación y mejora.</li>
+          <li><strong>Reducción de costos y precios:</strong> por la competencia internacional.</li>
+          <li><strong>Estabilidad y cooperación internacional:</strong> relaciones diplomáticas e interdependencia económica.</li>
+          <li><strong>Adaptación y resiliencia:</strong> diversificación de proveedores y mercados.</li>
+        </ul>
+
+        <h3>Importación y exportación</h3>
+        <ul class="study-list">
+          <li><strong>Importación:</strong> introducción de mercadería en territorio aduanero.</li>
+          <li><strong>Exportación:</strong> extracción de mercadería del territorio aduanero.</li>
+          <li><strong>Cuotas de importación:</strong> su objetivo es <em>proteger a las industrias nacionales</em> de la competencia extranjera excesiva, regular el mercado y equilibrar la oferta y la demanda.</li>
+        </ul>
+
+        <h3>Actores</h3>
+        <h4>Aduana</h4>
+        <p>Organismo administrativo encargado de aplicar las leyes de impo/expo de ByS: control del tráfico de mercaderías, fiscalización de prohibiciones, tributación y habilitación de lugares y horarios.</p>
+        <p><strong>Delitos aduaneros</strong> (con ejemplos):</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Delito</th><th>Qué es</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Contrabando</strong></td><td>Entrar o sacar productos del país sin declarar.</td><td>Meter celulares desde Paraguay sin pasar por Aduana.</td></tr>
+              <tr><td><strong>Fraude aduanero</strong></td><td>Falsificar papeles o mentir en la declaración para pagar menos.</td><td>Declarar una notebook en USD 200 cuando vale USD 1.000.</td></tr>
+              <tr><td><strong>Evasión de impuestos y aranceles</strong></td><td>No pagar lo que corresponde al importar/exportar.</td><td>Traer ropa del exterior y no abonar el impuesto de importación.</td></tr>
+              <tr><td><strong>Impo/expo ilegal</strong></td><td>Comerciar bienes prohibidos por ley.</td><td>Exportar armas sin autorización.</td></tr>
+              <tr><td><strong>Documentos falsos</strong></td><td>Usar papeles adulterados para engañar a la Aduana.</td><td>Presentar una factura falsa de origen de mercadería.</td></tr>
+              <tr><td><strong>Violación de regulaciones</strong></td><td>Ingresar/sacar productos regulados sin cumplir requisitos.</td><td>Importar químicos tóxicos sin permisos ambientales.</td></tr>
+              <tr><td><strong>Manipuleo de contenedores</strong></td><td>Alterar cargas para esconder productos ilegales.</td><td>Esconder droga dentro de un contenedor de frutas.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Consecuencias:</strong> sanciones penales, sanciones administrativas, confiscación de bienes y daño de reputación.</p>
+
+        <h4>Despachante de aduana</h4>
+        <p>Profesional especializado en la gestión de trámites aduaneros de impo/expo. Busca facilitar y asegurar que los procesos cumplan con las leyes vigentes: gestión de documentación, cumplimiento de regulaciones, intermediación, asesoría y gestión de trámites.</p>
+
+        <h4>Freight forwarder</h4>
+        <p>Facilitador del movimiento de bienes desde el origen hasta el destino final. Coordina todos los aspectos del transporte y la logística: coordinación de modos de transporte y transportistas, documentos de envío y declaraciones aduaneras, consolidación de la carga, coordinación logística y gestión de riesgos.</p>
+
+        <h4>Broker vs Trader</h4>
+        <div class="cmp two">
+          <div class="callout"><strong>Broker</strong><ul><li>Intermediario de venta.</li><li>Cobra por comisión.</li><li>Une comprador y vendedor.</li></ul></div>
+          <div class="callout"><strong>Trader</strong><ul><li>Gestiona la compra de productos en un país y su venta en otro.</li><li>Asume más riesgo que el broker, pero las ganancias por venta son mayores.</li></ul></div>
+        </div>
+
+        <h4>Organismos reguladores</h4>
+        <figure class="diagram">
+          <img src="img/00-9141186d.png" alt="Organismos reguladores del comercio internacional" loading="lazy">
+          <figcaption>Organismos reguladores del comercio internacional.</figcaption>
+        </figure>
+
+        <h3>INCOTERMS</h3>
+        <p>Son los distintos tipos de acuerdo de venta reconocidos a nivel internacional. Los colores representan hasta dónde llega la <strong>limitación de responsabilidad</strong> del comprador y del vendedor a lo largo del transporte.</p>
+        <figure class="diagram">
+          <img src="img/01-2300ff33.png" alt="Cuadro de INCOTERMS y limitación de responsabilidad comprador/vendedor" loading="lazy">
+          <figcaption>INCOTERMS: reparto de responsabilidad, costo y riesgo entre vendedor y comprador.</figcaption>
+        </figure>
+        <p class="exam-answer"><strong>Para el final:</strong> el punto clave de los Incoterms es <em>dónde se transfiere la responsabilidad (y el costo/riesgo)</em> del vendedor al comprador en la cadena de transporte.</p>
+
+        <h3>Ventajas</h3>
+        <h4>Ventaja competitiva</h4>
+        <p>Capacidad de una <strong>empresa</strong> para superar a sus competidores y obtener un rendimiento superior en el mercado.</p>
+        <div class="cmp two">
+          <div class="callout"><strong>Liderazgo en costos</strong><ul><li>Economías de escala.</li><li>Eficiencias operativas.</li><li>Reducción de costos de producción.</li><li>Optimización de la cadena de suministro.</li></ul></div>
+          <div class="callout"><strong>Diferenciación</strong><ul><li>Características únicas del producto.</li><li>Calidad superior.</li><li>Innovación.</li><li>Servicio al cliente excepcional.</li><li>Branding efectivo.</li></ul></div>
+        </div>
+        <figure class="diagram">
+          <img src="img/02-947124f1.png" alt="Estrategias de ventaja competitiva" loading="lazy">
+          <figcaption>Estrategias de ventaja competitiva: liderazgo en costos vs diferenciación.</figcaption>
+        </figure>
+
+        <h4>Ventaja comparativa</h4>
+        <p>Capacidad de un <strong>país</strong> para producir ByS a un <strong>costo de oportunidad</strong> relativamente menor en comparación con otro país.</p>
+        <div class="callout"><strong>Costo de oportunidad:</strong> el costo de no producir el siguiente mejor bien alternativo.</div>
+        <p><strong>Implicaciones:</strong> especialización, aprovechamiento de los beneficios del comercio y eficiencia global.</p>
+
+        <h3>Balanza de pagos</h3>
+        <p>Registro contable de todas las transacciones económicas entre un país y el resto del mundo en un período de tiempo.</p>
+        <div class="formula">BP = CCo + CCap + CF + EuO</div>
+        <ul class="study-list">
+          <li><strong>Cuenta corriente:</strong> mide intercambios de bienes, servicios, rentas y transferencias. <em>CCo = Balanza comercial + Balanza de servicios + Rentas + Transferencias.</em></li>
+          <li><strong>Cuenta de capital:</strong> transferencias de capital y compra-venta de activos no financieros (terrenos, patentes). <em>CCap = Ingresos − Pagos.</em></li>
+          <li><strong>Cuenta financiera:</strong> movimientos de inversión (directa, cartera, préstamos, reservas). <em>CF = Ingresos − Pagos.</em></li>
+          <li><strong>Errores u omisiones:</strong> ajuste de cierre para que la balanza cuadre.</li>
+        </ul>
+        <p><strong>Indicadores:</strong></p>
+        <ul class="study-list">
+          <li><strong>Saldo comercial</strong> = Exportaciones − Importaciones de bienes.</li>
+          <li><strong>Saldo de bienes y servicios</strong> = Balanza comercial + Balanza de servicios.</li>
+          <li><strong>Saldo de cuenta corriente</strong> = resultado neto de bienes, servicios, rentas y transferencias.</li>
+        </ul>
+      </section>
+
+<section class="chapter" id="empresa" data-title="empresa sociedad elementos materiales humanos inmateriales intangibles valor llave clientela modelo de negocio plan de negocio ley general de sociedades codigo civil comercial persona juridica responsabilidad limitada">
+        <div class="chapter-head">
+          <div class="chapter-number">02</div>
+          <div><h2>Empresa</h2></div>
+        </div>
+
+        <div class="callout"><strong>Empresa:</strong> conjunto organizado —en una estructura jurídica— de elementos materiales, humanos e inmateriales, con el objetivo de realizar actividades de producción o intercambio de ByS con un <strong>fin de lucro</strong>.</div>
+        <p><strong>⚠️ Ojo:</strong> la empresa <em>no</em> está taxativamente definida ni en el Código de Vélez, ni en el nuevo Código Civil y Comercial, ni en la Ley General de Sociedades.</p>
+
+        <h3>Sociedades vs Empresas</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Aspecto</th><th>Empresa</th><th>Sociedad</th></tr></thead>
+            <tbody>
+              <tr><td>Naturaleza</td><td>Actividad económica u organización productiva.</td><td>Forma jurídica de asociación entre personas.</td></tr>
+              <tr><td>Reconocimiento legal</td><td>No tiene definición jurídica propia; aparece a través del empresario (físico o jurídico).</td><td>Regulada en la Ley de Sociedades; es persona jurídica.</td></tr>
+              <tr><td>Sujeto de derecho</td><td>El empresario (dueño).</td><td>La sociedad misma (tiene patrimonio, razón social).</td></tr>
+              <tr><td>Responsabilidad</td><td>Puede ser ilimitada si es empresario individual.</td><td>Según el tipo societario: limitada (S.A., S.R.L.) o ilimitada (sociedad colectiva).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Elementos de la empresa</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Materiales</strong><ul><li>Bienes inmuebles</li><li>Bienes muebles</li><li>Maquinaria</li><li>Rodados</li><li>Mercadería</li></ul></div>
+          <div class="callout"><strong>Recursos humanos</strong><ul><li>Nómina de personal</li></ul>
+            <strong style="display:block;margin-top:10px">Inmateriales / intangibles</strong>
+            <ul><li>Valor llave</li><li>Valor clientela</li><li>Propiedad industrial o comercial</li><li>Propiedad intelectual</li></ul>
+          </div>
+        </div>
+
+        <h3>Modelo de negocio vs Plan de negocio</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Modelo de negocio</strong> — <em>¿Qué? ¿Cómo?</em><br>Representación estructural de cómo una organización <strong>crea, entrega y captura valor</strong>. Describe la lógica de cómo opera la empresa y cómo interactúa con clientes, proveedores y competidores.</div>
+          <div class="callout blue"><strong>Plan de negocio</strong> — <em>¿Cuándo? ¿Dónde?</em><br>Documento detallado con los objetivos, estrategias, estructura organizacional, mercado, proyecciones financieras y necesidades de financiamiento. Es la herramienta de <strong>planificación</strong>, esencial para buscar financiamiento (inversores o préstamos).</div>
+        </div>
+        <p class="exam-answer"><strong>En el final:</strong> distinguir empresa (actividad económica, sin definición jurídica propia) de sociedad (persona jurídica regulada), y modelo de negocio (el <em>qué/cómo</em> conceptual) de plan de negocio (el <em>cuándo/dónde</em> detallado y financiero). El desarrollo completo del negocio está en <a href="#evaluacion">§9</a>.</p>
+      </section>
+
+<section class="chapter" id="impuestos" data-title="impuestos tributos tasas contribuciones capacidad contributiva hecho imponible base imponible alicuota trasladable directo indirecto progresivo regresivo iva iibb bbpp sellos idcb iigg ganancias bienes personales responsable inscripto monotributo agentes de retencion percepcion sicore afip">
+        <div class="chapter-head">
+          <div class="chapter-number">03</div>
+          <div><h2>Impuestos y tributos</h2></div>
+        </div>
+
+        <div class="callout blue"><em>«La Constitución es la declaración de los derechos; las rentas públicas son la garantía de su ejercicio.»</em> — J. B. Alberdi. <strong>CN Art. 4:</strong> el Gobierno federal provee a los gastos de la Nación con los fondos del Tesoro nacional. Los derechos tienen un costo, y se financian con tributos.</div>
+
+        <h3>Tributos</h3>
+        <p>Prestaciones pecuniarias del contribuyente, originadas por un <strong>hecho imponible</strong>, cobradas por el Estado en función de su poder tributario.</p>
+        <ul class="study-list">
+          <li><strong>No vinculados</strong> (sin contraprestación directa): <em>impuestos</em> (ej. IVA).</li>
+          <li><strong>Vinculados</strong> (asociados a un servicio o beneficio del Estado): <em>tasas</em> (ej. ABL) y <em>contribuciones especiales</em> (ej. obras).</li>
+        </ul>
+
+        <h3>Capacidad contributiva</h3>
+        <p>Principio tributario: cada persona o entidad debe pagar impuestos en función de la manifestación de su <strong>capacidad económica</strong> real o potencial.</p>
+        <ul class="study-list">
+          <li><strong>Manifestación real:</strong> ingresos (ej. IIGG) y patrimonio (ej. Bienes Personales).</li>
+          <li><strong>Manifestación potencial:</strong> consumo (ej. IVA) y desarrollo de actividades económicas (ej. Sellos).</li>
+        </ul>
+
+        <h3>Hecho imponible</h3>
+        <div class="callout"><strong>Hecho imponible:</strong> acto o circunstancia prevista por la ley que genera la obligación de pagar un impuesto. Determina <em>cuándo</em> y <em>por qué</em> un contribuyente debe tributar.</div>
+        <div class="formula">Hecho Imponible = Hecho económico + Legislación + Consecuencia jurídica tributaria + Alícuota (Base imponible × %)</div>
+
+        <h3>Otras clasificaciones</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Trasladables vs No trasladables</strong><ul><li><strong>Trasladable:</strong> el contribuyente traslada el costo a otro, generalmente al consumidor final.</li><li><strong>No trasladable:</strong> recae directamente sobre el contribuyente.</li></ul>
+            <strong style="display:block;margin-top:10px">Directos vs Indirectos</strong>
+            <ul><li><strong>Directo:</strong> según manifestación real.</li><li><strong>Indirecto:</strong> según manifestación potencial.</li></ul>
+          </div>
+          <div class="callout"><strong>Según alícuota</strong><ul>
+            <li><strong>Fijos:</strong> el monto no varía si no cambia la situación patrimonial (ej. Monotributo).</li>
+            <li><strong>Progresivos:</strong> el % crece con la manifestación explícita de capacidad contributiva.</li>
+            <li><strong>Regresivos:</strong> el % es fijo y no tiene relación directa con la capacidad contributiva.</li>
+          </ul></div>
+        </div>
+
+        <h3>Los impuestos, uno por uno</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Impuesto</th><th>Hecho / base imponible</th><th>Jurisdicción</th><th>D/I</th><th>Trasl.</th><th>Alícuota</th><th>Progr.</th></tr></thead>
+            <tbody>
+              <tr><td><strong>IVA</strong></td><td>Compra/venta (al entregar el bien o emitir factura).</td><td>Nacional</td><td>Indirecto</td><td>Sí</td><td>21% gral · 10,5% alimentos · 27% serv. públicos · 0% exentos</td><td>Regresivo</td></tr>
+              <tr><td><strong>IIBB</strong></td><td>Realizar una actividad económica; base = facturación total sin restar costos.</td><td>Provincial</td><td>Directo</td><td>No</td><td>1%–5%</td><td>Regresivo</td></tr>
+              <tr><td><strong>BBPP</strong> (Bienes Personales)</td><td>Situación patrimonial al 31/12; base = valor de todos los bienes.</td><td>Nacional</td><td>Directo</td><td>No</td><td>0,25%–1,75%</td><td>Progresivo</td></tr>
+              <tr><td><strong>Sellos</strong></td><td>Formalización de documentos con actos jurídicos; base = valor del contrato/operación.</td><td>Provincial</td><td>Directo</td><td>No</td><td>0,5%–3%</td><td>Regresivo</td></tr>
+              <tr><td><strong>IDCB</strong> (Débitos y créditos)</td><td>Movimiento de dinero en cuenta bancaria (débito/crédito).</td><td>Nacional</td><td>Directo</td><td>No</td><td>0,6% por cada crédito/débito</td><td>Regresivo</td></tr>
+              <tr><td><strong>IIGG</strong> (Ganancias)</td><td>Ganancias netas del año fiscal.</td><td>Nacional</td><td>Directo</td><td>No</td><td>Personas físicas 5%–35% (sobre mínimo); tasa fija 35%</td><td>Progresivo</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="formula">IVA = IVA ventas (débito) − IVA compras (crédito) — si queda &lt; 0, se genera un crédito fiscal</div>
+
+        <h4>Condiciones frente al IVA</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Condición</th><th>Obligaciones ante AFIP</th><th>Facturación</th><th>IVA crédito/débito</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Responsable Inscripto (RI)</strong></td><td>Factura discriminando IVA; declaraciones mensuales.</td><td>Factura A (a RI) / Factura B (a CF, monotributistas, exentos).</td><td>Descuenta IVA crédito (compras) del IVA débito (ventas).</td><td>Empresa mayorista.</td></tr>
+              <tr><td><strong>Monotributista</strong></td><td>Cuota fija mensual que incluye IVA, Ganancias y aportes.</td><td>Solo Factura C.</td><td>No descuenta IVA; compra con IVA incluido.</td><td>Kiosco de barrio.</td></tr>
+              <tr><td><strong>IVA Exento</strong></td><td>No paga IVA al fisco.</td><td>Factura C (sin IVA discriminado).</td><td>No descuenta IVA crédito fiscal.</td><td>Colegio privado / hospital público.</td></tr>
+              <tr><td><strong>Consumidor Final</strong></td><td>Sin obligaciones de facturación.</td><td>Recibe Factura B o C.</td><td>Paga el IVA incluido en el precio; no descuenta.</td><td>Persona que compra en el súper.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Agentes e ingreso al fisco</h3>
+        <ul class="study-list">
+          <li><strong>Agente de retención:</strong> frente al <em>pago</em> de una obligación, retiene una parte del pago a su acreedor e ingresa ese monto al fisco.</li>
+          <li><strong>Agente de percepción:</strong> frente al <em>cobro</em> de un derecho, cobra un adicional por sobre el precio a su deudor e ingresa el monto al fisco.</li>
+          <li><strong>Ingreso al fisco:</strong> se realiza mediante el pago de <strong>SICORE</strong> (quincenal).</li>
+        </ul>
+        <p class="exam-answer"><strong>En el final:</strong> para cada impuesto tené fresca la cuádrupla <em>jurisdicción / directo-indirecto / trasladable / progresivo-regresivo</em> y su hecho imponible. Distinguí retención (sobre el pago) de percepción (sobre el cobro), y RI vs monotributo (quién puede descontar IVA crédito).</p>
+      </section>
+
+<section class="chapter" id="contratos" data-title="contrato consentimiento teoria de actos propios prestacion de servicios obligacion de medios resultados nda confidencialidad distribucion agencia eula site id numero de serie clausulas cesion de derechos jurisdiccion limitacion de responsabilidad cierre no renuncia excesos ley para las partes">
+        <div class="chapter-head">
+          <div class="chapter-number">04</div>
+          <div><h2>Contratos</h2></div>
+        </div>
+
+        <div class="callout"><strong>Contrato:</strong> compromiso voluntario y recíproco entre 2 o más partes (físicas o jurídicas) que <strong>crea, modifica o extingue</strong> derechos y obligaciones sobre algo determinado.</div>
+        <ul class="study-list">
+          <li>El contrato funciona como <strong>ley para las partes</strong>: es un reglamento por el cual rige el comportamiento de los involucrados.</li>
+          <li>La <strong>libertad de la voluntad</strong> (lo que se acuerda) queda limitada por las <em>leyes vigentes</em> y el <em>orden público</em> (ej.: no se puede pactar una paga por debajo del SMVM).</li>
+          <li>El consentimiento se manifiesta por <strong>expresión de la voluntad</strong>, explícita (firma) o tácita (ej.: aceptación por mail). También por la <strong>Teoría de los Actos Propios:</strong> si uno actúa como si hubiese aceptado, el contrato se toma como válido.</li>
+        </ul>
+
+        <h3>Tipos de contrato más comunes</h3>
+        <ul class="study-list">
+          <li><strong>Prestación de servicios:</strong> regido por <em>obligación de resultados</em> o de <em>medios</em>; plazo determinado (renovable), a veces atado a un proyecto. Requiere determinar claramente objeto, horas/entregables/objetivos y medición de resultados. Evade la ley de contrato de trabajo (una relación de dependencia encubierta); es el modo de contratación de empresas internacionales más común; si se pacta en moneda local, se acuerdan períodos de revisión.</li>
+          <li><strong>Confidencialidad (NDA):</strong> evita la filtración de información privada entre cliente final y quien implementa. Hay <strong>responsabilización solidaria</strong>: si comparto la info con un colega/subordinado, este también debe firmar el NDA con el cliente, o su filtración me cae a mí. Puede ser general o por información específica.</li>
+          <li><strong>Contrato de distribución:</strong> designa distribuidores para vender software de <em>software factories</em>; permite comercializar licencias como si fueran la propia factory. Puede ser con <strong>exclusividad</strong> (por materia o territorio) o no exclusivo. Importa la determinación de precios y beneficios; se agregan condiciones de auditoría, compliance y obligaciones de resultados; la factory se compromete a soporte y capacitaciones.</li>
+          <li><strong>Contrato de agencia:</strong> los agentes son intermediarios entre la factory y los clientes. <strong>No hay vínculo laboral</strong> ni regla de distribuidor. El agente hace gestiones comerciales y <strong>cobra por venta</strong> (un % o un fee); la factory brinda los medios normales para promoción y comercialización.</li>
+          <li><strong>EULA (licencia de usuario final):</strong> contrato <em>directo</em> entre cliente final y software factory. Debe incluir <strong>Site ID</strong> (identifica empresa/cliente) y <strong>N.º de serie</strong> (identifica la copia del software); sin ellos, carece de validez. Incluye políticas de buen uso y cuestiones prohibidas; con la descarga del software se entiende aceptado.</li>
+        </ul>
+
+        <h3>Cláusulas particulares</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Cláusula</th><th>Para qué sirve</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Cesión de derechos</strong></td><td>Permite reasignar los derechos del contrato. Para cuidarse: agregar que se requiera <em>aceptación</em> de la cesión.</td></tr>
+              <tr><td><strong>Jurisdicción</strong></td><td>En lo posible, negociar que sea en Tribunales de CABA.</td></tr>
+              <tr><td><strong>Limitación de responsabilidad</strong></td><td>Especifica hasta dónde llega la responsabilidad de cada parte.</td></tr>
+              <tr><td><strong>Cierre</strong></td><td>Da por entendido que el contrato es la versión final; invalida los términos de conversaciones previas no incluidos.</td></tr>
+              <tr><td><strong>No renuncia</strong></td><td>Ante el incumplimiento de una cláusula (o si una resulta <em>leonina</em>), no se invalida el resto del contrato.</td></tr>
+              <tr><td><strong>Excesos</strong></td><td>Determina en detalle qué pasa ante atrasos de entrega, necesidad de horas extra, etc.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="exam-answer"><strong>Recomendación de la cátedra:</strong> <em>TODO POR ESCRITO.</em> En el final suelen pedir distinguir los tipos de contrato del mundo del software (servicios, distribución, agencia, EULA) y para qué sirve cada cláusula particular.</p>
+      </section>
+
+<section class="chapter" id="derecho" data-title="derecho comercial propiedad intelectual industrial marca inpi patente de invencion nombre comercial diseño industrial modelo de utilidad know how secreto industrial derechos de autor copyright dnda software codigo ley 11723 22362 territorialidad registro vigencia cesion de derechos">
+        <div class="chapter-head">
+          <div class="chapter-number">05</div>
+          <div><h2>Derecho comercial y propiedad intelectual</h2></div>
+        </div>
+
+        <div class="callout"><strong>Propiedad intelectual</strong> (activo intangible): protección de las creaciones del intelecto humano. Fomenta el acceso al conocimiento y lo impulsa con retribución económica. Los derechos son <strong>territoriales</strong> (no mundiales), aunque los requisitos se acuerdan globalmente por tratados.</div>
+        <p><strong>Marco jurídico:</strong> Constitución Nacional (Art. 17) · Ley 22.362 de Marcas y Designaciones · Modelos y Diseños Industriales (y Ley 27.444) · Ley 11.867 de Fondo de Comercio · Ley 11.723 de Derechos de Autor.</p>
+
+        <p>La PI tiene dos grandes ramas: <strong>propiedad industrial</strong> (marca, patente de invención, nombre comercial, diseño industrial, modelo de utilidad, know-how) y <strong>derechos de autor</strong> (obras, software, contenidos).</p>
+
+        <h3>Propiedad industrial</h3>
+        <h4>Marca</h4>
+        <p>Palabras, emblemas, imágenes, etc., que <strong>identifican y diferencian</strong> productos y servicios. Autoridad de aplicación: <strong>INPI</strong> (Instituto Nacional de la Propiedad Industrial).</p>
+        <ul class="study-list">
+          <li><strong>Registro (da):</strong> monopolio y exclusividad de uso, protección de imagen, usufructo exclusivo, derecho de oposición ante uso desleal, y capacidad de ceder el uso a título oneroso o gratuito.</li>
+          <li><strong>Vigencia:</strong> 10 años desde el registro, renovable por otros 10 (indefinidamente). Para renovar se debe acreditar <em>uso efectivo en los últimos 5 años</em>. La transferencia es lícita; la cesión/venta del fondo de comercio implica la cesión de la marca salvo que se especifique lo contrario. Se extingue por renuncia, vencimiento o nulidad.</li>
+          <li><strong>Ley de Marcas 22.362 — requisitos:</strong> novedad relativa, distintividad y licitud. <strong>Prohibidos:</strong> nombres genéricos, descriptivos o contrarios a la moral.</li>
+          <li><strong>Procedimiento:</strong> presentación ante INPI → examen formal y sustancial → oposición de terceros → registro y vigencia (10 años renovables).</li>
+          <li><strong>No son marcas:</strong> designaciones necesarias/habituales, signos de uso general previo, la forma de los productos, su color natural.</li>
+          <li><strong>Ventaja estratégica:</strong> sin marca registrada, el nombre puede ser usado por terceros, aunque uno haya sido «el primero en usarlo».</li>
+        </ul>
+
+        <h4>Otros instrumentos</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Instrumento</th><th>Qué protege / define</th><th>Requisitos / vigencia</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Patente de invención</strong></td><td>Objeto, procedimiento, herramienta, compuesto químico o microorganismo.</td><td>Novedad + actividad inventiva + aplicación industrial.</td></tr>
+              <tr><td><strong>Nombre comercial</strong></td><td>Identifica a la persona jurídica o humana. No es lo mismo que la marca (Molinos ≠ Lucchetti).</td><td>No hay obligación de registrarlo (aunque recomendado).</td></tr>
+              <tr><td><strong>Diseño industrial</strong></td><td>La apariencia de un producto (líneas, contornos, colores, forma, textura, ornamentación).</td><td>Registro por 5 años, renovable por 2 períodos.</td></tr>
+              <tr><td><strong>Modelo de utilidad</strong></td><td>Mejora introducida en herramientas/objetos conocidos que implique una mejor utilización.</td><td>Novedad + aplicación industrial.</td></tr>
+              <tr><td><strong>Know-How</strong></td><td>Conocimientos técnicos <em>no</em> de dominio público, necesarios para producir/comercializar, que dan ventaja sobre competidores. Secreto industrial/comercial.</td><td>No se registra: se protege como secreto.</td></tr>
+              <tr><td><strong>Dominios de Internet</strong></td><td>No son propiedad intelectual: no confieren protección legal sobre el nombre. ICANN administra el DNS a nivel global; en Argentina, NIC Argentina.</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout blue"><strong>Ejemplo clásico — Coca-Cola:</strong> su receta <em>no</em> está patentada (si lo estuviera, sería pública y caducaría a los 20 años). Se protege como <strong>know-how</strong> mediante secreto industrial. Estrategia habitual: patentar una parte de la invención y guardar las claves como secreto.</div>
+
+        <h3>Derechos de autor</h3>
+        <p>Protegen obras literarias, artísticas, científicas, audiovisuales, <strong>programas de computación</strong>, etc. Autoridad de aplicación: <strong>DNDA</strong> (Dirección Nacional del Derecho de Autor).</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Aspecto</th><th>Derecho de Autor (continental: Argentina, Europa, LatAm)</th><th>Copyright (anglosajón: EE.UU., R.U.)</th></tr></thead>
+            <tbody>
+              <tr><td>Enfoque</td><td>Relación personal del autor con la obra + explotación económica.</td><td>Explotación económica/comercial de la obra.</td></tr>
+              <tr><td>Derechos morales</td><td>Muy fuertes e <strong>irrenunciables</strong> (reconocimiento, integridad, divulgación, retiro).</td><td>Limitados o inexistentes.</td></tr>
+              <tr><td>Duración</td><td>Vida del autor + 70 años.</td><td>Vida + 70; obras corporativas 95 desde publicación o 120 desde creación.</td></tr>
+              <tr><td>Registro</td><td>Surge automáticamente con la creación (puede inscribirse como prueba).</td><td>Automático, pero el registro formal es requisito para demandar.</td></tr>
+              <tr><td>Titularidad</td><td>El autor es el titular originario (puede ceder patrimoniales).</td><td>Muchas veces el empleador/productor («work made for hire»).</td></tr>
+              <tr><td>Cesión</td><td>Se ceden los patrimoniales; los <strong>morales no se renuncian</strong>.</td><td>Se ceden en bloque, incluso casi todos los derechos del autor.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Implicancias en el mundo tech</h3>
+        <p>¿Cómo se protegen los códigos, programas y software en el derecho argentino? Están comprendidos como <strong>propiedad intelectual</strong> y protegidos por la ley de <em>Derechos de Autor</em>. La ley de Patentes <strong>inhibe</strong> patentar programas y código, por no considerarlos innovaciones.</p>
+        <p><strong>Titulares del derecho (Art. 4, Ley 11.723):</strong></p>
+        <ul class="study-list">
+          <li><strong>a)</strong> el <strong>autor</strong> de la obra;</li>
+          <li><strong>b)</strong> sus <strong>herederos</strong> o derechohabientes;</li>
+          <li><strong>c)</strong> quienes, con permiso del autor, la traducen, adaptan o modifican (sobre la obra resultante);</li>
+          <li><strong>d)</strong> las personas físicas o jurídicas cuyos <strong>dependientes contratados</strong> para elaborar un programa lo produzcan en el desempeño de sus funciones, <em>salvo estipulación en contrario</em>.</li>
+        </ul>
+        <div class="callout"><strong>Sobre el inciso d):</strong> la regla legal <strong>favorece al empleador</strong> cuando hay relación laboral y el desarrollo está dentro de las funciones. Pero <em>siempre</em> puede pactarse lo contrario. Por eso se recalca firmar <strong>contratos de cesión</strong>: eliminan cualquier ambigüedad sobre la titularidad, incluso con empleados. Instrumentos más usados: <strong>NDA</strong> y <strong>contrato de cesión de derechos de PI</strong>.</div>
+        <p class="exam-answer"><strong>En el final:</strong> el software se protege por derecho de autor, <em>no</em> por patente; distinguí derecho de autor (moral irrenunciable) de copyright (económico); y sabé la vigencia de cada instrumento de PI (marca 10+10, diseño 5, patente novedad/inventiva/industrial).</p>
+      </section>
+
+<section class="chapter" id="datos" data-title="datos personales ley de proteccion de datos habeas data dato sensible metadato tratamiento disociacion consentimiento libre expreso informado derechos acceso rectificacion supresion oposicion aaip agencia de acceso registro no llame compra venta de bases de datos bdd titular responsable">
+        <div class="chapter-head">
+          <div class="chapter-number">06</div>
+          <div><h2>Datos personales</h2></div>
+        </div>
+
+        <div class="callout"><strong>Dato personal:</strong> información de cualquier tipo referida a personas físicas o de existencia ideal determinada o determinable. Para ser <em>personal</em>, el dato debe poder vincularse con una persona física/jurídica.</div>
+
+        <h3>Marco legal</h3>
+        <ul class="study-list">
+          <li><strong>Ley de Protección de Datos Personales — objetivo:</strong> protección integral de los datos asentados en archivos, registros o bancos de datos (públicos o privados), para <strong>garantizar el derecho al honor y a la intimidad</strong> de las personas.</li>
+          <li><strong>Habeas Data:</strong> acción para tomar conocimiento de los datos referidos a uno y su finalidad, y exigir su <em>supresión, rectificación, confidencialidad o actualización</em> ante falsedad o discriminación. Aun sin falsedad, puede pedirse para bases de datos no esenciales.</li>
+        </ul>
+
+        <h3>Otras definiciones</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Dato sensible</strong></td><td>Revela origen racial/étnico, opiniones políticas, convicciones religiosas/filosóficas/morales, afiliación sindical, salud o vida sexual.</td></tr>
+              <tr><td><strong>Metadato</strong></td><td>Información que caracteriza a los datos (contenido, calidad, trazabilidad, geolocalización, etc.).</td></tr>
+              <tr><td><strong>Base / banco de datos</strong></td><td>Conjunto organizado de datos personales sometidos a tratamiento, cualquiera sea su soporte o finalidad.</td></tr>
+              <tr><td><strong>Tratamiento de datos</strong></td><td>Operaciones para recolectar, conservar, modificar, relacionar, evaluar, ceder o eliminar datos.</td></tr>
+              <tr><td><strong>Responsable</strong></td><td>Persona física/jurídica titular de un archivo o base de datos.</td></tr>
+              <tr><td><strong>Titular de los datos</strong></td><td>Persona cuyos datos son objeto de tratamiento.</td></tr>
+              <tr><td><strong>Usuario de datos</strong></td><td>Quien utiliza o accede a datos en bases propias o ajenas.</td></tr>
+              <tr><td><strong>Disociación</strong></td><td>Procedimiento por el que los datos se transforman para que no puedan vincularse a una persona identificable.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Consentimiento</h3>
+        <div class="callout blue">El tratamiento de datos es <strong>ilícito</strong> cuando el titular no prestó su consentimiento <strong>libre, expreso e informado</strong>, de manera destacada y con notificación previa.</div>
+        <p><strong>No es necesario el consentimiento cuando</strong> los datos: son de acceso público irrestricto; derivan de funciones propias del Estado u obligaciones legales; son info básica (nombre, DNI, identificación tributaria, ocupación, fecha de nacimiento, domicilio); derivan de una relación contractual/científica/profesional necesaria; o en ciertas operaciones de entidades financieras.</p>
+        <p><strong>Información requerida para solicitar un dato:</strong> finalidad; existencia del archivo con identidad y domicilio del responsable; carácter obligatorio o facultativo; consecuencias de darlo, negarse o su inexactitud; y la posibilidad de ejercer acceso, rectificación y supresión.</p>
+
+        <h3>Derechos del titular</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Derecho</th><th>Qué permite</th><th>Ejemplo</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Oposición</strong> (Art. 7)</td><td>Negarse a dar datos sensibles o impedir su uso para ciertos fines.</td><td>Una prepaga te pide tu religión → podés negarte.</td></tr>
+              <tr><td><strong>Información</strong> (Art. 13)</td><td>Preguntar a la AAIP qué bases existen, sus fines y responsables.</td><td>Consultás si tu banco reporta a una base de deudores.</td></tr>
+              <tr><td><strong>Acceso</strong> (Art. 14) — <em>habeas data</em></td><td>Pedir qué datos tuyos tienen y para qué los usan.</td><td>Qué datos tuyos usa una financiera para el scoring.</td></tr>
+              <tr><td><strong>Contenido de la info</strong> (Art. 15)</td><td>La información debe ser completa, clara y entendible.</td><td>Un hospital te da la historia clínica en términos comprensibles.</td></tr>
+              <tr><td><strong>Rectificación / actualización / supresión</strong> (Art. 16)</td><td>Corregir, actualizar o eliminar datos falsos, innecesarios o ilegítimos.</td><td>Figura una deuda ya cancelada → pedís rectificación.</td></tr>
+              <tr><td><strong>Consulta</strong> (Art. 13)</td><td>Consultar gratis las bases registradas en el órgano de control.</td><td>Ver qué empresas tienen bases con fines de marketing.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Ante una violación:</strong> solicitar supresión/modificación por los medios correspondientes. Si no hay respuesta en <strong>5 días hábiles</strong>: <em>vía administrativa</em> (denuncia ante la autoridad de aplicación) o <em>vía judicial</em> (acción de amparo por Habeas Data). Pueden ejercerlo el titular (o sus representantes legales) y el Defensor del Pueblo, contra el <strong>responsable</strong> de la base y los <strong>usuarios</strong> de datos.</p>
+        <ul class="study-list">
+          <li><strong>Solicitud de baja:</strong> quien no quiera recibir contenido comercial puede pedirlo en cualquier momento (contacto directo o Registro Nacional <em>«No Llame»</em>).</li>
+          <li><strong>Autoridad de aplicación:</strong> <strong>AAIP</strong> (Agencia de Acceso a la Información Pública) — registra bases, recibe denuncias y asiste a los titulares.</li>
+        </ul>
+
+        <h3>Compra / venta de bases de datos</h3>
+        <p>Los datos solo pueden cederse para el cumplimiento de fines relacionados con el <strong>interés legítimo</strong> del cedente y cesionario, y con <strong>previo consentimiento</strong> del titular (revocable). No se necesita consentimiento cuando lo dispone una ley, entre dependencias del Estado, o para datos de salud con mecanismos de <em>disociación</em>.</p>
+        <p>El cesionario queda sujeto a las <strong>mismas obligaciones</strong> que el cedente, quien responde solidaria y conjuntamente. Entonces, la cesión es <strong>lícita</strong> si hay: consentimiento explícito del titular; infraestructura informática que garantice la seguridad; y registro de la base ante el organismo controlador.</p>
+        <p class="exam-answer"><strong>En el final:</strong> definí dato personal y dato sensible, explicá el habeas data y las condiciones de un consentimiento válido (libre, expreso, informado), y las tres condiciones que hacen lícita la compra/venta de una BDD.</p>
+      </section>
+
+<section class="chapter" id="rse" data-title="rse responsabilidad social empresaria sostenibilidad sustentabilidad ambiental economica social esg environmental social governance acuerdo de paris agenda 2030 ley 25675 ley yolanda 27592 fontar greenwashing ods plan de sustentabilidad stakeholders huella de carbono">
+        <div class="chapter-head">
+          <div class="chapter-number">07</div>
+          <div><h2>RSE y sostenibilidad</h2></div>
+        </div>
+
+        <div class="callout"><strong>Sostenibilidad:</strong> capacidad de asegurar las necesidades del presente <strong>sin comprometer</strong> las necesidades de las generaciones futuras.</div>
+
+        <h3>Las tres dimensiones</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Ambiental</strong><br>Gestión eficiente de los recursos naturales en la actividad productiva, para preservarlos a futuro.</div>
+          <div class="callout"><strong>Económica</strong><br>Uso de prácticas económicamente rentables que sean, además, social y ambientalmente responsables.</div>
+        </div>
+        <div class="callout"><strong>Social</strong><br>Fortalecimiento de la cohesión y estabilidad de las poblaciones y su desarrollo vital.</div>
+        <figure class="diagram">
+          <img src="img/03-285a8e34.png" alt="Dimensiones de la sostenibilidad" loading="lazy">
+          <figcaption>Las tres dimensiones de la sostenibilidad y su intersección.</figcaption>
+        </figure>
+
+        <h3>Sostenibilidad en tech</h3>
+        <ul class="study-list">
+          <li>Inversores y fondos de venture priorizan criterios <strong>ESG</strong> (Environmental, Social &amp; Governance).</li>
+          <li>Consumidores y talentos jóvenes valoran las <strong>empresas responsables</strong>.</li>
+          <li>Riesgos <strong>legales y regulatorios</strong> crecientes.</li>
+        </ul>
+
+        <h3>Marcos regulatorios</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Globales</strong><ul><li>Acuerdo de París</li><li>Agenda 2030 (ONU)</li></ul></div>
+          <div class="callout blue"><strong>Nacionales</strong><ul>
+            <li><strong>Ley 25.675</strong> (General del Ambiente): principios de prevención y responsabilidad ambiental.</li>
+            <li><strong>Ley 27.592</strong> («Ley Yolanda»): capacitación ambiental obligatoria para funcionarios públicos.</li>
+            <li>Beneficios fiscales y programas de apoyo (energías renovables, financiamiento <strong>FONTAR</strong>).</li>
+            <li>Riesgos de <strong>compliance ambiental</strong>, sobre todo por publicidad engañosa o <em>greenwashing</em>.</li>
+          </ul></div>
+        </div>
+
+        <h3>Modelo de plan de sustentabilidad</h3>
+        <ol>
+          <li><strong>Diagnóstico inicial:</strong> análisis de impactos (huella de carbono, cadena de suministro, ética de datos) y mapeo de stakeholders.</li>
+          <li><strong>Definición de objetivos</strong> alineados a los ODS.</li>
+          <li><strong>Estrategias y acciones concretas.</strong></li>
+          <li><strong>Seguimiento de KPIs.</strong></li>
+          <li><strong>Comunicación y reporting.</strong></li>
+        </ol>
+        <p class="exam-answer"><strong>En el final:</strong> definí sostenibilidad y sus tres dimensiones, relacioná ESG con el financiamiento de startups, y sabé nombrar marcos (Acuerdo de París, Agenda 2030, Ley 25.675, Ley Yolanda) y el riesgo de <em>greenwashing</em>.</p>
+      </section>
+
+<section class="chapter" id="economia" data-title="economia macroeconomia microeconomia pbi desempleo ciclico estructural friccional tipo de cambio inflacion ipc demanda costos inercial estructural tasa efectiva nominal real fisher salario real poder adquisitivo mercado oferta demanda punto de equilibrio estructuras de mercado">
+        <div class="chapter-head">
+          <div class="chapter-number">08</div>
+          <div><h2>Economía</h2></div>
+        </div>
+
+        <div class="callout"><strong>Economía:</strong> ciencia social que estudia cómo se administran los recursos <strong>escasos</strong> para satisfacer las necesidades humanas <strong>ilimitadas</strong>.</div>
+
+        <h3>Macroeconomía</h3>
+        <p>Estudia el funcionamiento <strong>global</strong> de la economía. Indicadores clave:</p>
+        <ul class="study-list">
+          <li><strong>PBI:</strong> valor total de todos los ByS producidos en una economía en un período (generalmente un año).</li>
+          <li><strong>Desempleo:</strong> personas en condiciones y con deseo de trabajar que no consiguen empleo. Tipos: <em>cíclico</em> (recesiones), <em>estructural</em> (cambios tecnológicos, desajuste oferta/demanda laboral) y <em>friccional</em> (transitorio).</li>
+          <li><strong>Tipo de cambio:</strong> relación de proporción entre los valores de dos monedas; surge del comercio internacional entre países con distintas monedas.</li>
+          <li><strong>Inflación:</strong> aumento sostenido y generalizado de los precios; se mide con el <strong>IPC</strong>. Tipos: de demanda, de costos, inercial/por expectativas, estructural y por política monetaria.</li>
+        </ul>
+
+        <h3>Tasas: nominal vs real (Fisher)</h3>
+        <p>La <strong>tasa efectiva</strong> es nominal respecto de la inflación; para saber el rendimiento verdadero se calcula la <strong>tasa real</strong>.</p>
+        <div class="formula">1 + TR = (1 + TE) / (1 + TI)</div>
+        <div class="callout blue"><strong>Ejemplo de salario real.</strong> Salario inicial $500.000, final $750.000, inflación anual 100%.
+          <ul>
+            <li>La pregunta correcta: ¿el salario creció más, igual o menos que los precios?</li>
+            <li><strong>Salario real final</strong> = 750.000 / (1 + TI) = 750.000 / 2 = <strong>$375.000</strong>.</li>
+            <li>Esos $750.000 compran lo mismo que $375.000 del año anterior → el <strong>poder adquisitivo cayó un 25%</strong>. Nominalmente ganó más, pero los precios subieron más que el salario.</li>
+          </ul>
+        </div>
+        <p><strong>¿Por qué la inflación genera conflictos?</strong> Redistribuye ingresos entre <em>trabajadores</em> (piden aumentos para no perder), <em>empresas</em> (sus costos pueden subir más rápido que sus ingresos) y <em>Estado</em> (recauda más nominal pero debe actualizar jubilaciones → tensión fiscal). Conflicto típico: <strong>«paritarias vs. precios vs. márgenes»</strong>.</p>
+        <p><strong>Impacto en consumo e inversión:</strong> el consumo cae (menor poder adquisitivo; se adelantan compras de durables si se espera más inflación); la inversión baja porque la <strong>incertidumbre</strong> dificulta calcular costos y rentabilidad, reduce el crédito real y empuja a dolarizar excedentes.</p>
+
+        <h3>Microeconomía</h3>
+        <p>Estudia el comportamiento de los <strong>agentes individuales</strong>.</p>
+        <ul class="study-list">
+          <li><strong>Mercado:</strong> espacio (físico o virtual) donde se encuentran oferentes y demandantes para intercambiar ByS o factores de producción. Pueden ser locales/globales, organizados/no organizados, formales/informales. El <strong>precio</strong> actúa como señal que coordina producción y consumo.</li>
+          <li><strong>Oferta:</strong> cantidad de un ByS que los productores están dispuestos a vender a diferentes precios.</li>
+          <li><strong>Demanda:</strong> cantidad de un ByS que los consumidores están dispuestos a adquirir a diferentes precios.</li>
+        </ul>
+
+        <h4>Estructuras de mercado</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Competencia perfecta</th><th>Monopolio</th><th>Oligopolio</th><th>Competencia monopólica</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Cantidad de empresas</strong></td><td>Muchas</td><td>Una</td><td>Pocas</td><td>Muchas</td></tr>
+              <tr><td><strong>Información</strong></td><td>Perfecta</td><td>Perfecta</td><td>Imperfecta</td><td>Imperfecta</td></tr>
+              <tr><td><strong>Homogeneidad del bien</strong></td><td>Homogéneos</td><td>Un solo bien o servicio</td><td>Homogéneos o diferenciados</td><td>Diferenciados</td></tr>
+              <tr><td><strong>Barreras de entrada/salida</strong></td><td>No hay</td><td>Monopolio natural: control de un factor, patentes, tecnología única</td><td>Inversiones, ventaja en costos</td><td>Bajas</td></tr>
+              <tr><td><strong>Influencia en los precios</strong></td><td>No hay</td><td>Muchísima</td><td>Mucha</td><td>Poca</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><em>Monopolio, oligopolio y competencia monopólica son formas de <strong>competencia imperfecta</strong>.</em></p>
+
+        <h4>Punto de equilibrio</h4>
+        <figure class="chart">
+          <svg viewBox="0 0 460 320" role="img" aria-label="Gráfico de oferta y demanda con punto de equilibrio">
+            <line x1="60" y1="285" x2="440" y2="285" stroke="#7c8b86" stroke-width="1.5"/>
+            <line x1="60" y1="285" x2="60" y2="30" stroke="#7c8b86" stroke-width="1.5"/>
+            <line x1="72" y1="70" x2="410" y2="255" stroke="#3f5bb2" stroke-width="3"/>
+            <line x1="72" y1="255" x2="410" y2="70" stroke="#0d9488" stroke-width="3"/>
+            <line x1="241" y1="162" x2="241" y2="285" stroke="#a23b3b" stroke-width="1.3" stroke-dasharray="5 4"/>
+            <line x1="60" y1="162" x2="241" y2="162" stroke="#a23b3b" stroke-width="1.3" stroke-dasharray="5 4"/>
+            <circle cx="241" cy="162" r="5" fill="#a23b3b"/>
+            <text x="415" y="66" font-size="13" fill="#0d9488" font-weight="700">Oferta</text>
+            <text x="415" y="262" font-size="13" fill="#3f5bb2" font-weight="700">Demanda</text>
+            <text x="241" y="180" font-size="11.5" fill="#14201d" text-anchor="middle">Equilibrio</text>
+            <text x="56" y="158" font-size="11" fill="#a23b3b" text-anchor="end">P*</text>
+            <text x="241" y="302" font-size="11" fill="#a23b3b" text-anchor="middle">Q*</text>
+            <text x="250" y="315" font-size="11.5" fill="#14201d" text-anchor="middle">Cantidad</text>
+            <text x="20" y="160" font-size="11.5" fill="#14201d" text-anchor="middle" transform="rotate(-90 20 160)">Precio ($)</text>
+          </svg>
+          <figcaption>El punto de equilibrio es donde se cruzan las curvas de oferta y demanda: define el precio (P*) y la cantidad (Q*) de equilibrio.</figcaption>
+        </figure>
+        <p class="exam-answer"><strong>En el final:</strong> definí los indicadores macro (PBI, desempleo y sus tipos, inflación y sus tipos), aplicá Fisher para tasa/salario real, y explicá cómo la inflación redistribuye ingresos y afecta consumo e inversión.</p>
+      </section>
+
+<section class="chapter" id="evaluacion" data-title="evaluacion de negocio cruz de porter cinco fuerzas business model canvas segmento propuesta de valor canales relaciones fuentes de ingresos recursos actividades alianzas estructura de costos tam sam som oceano azul plan de negocio 4p 4c costeo absorcion variable punto de equilibrio margen de seguridad van cashflow periodo de repago b2b b2c">
+        <div class="chapter-head">
+          <div class="chapter-number">09</div>
+          <div><h2>Evaluación de negocio</h2></div>
+        </div>
+
+        <h3>Cruz de Porter (5 fuerzas)</h3>
+        <p><strong>Objetivo:</strong> evaluar la estructura competitiva de una industria y comprender los factores que afectan su rentabilidad potencial.</p>
+        <figure class="diagram">
+          <img src="img/06-22ff4732.png" alt="Cruz de Porter: las cinco fuerzas competitivas" loading="lazy">
+          <figcaption>Las cinco fuerzas competitivas de Porter convergen en la rivalidad del sector.</figcaption>
+        </figure>
+        <ul class="study-list">
+          <li><strong>Rivalidad entre competidores:</strong> intensidad de la competencia. A mayor rivalidad, precios más bajos y menor margen.</li>
+          <li><strong>Amenaza de nuevos competidores:</strong> facilidad de entrada. A menores barreras, mayor amenaza.</li>
+          <li><strong>Poder de los proveedores:</strong> capacidad de influir en precios y condiciones. Menos proveedores → más poder.</li>
+          <li><strong>Poder de los clientes:</strong> influencia de los compradores sobre precios y condiciones de venta.</li>
+          <li><strong>Amenaza de sustitutos:</strong> riesgo de que el cliente opte por alternativas que satisfacen la misma necesidad.</li>
+        </ul>
+
+        <h3>Business Model Canvas</h3>
+        <p>Herramienta para visualizar el modelo de negocio en 9 bloques (visualización clara, análisis integral, planificación estratégica).</p>
+        <figure class="diagram">
+          <img src="img/07-3162aa5e.png" alt="Business Model Canvas: los 9 bloques" loading="lazy">
+          <figcaption>Los 9 bloques del Business Model Canvas.</figcaption>
+        </figure>
+        <figure class="diagram">
+          <img src="img/08-95dfaa84.png" alt="Business Model Canvas completo" loading="lazy">
+          <figcaption>El lienzo completo: infraestructura, oferta, cliente y viabilidad económica.</figcaption>
+        </figure>
+        <ol>
+          <li><strong>Segmento de cliente (mercado):</strong> ¿para quién creamos valor? <strong>B2B / B2C / B2B2C.</strong> Fracciones de mercado:
+            <ul>
+              <li><strong>TAM</strong> (Total Addressable Market): todo el mercado si captás el 100%. Dimensiona la oportunidad.</li>
+              <li><strong>SAM</strong> (Serviceable Available Market): la parte del TAM a la que podés llegar con tu producto. Fija metas de crecimiento.</li>
+              <li><strong>SOM</strong> (Serviceable Obtainable Market): captura realista a corto/mediano plazo.</li>
+            </ul>
+          </li>
+          <li><strong>Propuesta de valor:</strong> ¿qué valor entregamos, qué problema resolvemos? Debe ser <em>clara, específica y real</em>. Se diseña observando <em>beneficios esperados, dolores y tareas</em> del cliente, y creando ByS que generen esos beneficios y alivien esos dolores.</li>
+          <li><strong>Canales:</strong> cómo llegamos al cliente. <em>Directo/indirecto</em>, <em>propio/socio</em>.</li>
+          <li><strong>Relaciones con clientes:</strong> asistencia personal (exclusiva), autoservicio, servicios automáticos, comunidades, creación colectiva.</li>
+          <li><strong>Fuentes de ingresos:</strong> venta de activos, cuotas por uso, suscripción, préstamo/alquiler, licencias, comisiones, publicidad.</li>
+          <li><strong>Recursos clave:</strong> físicos, intelectuales (patentes, marcas), humanos, financieros.</li>
+          <li><strong>Actividades clave:</strong> acciones necesarias para que el modelo funcione.</li>
+          <li><strong>Alianzas clave:</strong> empresas no competidoras (complementarios), coopetición, joint ventures, clientes.</li>
+          <li><strong>Estructura de costos:</strong> según costes (recortar gastos) o según valor (foco en crear valor). Costos fijos/variables, de adquisición de clientes, de desarrollo, operativos.</li>
+        </ol>
+
+        <h4>Segmento de cliente: fracciones de mercado</h4>
+        <div class="circles">
+          <svg viewBox="0 0 260 232" role="img" aria-label="Círculos concéntricos TAM SAM SOM">
+            <circle cx="130" cy="112" r="108" fill="#c7e9e3"/>
+            <circle cx="130" cy="150" r="68" fill="#7fcfc2"/>
+            <circle cx="130" cy="178" r="38" fill="#0d9488"/>
+            <text x="130" y="30" font-size="15" font-weight="700" fill="#0f766e" text-anchor="middle">TAM</text>
+            <text x="130" y="120" font-size="14" font-weight="700" fill="#0b5b52" text-anchor="middle">SAM</text>
+            <text x="130" y="182" font-size="13" font-weight="700" fill="#ffffff" text-anchor="middle">SOM</text>
+          </svg>
+          <ul class="study-list">
+            <li><strong>TAM</strong> (Total Addressable Market): todo el mercado si captás el 100%. Dimensiona la oportunidad.</li>
+            <li><strong>SAM</strong> (Serviceable Available Market): la parte del TAM a la que podés llegar con tu producto. Fija metas de crecimiento.</li>
+            <li><strong>SOM</strong> (Serviceable Obtainable Market): la captura realista a corto/mediano plazo.</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <strong>Ejemplo — Talleres de IA para PYMEs</strong>
+          <ul>
+            <li><strong>TAM:</strong> todas las PYMEs activas en América Latina (~25 millones) × ticket promedio de formación en IA (USD 200) → <strong>≈ USD 5.000 millones</strong>.</li>
+            <li><strong>SAM:</strong> PYMEs de Argentina, Chile y Uruguay (~3 millones) × USD 200 → <strong>≈ USD 600 millones</strong>.</li>
+            <li><strong>SOM:</strong> PYMEs con liderazgo activo en digitalización (~5%) × USD 200 → <strong>≈ USD 30 millones</strong>.</li>
+          </ul>
+        </div>
+
+        <h4>¿Para quién creamos valor? (cliente vs usuario)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Público objetivo</th><th>Cliente ideal</th></tr></thead>
+            <tbody>
+              <tr><td>Idea más abstracta</td><td>Humanizamos y entendemos</td></tr>
+              <tr><td>Sólo datos demográficos</td><td>Datos concretos</td></tr>
+              <tr><td>Varios tipos de clientes ideales</td><td>Define necesidades</td></tr>
+              <tr><td>Grupo sin identidad propia</td><td>Con identidad propia</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Propuesta de valor: observar y diseñar</h4>
+        <div class="cmp two">
+          <figure class="diagram">
+            <img src="img/12-fffc8316.png" alt="Mapa de valor: observar al cliente" loading="lazy">
+            <figcaption>Observar: tareas, dolores y beneficios del cliente.</figcaption>
+          </figure>
+          <figure class="diagram">
+            <img src="img/13-3fbaf356.png" alt="Mapa de valor: diseñar la propuesta" loading="lazy">
+            <figcaption>Diseñar: ByS, generadores de alegrías y aliviadores de dolores.</figcaption>
+          </figure>
+        </div>
+
+        <h4>Relaciones con los clientes</h4>
+        <figure class="diagram">
+          <img src="img/14-48e50e12.png" alt="Relaciones con los clientes" loading="lazy">
+          <figcaption>Tipos de relación con los clientes.</figcaption>
+        </figure>
+
+        <h4>Estructura de costos (composición del precio de venta)</h4>
+        <div class="cup-block">
+          <div class="cup-top">Precio de venta — precio al público, precio al canal y márgenes</div>
+          <div class="cup">
+            <div class="cup-lid"></div>
+            <div class="cup-band" style="width:100%;background:#8fb9d6">Admin, impuestos y otros<span class="cup-tip">Gastos administrativos y generales, impuestos, seguros de cobranza, costos financieros y de cobertura.</span></div>
+            <div class="cup-band" style="width:91%;background:#5f97c4">Logística out<span class="cup-tip">Almacenamiento, fletes internacionales y locales, seguros.</span></div>
+            <div class="cup-band" style="width:83%;background:#3f6fa8">Manufactura<span class="cup-tip">Costos de manufactura (MOD, MOI y ST), gastos indirectos de fabricación, amortizaciones, desperdicios, MOQ.</span></div>
+            <div class="cup-band" style="width:75%;background:#2b5288">Logística in<span class="cup-tip">Fletes internacionales y locales, seguros, aduanas.</span></div>
+            <div class="cup-band" style="width:67%;background:#1c3a66">Materias primas<span class="cup-tip">Materias primas y materiales.</span></div>
+          </div>
+          <p style="text-align:center;margin:.6em 0 0;font-size:12.5px;color:#4a5a55">Pasá el cursor sobre cada capa para ver qué incluye. El precio se construye apilando costos, de las materias primas hasta el margen.</p>
+        </div>
+
+        <h3>Estrategia del Océano Azul</h3>
+        <div class="callout blue">Salir de mercados saturados («océanos rojos») para <strong>crear espacios de mercado nuevos, sin competencia directa</strong>. No competir por la misma torta: <em>crear una categoría nueva</em> donde la competencia sea irrelevante.</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Océano rojo</th><th>Océano azul</th></tr></thead>
+            <tbody>
+              <tr><td>Competencia feroz</td><td>No hay competencia al inicio</td></tr>
+              <tr><td>Guerra de precios</td><td>Creación de nuevo valor</td></tr>
+              <tr><td>Reglas existentes</td><td>Reglas nuevas</td></tr>
+              <tr><td>Demanda conocida</td><td>Demanda creada</td></tr>
+              <tr><td>Valor y costo en tensión</td><td>Valor alto con costo bajo (innovación en valor)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Principios:</strong> reconstruir las fronteras del mercado; enfocarse en el panorama global (no en los números); ir más allá de la demanda existente; diseñar la estrategia pensando en la ejecución; superar obstáculos organizacionales; construir implementación y adopción en simultáneo.</p>
+
+        <h3>Plan de negocio</h3>
+        <p>Resumen ejecutivo y hoja de ruta que le da a inversores una idea clara de por qué apoyar el negocio. Es el desarrollo detallado del Modelo de Negocio. <strong>Objetivos:</strong> guiar la acción, reducir incertidumbre, comunicar el proyecto y medir desempeño.</p>
+        <figure class="diagram">
+          <img src="img/17-101e321c.png" alt="Estructura del plan de negocio" loading="lazy">
+          <figcaption>Componentes del plan de negocio.</figcaption>
+        </figure>
+        <ul class="study-list">
+          <li><strong>Resumen ejecutivo:</strong> misión, visión, propuesta de valor general, objetivos de largo plazo.</li>
+          <li><strong>Análisis competitivo y estratégico:</strong> FODA + mapa competitivo.</li>
+          <li><strong>Propuesta de valor:</strong> TAM/SAM/SOM, cliente ideal, modelo Canvas.</li>
+          <li><strong>Plan de marketing y ventas:</strong> <strong>4P</strong> (Producto, Precio, Plaza, Promoción) y <strong>4C</strong> (Cliente, Costo, Conveniencia, Comunicación).</li>
+          <li><strong>Plan de operaciones:</strong> detalles operativos de la propuesta.</li>
+          <li><strong>Plan de capital humano:</strong> organigrama, roles, competencias, incorporación/retención, capacitación, cultura, presupuesto de personal.</li>
+          <li><strong>Plan económico-financiero:</strong> proyecciones, viabilidad económica, sostenibilidad financiera.</li>
+          <li><strong>Plan de contingencia:</strong> el «plan B» ante escenarios imprevistos.</li>
+        </ul>
+
+        <h3>Costeo</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Por absorción</strong><br>Incluye <em>todos</em> los costos de producción. Los costos fijos se reparten entre las unidades producidas y forman parte del inventario hasta que se venden.</div>
+          <div class="callout"><strong>Variable</strong><br>Incluye <em>solo</em> los costos variables de producción en el costo unitario.</div>
+        </div>
+        <p>El modelo de costeo impacta en cómo se calcula el margen de ganancia (resultado bruto).</p>
+
+        <h4>Punto de equilibrio</h4>
+        <div class="formula">PE (unidades) = CF / (PV − CV) &nbsp;·&nbsp; PE (valor) = CF / (1 − CV/PV)</div>
+        <p>Con <strong>CF</strong> = costos fijos, <strong>PV</strong> = precio de venta, <strong>CV</strong> = costos variables.</p>
+        <ul class="study-list">
+          <li><strong>Margen de seguridad</strong> = (Ventas actuales − Ventas de equilibrio) / Ventas actuales. Cuánto % puedo perder sin entrar en pérdidas.</li>
+          <li><strong>Capacidad en punto de equilibrio</strong> = Ventas de equilibrio / Ventas actuales.</li>
+        </ul>
+
+        <h4>Decisiones financieras y evaluación de proyectos</h4>
+        <p>Decisiones de <em>operación</em> (flujo de caja diario), de <em>inversión</em> (maximizar valor a largo plazo), de <em>financiamiento</em> (elegir fuentes) y de <em>política de dividendos</em> (cómo repartir ganancias).</p>
+        <div class="formula">VAN = Σ [ CashFlow_t / (1 + r)^t ] − Inversión inicial</div>
+        <ul class="study-list">
+          <li><strong>VAN:</strong> determina si un proyecto es viable económicamente (si es positivo, crea valor).</li>
+          <li><strong>Cashflow:</strong> mide los movimientos en efectivo para evitar el quiebre de caja; solo considera los movimientos propios del proyecto.</li>
+          <li><strong>Período de repago</strong> = Inversión inicial / Cashflow anual. Tiempo para recuperar el costo inicial.</li>
+        </ul>
+        <p class="exam-answer"><strong>En el final:</strong> es el capítulo más «de diseño». Sabé aplicar las 5 fuerzas a una industria, armar un Canvas con TAM/SAM/SOM, distinguir Océano Azul de competir en rojo, y calcular punto de equilibrio, margen de seguridad y VAN. Modelo de negocio (qué/cómo) vs plan de negocio (detalle) → <a href="#empresa">§2</a>.</p>
+      </section>
+
+<section class="chapter" id="planificacion" data-title="planificacion administracion organizacion direccion control niveles estrategico tactico operativo foda presupuesto economico financiero premisas estado de resultados ebitda ebit resultado neto opex capex amortizaciones control presupuestario analisis de variaciones reforecast">
+        <div class="chapter-head">
+          <div class="chapter-number">10</div>
+          <div><h2>Planificación y administración</h2></div>
+        </div>
+
+        <div class="callout"><strong>Administración:</strong> disciplina sociocientífica cuyo objeto de estudio son las <strong>organizaciones</strong>. Se encarga de planificar, organizar, dirigir y controlar.</div>
+        <figure class="diagram">
+          <div class="mermaid">flowchart LR
+    P["Planificación"] --> O["Organización"]
+    O --> D["Dirección"]
+    D --> C["Control"]
+    C --> P</div>
+          <figcaption>El ciclo de la administración: planificar, organizar, dirigir y controlar (y volver a empezar).</figcaption>
+        </figure>
+        <ul class="study-list">
+          <li><strong>Planificación:</strong> parte de la visión, la misión, los objetivos y las estrategias/políticas. Plazos: corto (&lt; 1 año), mediano (1–5 años), largo (&gt; 5 años).</li>
+          <li><strong>Organización:</strong> diseñar el organigrama, definir responsabilidades, coordinar y sincronizar tareas.</li>
+          <li><strong>Dirección:</strong> ejercer influencia positiva y voluntaria para que lo planeado se realice. «Hacer que las cosas se hagan.»</li>
+          <li><strong>Control:</strong> medir el desempeño de lo ejecutado, compararlo con las metas, destacar desvíos y corregir.</li>
+        </ul>
+        <p><strong>Niveles de control:</strong> <em>estratégico</em> (políticas y estrategias, altos mandos), <em>táctico</em> (coordinación de actividades, gerentes) y <em>operativo</em> (ejecución eficaz de las tareas, analistas/obreros).</p>
+        <div class="pyramid-block">
+          <div class="pyr-desc">
+            <p><strong>Estratégico:</strong> políticas y estrategias de la organización. Altos mandos.</p>
+            <p><strong>Táctico:</strong> coordinación de actividades. Gerentes / administradores.</p>
+            <p><strong>Operativo:</strong> ejecución eficaz de las tareas. Analistas / obreros.</p>
+          </div>
+          <div class="pyr">
+            <div class="pyr-band" style="width:46%;background:#0f766e">Estratégico<span class="pyr-tip">Políticas y estrategias de la organización — altos mandos.</span></div>
+            <div class="pyr-band" style="width:73%;background:#0d9488">Táctico<span class="pyr-tip">Coordinación de actividades — gerentes / administradores.</span></div>
+            <div class="pyr-band" style="width:100%;background:#3aa99b">Operativo<span class="pyr-tip">Ejecución eficaz de las tareas — analistas / obreros.</span></div>
+          </div>
+        </div>
+
+        <h3>Herramientas</h3>
+        <h4>FODA</h4>
+        <p>Análisis estratégico que identifica <strong>F</strong>ortalezas, <strong>O</strong>portunidades, <strong>D</strong>ebilidades y <strong>A</strong>menazas. Permite evaluar la posición actual y ayudar en la planificación (fortalezas/debilidades son internas; oportunidades/amenazas, externas).</p>
+        <figure class="diagram">
+          <img src="img/20-da3b5e95.png" alt="Matriz FODA" loading="lazy">
+          <figcaption>Matriz FODA: interno (fortalezas/debilidades) vs externo (oportunidades/amenazas).</figcaption>
+        </figure>
+
+        <h4>Presupuesto</h4>
+        <p>Herramienta de <strong>planificación, coordinación y control</strong> que traduce planes y estrategias en <strong>números concretos</strong>. Puede ser de largo/mediano/corto plazo y flexible o rígido.</p>
+        <figure class="diagram">
+          <div class="mermaid">flowchart LR
+    V["Presupuesto de Ventas"] --> E["Presupuesto Económico"]
+    F["Presupuesto de Fabricación"] --> E
+    G["Presupuesto de Gastos"] --> E
+    I["Presupuesto de Ingresos"] --> FIN["Presupuesto Financiero"]
+    EG["Presupuesto de Egresos"] --> FIN
+    E --> INT["Presupuestación Integral"]
+    FIN --> INT
+    INV["Presupuesto de Inversión"] --> INT
+    INT --> EC["Estados Contables Proyectados"]</div>
+          <figcaption>Proceso de presupuestación: los presupuestos de ventas, fabricación y gastos alimentan el económico; ingresos y egresos, el financiero; junto con inversión convergen en la presupuestación integral y los estados contables proyectados.</figcaption>
+        </figure>
+        <div class="cmp two">
+          <div class="callout"><strong>Presupuesto económico</strong> (momentos de <em>transacción económica</em>)<ul><li>de Ventas (ventas proyectadas)</li><li>de Operaciones (capacidad de producir esas ventas)</li><li>de Gastos administrativos</li><li>de Inversiones (ByS a adquirir)</li></ul></div>
+          <div class="callout blue"><strong>Presupuesto financiero</strong> (momentos de <em>pago/cobro</em>)<ul><li>de Ingresos / Egresos</li><li>Flujo neto</li><li>Caja inicial / final / mínima</li><li>Necesidades de financiamiento e inversión/ahorro</li></ul></div>
+        </div>
+        <p><strong>Premisas:</strong> supuestos que se asumen antes de presupuestar (nivel de producción estándar, costo de horas de servicio, inflación estimada, fluctuación del PBI, tipo de cambio y tasa proyectada).</p>
+
+        <h4>Estado de resultados</h4>
+        <p>Estado contable que refleja las <strong>ganancias y pérdidas</strong> de un ente en un período. Se arma en cascada:</p>
+        <figure class="diagram">
+          <img src="img/22-2bfe4f0d.png" alt="Estado de resultados en cascada" loading="lazy">
+          <figcaption>De los ingresos al resultado neto: Bruto → EBITDA → EBIT → Neto.</figcaption>
+        </figure>
+        <ul class="study-list">
+          <li><strong>Costos (OPEX):</strong> costo × cantidad vendida → Resultado Bruto.</li>
+          <li><strong>Gastos (OPEX):</strong> costos fijos no asociados directamente a la producción (distribuidos por algún factor) → EBITDA.</li>
+          <li><strong>Amortizaciones (CAPEX):</strong> valor de los activos fijos / vida útil → EBIT.</li>
+          <li><strong>Resultados financieros:</strong> diferencias de cambio, intereses, inflación, tenencia, compra-venta de activos financieros.</li>
+          <li><strong>Impuestos:</strong> IIGG sobre EBIT + resultados financieros → Resultado Neto.</li>
+        </ul>
+
+        <h4>Control presupuestario y ajustes</h4>
+        <ul class="study-list">
+          <li><strong>Control presupuestario:</strong> comparación sistemática entre lo presupuestado y lo realizado; función esencial de <strong>retroalimentación</strong>.</li>
+          <li><strong>Análisis de variaciones:</strong> analizar las desviaciones en ingresos, gastos, cronograma, calidad y alcance.</li>
+          <li><strong>Reforecast:</strong> ajustar las proyecciones ante un cambio de paradigma para reflejar la realidad actual (actualizar estimaciones, reasignar recursos, mejorar la toma de decisiones).</li>
+        </ul>
+        <p class="exam-answer"><strong>En el final:</strong> las 4 funciones de la administración y los 3 niveles de control; para qué sirve el FODA; presupuesto económico vs financiero; y armar el <strong>estado de resultados</strong> en cascada sabiendo qué entra en cada escalón (OPEX vs CAPEX, EBITDA vs EBIT vs Neto).</p>
+      </section>
+
+<section class="chapter" id="startups" data-title="start up startup pymes bootstrapping venture capital capital semilla emprendedor privado innovacion abierta push pull ecosistema de innovacion lean startup construir medir aprender lean manufacturing customer development mvp producto minimo viable pivotar running lean value stick job to be done demand side sales matriz eric spin off i+d etapas de crecimiento">
+        <div class="chapter-head">
+          <div class="chapter-number">11</div>
+          <div><h2>Start-ups e innovación</h2></div>
+        </div>
+
+        <div class="callout"><strong>Start-up:</strong> emprendimiento científico-tecnológico creado sobre la base del conocimiento de actividades de I+D (de instituciones académicas o empresas). Empresa nueva con un modelo de negocio <strong>escalable</strong> asociado al uso de nuevas tecnologías; tiene el <em>potencial</em> (no la obligación) de ser innovadora.</div>
+        <p><strong>Características:</strong> origen en universidades/I+D; alta inversión en conocimiento y baja en infraestructura al inicio; riesgo alto pero potencial de crecimiento rápido; necesidad de vincularse con actores del ecosistema.</p>
+
+        <h3>Start-up vs PYME</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>Start-up</th><th>PYME</th></tr></thead>
+            <tbody>
+              <tr><td>Objetivo principal</td><td>Modelo repetible y escalable</td><td>Modelo conocido</td></tr>
+              <tr><td>Contexto</td><td>Alta incertidumbre</td><td>Mercado establecido</td></tr>
+              <tr><td>Formas de trabajo</td><td>Ciclos rápidos de experimentación</td><td>Procesos estables</td></tr>
+              <tr><td>Financiamiento</td><td>Bootstrapping / Venture Capital</td><td>Capital propio / créditos tradicionales</td></tr>
+              <tr><td>Escalabilidad</td><td>Crecimiento exponencial por diseño</td><td>Crecimiento lineal</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Etapas de crecimiento</h3>
+        <figure class="diagram">
+          <img src="img/23-68429a75.png" alt="Curva de ingresos vs tiempo con el valle de la muerte" loading="lazy">
+          <figcaption>Ingresos vs tiempo: del valle de la muerte al mercado público (IPO), con sus etapas y rondas de inversión.</figcaption>
+        </figure>
+
+        <h4>Del descubrimiento a la escala</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Pre-seed</th><th>Seed</th><th>Serie A (Early)</th><th>Serie B (Early)</th><th>Growth (C, D, E…)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Volumen de ronda (€)</strong></td><td>menos de 200K</td><td>200K – 500K</td><td>1M – 5M</td><td>6M – 20M</td><td>más de 20M</td></tr>
+              <tr><td><strong>Tipo de inversor</strong></td><td>FFF, business angels, aceleradoras, financiación pública</td><td>Business angels, family offices, aceleradoras, financiación pública, crowdfunding, venture capital</td><td>Venture capital</td><td>Venture capital</td><td>Grandes fondos</td></tr>
+              <tr><td><strong>Propósito financiero</strong></td><td>Desarrollar MVP; crear modelo de negocio</td><td>Mejorar MVP; validar modelo; cubrir roles clave del equipo; métricas (clientes, ventas, ingresos)</td><td>Escalar métricas; mostrar rentabilidad atractiva; ampliar equipo</td><td>Aumentar margen de ganancias; generar flujo de caja positivo</td><td>Consolidar una estrategia de crecimiento sólida y rápida</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Technology Readiness Levels (TRLs)</h4>
+        <p>Escala de madurez tecnológica, del laboratorio (academia) a la operación real (industria / gobierno).</p>
+        <div class="trl-row">
+          <div class="trl-card"><span class="trl-n">TRL 1</span><p>Principios básicos observados. <em>(Research)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 2</span><p>Concepto tecnológico formulado. <em>(Research)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 3</span><p>Prueba de concepto experimental. <em>(Research)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 4</span><p>Tecnología validada en laboratorio / entorno local. <em>(Development)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 5</span><p>Tecnología validada en entorno relevante. <em>(Development)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 6</span><p>Tecnología demostrada en entorno relevante. <em>(Development)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 7</span><p>Prototipo de sistema demostrado en entorno operativo. <em>(Deployment)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 8</span><p>Sistema completo y calificado. <em>(Deployment)</em></p></div>
+          <div class="trl-card"><span class="trl-n">TRL 9</span><p>Sistema real probado en entorno operativo. <em>(Deployment)</em></p></div>
+        </div>
+
+        <h3>Formas de financiamiento</h3>
+        <div class="cmp two">
+          <div class="callout"><strong>Bootstrapping</strong><ul><li>Recursos propios / ingresos de clientes.</li><li>Autofinanciamiento.</li><li>Control total de la organización.</li><li>Mayor disciplina financiera.</li></ul></div>
+          <div class="callout blue"><strong>Venture Capital</strong> (fondos externos a cambio de acciones: dinero, recursos, mentoría)<ul>
+            <li><strong>Capital semilla:</strong> rondas pre-Series A, en general menores a 1M.</li>
+            <li><strong>Capital emprendedor:</strong> Series A en adelante, mayores a 1M.</li>
+            <li><strong>Capital privado:</strong> compañías maduras, participación habitualmente mayoritaria.</li>
+          </ul></div>
+        </div>
+
+        <h3>Innovación</h3>
+        <p>Proceso por el que una idea se transforma en un ByS novedoso en el mercado; los resultados de la I+D se lanzan al mercado como nuevos ByS.</p>
+
+        <h4>Innovación abierta</h4>
+        <p>Las ideas valiosas pueden venir de dentro o de fuera de la compañía, y salir al mercado desde dentro o fuera. Da acceso a conocimiento y tecnologías externas, reduce costos y riesgos, facilita escalar y co-crear productos.</p>
+        <p>Según cuánto forma parte de la estrategia, la <strong>madurez de la innovación</strong> escala así:</p>
+        <div class="pyramid-block">
+          <div class="pyr-desc">
+            <p><strong>Gestión de la innovación:</strong> la innovación forma parte de mi estrategia.</p>
+            <p><strong>Innovación continua:</strong> no queda otro remedio, el mercado nos puede.</p>
+            <p><strong>Innovación puntual:</strong> sólo ante la demanda de clientes.</p>
+            <p><strong>Innovación oculta:</strong> el día a día nos puede.</p>
+          </div>
+          <div class="pyr">
+            <div class="pyr-band" style="width:40%;background:#0f766e">Gestión de la innovación<span class="pyr-tip">La innovación forma parte de mi estrategia.</span></div>
+            <div class="pyr-band" style="width:60%;background:#0d9488">Innovación continua<span class="pyr-tip">No queda otro remedio: el mercado nos puede.</span></div>
+            <div class="pyr-band" style="width:80%;background:#2f9e91">Innovación puntual<span class="pyr-tip">Sólo ante la demanda de clientes.</span></div>
+            <div class="pyr-band" style="width:100%;background:#5cbdb0">Innovación oculta<span class="pyr-tip">El día a día nos puede.</span></div>
+          </div>
+        </div>
+        <figure class="diagram">
+          <img src="img/27-9bbf9580.png" alt="Innovación abierta (detalle)" loading="lazy">
+          <figcaption>Flujos de conocimiento hacia dentro y hacia fuera.</figcaption>
+        </figure>
+        <figure class="diagram">
+          <img src="img/28-4d803104.png" alt="Innovación abierta vs cerrada" loading="lazy">
+          <figcaption>Comparación con el modelo de innovación cerrada.</figcaption>
+        </figure>
+
+        <h4>Método PUSH vs PULL</h4>
+        <p><em>Push</em> = la tecnología/investigación empuja hacia el mercado; <em>pull</em> = la demanda del mercado tracciona el desarrollo.</p>
+        <figure class="diagram">
+          <div class="mermaid">flowchart LR
+    IB["Investigación básica"] --> IA["Investigación aplicada"]
+    IA --> D["Desarrollo"]
+    D --> P["Producción"]
+    P --> C["Comercialización"]
+    C --> M["Mercado"]</div>
+          <figcaption>Método PUSH: arranca en la investigación y empuja la tecnología hacia el mercado.</figcaption>
+        </figure>
+        <figure class="diagram">
+          <div class="mermaid">flowchart LR
+    NM["Necesidad del mercado"] --> IB["Investigación básica"]
+    IB --> IA["Investigación aplicada"]
+    IA --> D["Desarrollo"]
+    D --> P["Producción"]
+    P --> C["Comercialización"]
+    C --> M["Mercado"]</div>
+          <figcaption>Método PULL: arranca en una necesidad del mercado que tracciona todo el desarrollo.</figcaption>
+        </figure>
+
+        <h4>Ecosistema de innovación</h4>
+        <div class="cmp two">
+          <ul class="study-list">
+            <li><strong>Estado:</strong> políticas, regulación. <strong>Estado → Empresa:</strong> incentivos, beneficios fiscales.</li>
+            <li><strong>Sistema científico-tecnológico (SCT):</strong> conocimiento, tecnología. <strong>Empresa → SCT:</strong> transferencia tecnológica, innovación abierta, spin-offs.</li>
+            <li><strong>Empresa:</strong> transformación en valor. <strong>SCT → Estado:</strong> financiamiento, becas, políticas.</li>
+          </ul>
+          <figure class="diagram">
+            <div class="mermaid">flowchart TD
+    EST["Estado"] -->|"incentivos, beneficios fiscales"| EMP["Empresa"]
+    EMP -->|"transferencia, innovación abierta, spin-offs"| SCT["Sistema Científico-Tecnológico"]
+    SCT -->|"financiamiento, becas, políticas"| EST</div>
+            <figcaption>El triángulo Estado – Empresa – SCT y los flujos entre ellos.</figcaption>
+          </figure>
+        </div>
+
+        <h3>Lean Startup</h3>
+        <div class="callout blue">Metodología para crear startups con <strong>aprendizaje validado</strong>, experimentación rápida y ciclos cortos (<strong>Construir → Medir → Aprender</strong>). Objetivo: <strong>evitar construir algo que nadie quiere</strong> y aprender rápido y barato qué demanda el mercado.</div>
+        <p>Permite aprender rápido, reducir el riesgo (validar antes de invertir) y optimizar recursos (construir solo lo que importa). Se basa en dos pilares:</p>
+
+        <h4>Lean Manufacturing</h4>
+        <p>Eliminación de desperdicio, desarrollo iterativo, MVP, pivote o perseverancia.</p>
+        <figure class="diagram">
+          <img src="img/32-93832305.png" alt="Lean Manufacturing" loading="lazy">
+          <figcaption>Principios de Lean Manufacturing aplicados a startups.</figcaption>
+        </figure>
+
+        <h4>Customer Development</h4>
+        <p>Validación temprana, ajuste producto-mercado, iteración constante.</p>
+        <figure class="diagram">
+          <div class="mermaid">flowchart LR
+    A["Descubrimiento de cliente"] --> B["Validación de cliente"]
+    B --> C["Creación de cliente"]
+    C --> D["Construcción de la compañía"]
+    B -.->|"pivotar"| A</div>
+          <figcaption>Customer Development: descubrir, validar (con posibilidad de pivotar), crear cliente y construir la compañía.</figcaption>
+        </figure>
+
+        <h4>MVP (Producto Mínimo Viable)</h4>
+        <p>Versión inicial de un ByS con las funciones básicas para <strong>validar una idea</strong> en el mercado real: probar, medir y aprender antes del lanzamiento final. Sirve para obtener feedback temprano, validar hipótesis y reducir riesgos.</p>
+        <ul class="study-list">
+          <li><strong>Ejemplos de MVP:</strong> video de demostración; MVP <em>conserje</em> (servicio manual y personalizado); <em>Mago de Oz</em> (el cliente cree que es el producto final, pero es a mano); <em>smoke test</em> (ofrecer la venta de un producto aún no creado).</li>
+          <li><strong>Pasos:</strong> 1) analizar al público objetivo; 2) testear en dos fases — <em>Alpha</em> (usuarios clave) y <em>Beta</em> (con ajustes); 3) actuar según resultados con métricas accionables: <strong>pivotar</strong> si no cumple o <strong>perseverar</strong> si funciona.</li>
+        </ul>
+
+        <h3>Herramientas</h3>
+        <h4>Running Lean</h4>
+        <p>Proceso iterativo para pasar del plan A a un plan que funcione (Lean Canvas + experimentación).</p>
+        <figure class="diagram">
+          <img src="img/34-133af6a7.png" alt="Running Lean" loading="lazy">
+          <figcaption>Running Lean (1/4).</figcaption>
+        </figure>
+        <figure class="diagram">
+          <img src="img/35-ae28f2c0.png" alt="Running Lean" loading="lazy">
+          <figcaption>Running Lean (2/4).</figcaption>
+        </figure>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Característica</th><th>Lean Canvas</th><th>Business Model Canvas</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Enfoque principal</strong></td><td>Diseñado específicamente para startups; aborda la incertidumbre y busca el ajuste producto-mercado rápido.</td><td>Da una visión global del modelo de negocio, aplicable a empresas de cualquier tamaño y etapa.</td></tr>
+              <tr><td><strong>Origen</strong></td><td>Adaptado por Ash Maurya a partir del BMC, para el enfoque Lean Startup.</td><td>Desarrollado por Alexander Osterwalder para mapear, discutir, diseñar e innovar modelos de negocio.</td></tr>
+              <tr><td><strong>Componentes clave</strong></td><td>Problema, Solución, Métricas clave, Ventaja única, Propuesta de valor, Segmentos, Canales, Estructura de costos, Fuentes de ingresos.</td><td>Segmentos, Propuestas de valor, Canales, Relaciones, Fuentes de ingresos, Recursos clave, Actividades clave, Socios clave, Estructura de costos.</td></tr>
+              <tr><td><strong>Foco en problema/solución</strong></td><td>Alto: valida el problema del cliente antes de definir la solución.</td><td>Presente, pero con un enfoque más equilibrado entre todos los componentes.</td></tr>
+              <tr><td><strong>Iteración y flexibilidad</strong></td><td>Alta: iteraciones rápidas basadas en feedback para llegar al product-market fit.</td><td>Moderada: ajustes según se aprende más sobre clientes y mercado.</td></tr>
+              <tr><td><strong>Simplicidad</strong></td><td>Simplificado, para entender y ajustar rápido.</td><td>Complejo, con visión detallada de cada aspecto (requiere más tiempo).</td></tr>
+              <tr><td><strong>Objetivo de aprendizaje</strong></td><td>Aprender rápido sobre la viabilidad, reduciendo el riesgo de fallo.</td><td>Entender y definir cómo la organización crea, entrega y captura valor.</td></tr>
+              <tr><td><strong>Público objetivo</strong></td><td>Emprendedores y startups en etapas iniciales que validan su idea.</td><td>Desde emprendedores hasta grandes corporaciones.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>Value Stick</h4>
+        <p>Herramienta de captura de valor entre la disposición a pagar y los costos.</p>
+        <figure class="diagram">
+          <img src="img/38-4e8e04f0.png" alt="Value Stick" loading="lazy">
+          <figcaption>Value Stick: disposición a pagar, precio, costo y disposición a vender.</figcaption>
+        </figure>
+        <figure class="diagram">
+          <img src="img/39-b3d0b2b9.png" alt="Value Stick (detalle)" loading="lazy">
+          <figcaption>Márgenes de valor capturado por cliente, empresa y proveedor.</figcaption>
+        </figure>
+
+        <h4>Job To Be Done</h4>
+        <p>En vez de enfocarse en las características del producto, centrarse en la <em>tarea</em> que el cliente quiere realizar: funcional, emocional y social.</p>
+
+        <h4>Demand Side Sales</h4>
+        <p>Vender lo que el cliente <em>demanda</em>: identificar su problema, explorar alternativas, presentar soluciones adaptadas y ayudar a decidir.</p>
+
+        <h4>Matriz ERIC</h4>
+        <p>Diferenciate de tu competencia con una o más de estas acciones, a partir del desarrollo previo de la <strong>curva de valor</strong> (ligada al Océano Azul):</p>
+        <div class="eric">
+          <div class="q"><h4>Eliminar ✕</h4><p>Qué factores que el sector da por sentado conviene <strong>eliminar</strong>.</p></div>
+          <div class="q"><h4>Reducir −</h4><p>Qué factores <strong>reducir</strong> muy por debajo del estándar del sector.</p></div>
+          <div class="q"><h4>Incrementar +</h4><p>Qué factores <strong>incrementar</strong> muy por encima del estándar del sector.</p></div>
+          <div class="q"><h4>Crear ★</h4><p>Qué factores nuevos <strong>crear</strong>, que el sector nunca ofreció.</p></div>
+        </div>
+
+        <p class="exam-answer"><strong>En el final:</strong> distinguí start-up de PYME (escalable vs conocido), las formas de financiamiento (bootstrapping vs VC y sus etapas), el ciclo Construir-Medir-Aprender, qué es un MVP con ejemplos, y pivotar vs perseverar. La Matriz ERIC conecta con el Océano Azul de <a href="#evaluacion">§9</a>.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="highlight-toolbar" id="highlight-toolbar" role="toolbar" aria-label="Resaltador de estudio" hidden>
+    <span class="highlight-label" id="highlight-label" aria-live="polite">Resaltar selección</span>
+    <div class="highlight-colors" aria-label="Color del resaltado">
+      <button class="highlight-color" type="button" data-color="yellow" aria-label="Resaltar en amarillo"></button>
+      <button class="highlight-color" type="button" data-color="mint" aria-label="Resaltar en verde"></button>
+      <button class="highlight-color" type="button" data-color="pink" aria-label="Resaltar en rosa"></button>
+      <button class="highlight-color" type="button" data-color="blue" aria-label="Resaltar en azul"></button>
+    </div>
+    <button class="highlight-tool-button highlight-pin" id="highlight-pin" type="button" aria-label="Dejar resaltador fijo" aria-pressed="false" title="Dejar resaltador fijo">Fijar</button>
+    <button class="highlight-tool-button" id="highlight-remove" type="button" aria-label="Quitar resaltado" title="Quitar resaltado" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 15H6L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+    </button>
+    <button class="highlight-tool-button" id="highlight-close" type="button" aria-label="Cerrar resaltador" title="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const chapters = [...document.querySelectorAll('.chapter')];
+    const navLinks = [...document.querySelectorAll('.toc a')];
+    const search = document.getElementById('search');
+    const searchResults = document.getElementById('search-results');
+    const searchWrap = document.querySelector('.search-wrap');
+    const progress = document.getElementById('reading-progress');
+    const content = document.getElementById('content');
+    const highlightToolbar = document.getElementById('highlight-toolbar');
+    const highlightLabel = document.getElementById('highlight-label');
+    const highlightRemove = document.getElementById('highlight-remove');
+    const highlightPin = document.getElementById('highlight-pin');
+    const highlightHelp = document.getElementById('highlight-help');
+    const highlightColors = [...document.querySelectorAll('.highlight-color')];
+    const highlightStorageKey = 'aa-highlights-v1';
+    const highlightModeStorageKey = 'aa-highlight-fixed-v1';
+    const highlightColorStorageKey = 'aa-highlight-color-v1';
+    const preparedStorageKey = 'aa-prepared-topics-v1';
+
+    function loadPreparedTopics() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(preparedStorageKey) || '[]');
+        return new Set(Array.isArray(stored) ? stored.filter(topic => typeof topic === 'string') : []);
+      } catch (error) {
+        return new Set();
+      }
+    }
+
+    const preparedTopics = loadPreparedTopics();
+
+    function savePreparedTopics() {
+      localStorage.setItem(preparedStorageKey, JSON.stringify([...preparedTopics]));
+    }
+
+    navLinks.forEach(link => {
+      const topicId = link.getAttribute('href').slice(1);
+      const topicName = link.textContent.replace(/\s+/g, ' ').trim().replace(/^(?:\d+|[A-Z])\s*/, '');
+      const item = document.createElement('div');
+      const button = document.createElement('button');
+      item.className = 'toc-item';
+      button.className = 'nav-check';
+      button.type = 'button';
+
+      link.before(item);
+      item.append(button, link);
+
+      function renderPreparedState() {
+        const prepared = preparedTopics.has(topicId);
+        item.classList.toggle('prepared', prepared);
+        button.textContent = prepared ? '✓' : '';
+        button.setAttribute('aria-pressed', String(prepared));
+        button.setAttribute('aria-label', `${prepared ? 'Volver a pendiente' : 'Marcar como preparado'}: ${topicName}`);
+        button.title = prepared ? 'Volver a pendiente' : 'Marcar como preparado';
+      }
+
+      button.addEventListener('click', () => {
+        if (preparedTopics.has(topicId)) preparedTopics.delete(topicId);
+        else preparedTopics.add(topicId);
+        savePreparedTopics();
+        renderPreparedState();
+      });
+
+      renderPreparedState();
+    });
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      localStorage.setItem('aa-theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('aa-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    function toggleTheme() {
+      setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    document.getElementById('mobile-theme').addEventListener('click', toggleTheme);
+    document.getElementById('print-button').addEventListener('click', () => window.print());
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const navBackdrop = document.getElementById('nav-backdrop');
+    const desktopNavToggle = document.getElementById('desktop-nav-toggle');
+    const sidebarStateKey = 'aa-sidebar-collapsed-v1';
+
+    function setSidebarCollapsed(collapsed) {
+      body.classList.toggle('sidebar-collapsed', collapsed);
+      localStorage.setItem(sidebarStateKey, String(collapsed));
+      desktopNavToggle.setAttribute('aria-expanded', String(!collapsed));
+      desktopNavToggle.setAttribute('aria-label', collapsed ? 'Expandir navegación' : 'Contraer navegación');
+      desktopNavToggle.title = collapsed ? 'Expandir navegación' : 'Contraer navegación';
+    }
+
+    setSidebarCollapsed(localStorage.getItem(sidebarStateKey) === 'true');
+    desktopNavToggle.addEventListener('click', () => {
+      setSidebarCollapsed(!body.classList.contains('sidebar-collapsed'));
+    });
+
+    function setNavOpen(open) {
+      body.classList.toggle('nav-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación');
+    }
+
+    menuToggle.addEventListener('click', () => setNavOpen(!body.classList.contains('nav-open')));
+    menuClose.addEventListener('click', () => setNavOpen(false));
+    navBackdrop.addEventListener('click', () => setNavOpen(false));
+
+    navLinks.forEach(link => link.addEventListener('click', () => setNavOpen(false)));
+
+    function updateProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const value = max > 0 ? (window.scrollY / max) * 100 : 0;
+      progress.style.width = `${Math.min(100, Math.max(0, value))}%`;
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach(link => {
+        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        link.classList.toggle('active', active);
+        link.closest('.toc-item')?.classList.toggle('active', active);
+      });
+    }, { rootMargin: '-12% 0px -72% 0px', threshold: [0, .1, .5] });
+
+    chapters.forEach(chapter => observer.observe(chapter));
+
+    function normalize(value) {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    const seenSearchEntries = new Set();
+    const searchIndex = chapters.flatMap(chapter => {
+      const chapterTitle = chapter.querySelector('h2')?.textContent.trim() || chapter.id;
+      return [...chapter.querySelectorAll('h2, h3, h4, p, li, td, summary')].map((node, index) => {
+        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        const normalized = normalize(text);
+        const key = `${chapter.id}:${normalized}`;
+        if (text.length < 3 || seenSearchEntries.has(key)) return null;
+        seenSearchEntries.add(key);
+        if (!node.id) node.id = `search-${chapter.id}-${index}`;
+        return {
+          node,
+          text,
+          normalized,
+          chapterTitle,
+          priority: /^H[2-4]$/.test(node.tagName) ? 0 : node.tagName === 'SUMMARY' ? 1 : 2
+        };
+      }).filter(Boolean);
+    });
+
+    let activeResult = -1;
+    let currentMatches = [];
+
+    function foldWithMap(value) {
+      let folded = '';
+      const map = [];
+      [...value].forEach((character, rawIndex) => {
+        const part = character.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        [...part].forEach(unit => {
+          folded += unit;
+          map.push(rawIndex);
+        });
+      });
+      return { folded, map };
+    }
+
+    function makeSnippet(text, query) {
+      const { folded, map } = foldWithMap(text);
+      const matchAt = folded.indexOf(query);
+      if (matchAt < 0) return text.slice(0, 180);
+      const rawStart = map[matchAt] ?? 0;
+      const rawEnd = (map[matchAt + query.length - 1] ?? rawStart) + 1;
+      const start = Math.max(0, rawStart - 62);
+      const end = Math.min(text.length, rawEnd + 105);
+      return `${start > 0 ? '...' : ''}${text.slice(start, end)}${end < text.length ? '...' : ''}`;
+    }
+
+    function addHighlightedText(container, text, query) {
+      const { folded, map } = foldWithMap(text);
+      const matchAt = folded.indexOf(query);
+      if (matchAt < 0) {
+        container.textContent = text;
+        return;
+      }
+      const start = map[matchAt];
+      const end = (map[matchAt + query.length - 1] ?? start) + 1;
+      container.append(document.createTextNode(text.slice(0, start)));
+      const mark = document.createElement('mark');
+      mark.textContent = text.slice(start, end);
+      container.append(mark, document.createTextNode(text.slice(end)));
+    }
+
+    function closeSearch() {
+      searchResults.hidden = true;
+      search.setAttribute('aria-expanded', 'false');
+      activeResult = -1;
+    }
+
+    function setActiveResult(index) {
+      const buttons = [...searchResults.querySelectorAll('.search-result')];
+      if (!buttons.length) return;
+      activeResult = (index + buttons.length) % buttons.length;
+      buttons.forEach((button, buttonIndex) => {
+        const active = buttonIndex === activeResult;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+      buttons[activeResult].scrollIntoView({ block: 'nearest' });
+    }
+
+    function goToSearchResult(result) {
+      result.node.closest('details')?.setAttribute('open', '');
+      result.node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      result.node.classList.remove('search-target');
+      void result.node.offsetWidth;
+      result.node.classList.add('search-target');
+      window.setTimeout(() => result.node.classList.remove('search-target'), 2300);
+      body.classList.remove('nav-open');
+      closeSearch();
+    }
+
+    function renderSearch(rawQuery) {
+      const query = normalize(rawQuery);
+      searchResults.replaceChildren();
+      activeResult = -1;
+      if (!query) {
+        closeSearch();
+        return;
+      }
+
+      currentMatches = searchIndex
+        .filter(item => item.normalized.includes(query))
+        .sort((a, b) => {
+          const startDifference = Number(!a.normalized.startsWith(query)) - Number(!b.normalized.startsWith(query));
+          return startDifference || a.priority - b.priority || a.text.length - b.text.length;
+        })
+        .slice(0, 10);
+
+      if (!currentMatches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'search-empty';
+        empty.textContent = 'No encontré coincidencias. Probá con una palabra más general o una sigla.';
+        searchResults.append(empty);
+      } else {
+        const summary = document.createElement('div');
+        summary.className = 'search-summary';
+        summary.textContent = `${currentMatches.length}${currentMatches.length === 10 ? '+' : ''} coincidencias`;
+        searchResults.append(summary);
+
+        currentMatches.forEach((result, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'search-result';
+          button.setAttribute('role', 'option');
+          button.setAttribute('aria-selected', 'false');
+
+          const chapterLabel = document.createElement('small');
+          chapterLabel.textContent = result.chapterTitle;
+          const snippet = document.createElement('span');
+          addHighlightedText(snippet, makeSnippet(result.text, query), query);
+          button.append(chapterLabel, snippet);
+          button.addEventListener('click', () => goToSearchResult(result));
+          button.addEventListener('mouseenter', () => setActiveResult(index));
+          searchResults.append(button);
+        });
+      }
+
+      searchResults.hidden = false;
+      search.setAttribute('aria-expanded', 'true');
+    }
+
+    search.addEventListener('input', event => renderSearch(event.target.value));
+    search.addEventListener('focus', () => {
+      if (search.value) renderSearch(search.value);
+    });
+    search.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeSearch();
+        return;
+      }
+      if (!currentMatches.length || searchResults.hidden) return;
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveResult(activeResult + 1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveResult(activeResult - 1);
+      } else if (event.key === 'Enter' && activeResult >= 0) {
+        event.preventDefault();
+        goToSearchResult(currentMatches[activeResult]);
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!searchWrap.contains(event.target)) closeSearch();
+    });
+
+    const initialQuery = new URLSearchParams(window.location.search).get('buscar');
+    if (initialQuery) {
+      search.value = initialQuery;
+      renderSearch(initialQuery);
+    }
+
+    function loadHighlights() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(highlightStorageKey) || '[]');
+        return Array.isArray(stored) ? stored.filter(item =>
+          item &&
+          typeof item.id === 'string' &&
+          typeof item.chapterId === 'string' &&
+          Number.isInteger(item.start) &&
+          Number.isInteger(item.end) &&
+          item.start >= 0 &&
+          item.end > item.start
+        ) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    let highlights = loadHighlights();
+    let pendingHighlight = null;
+    let activeHighlightId = null;
+    let fixedHighlightMode = localStorage.getItem(highlightModeStorageKey) === 'true';
+    let activeHighlightColor = localStorage.getItem(highlightColorStorageKey) || 'yellow';
+    if (!highlightColors.some(button => button.dataset.color === activeHighlightColor)) activeHighlightColor = 'yellow';
+    const highlightHistory = [];
+    const highlightRedo = [];
+
+    function saveHighlights() {
+      localStorage.setItem(highlightStorageKey, JSON.stringify(highlights));
+    }
+
+    function cloneHighlights(items = highlights) {
+      return items.map(item => ({ ...item }));
+    }
+
+    function recordHighlightState() {
+      highlightHistory.push(cloneHighlights());
+      if (highlightHistory.length > 100) highlightHistory.shift();
+      highlightRedo.length = 0;
+    }
+
+    function unwrapHighlights() {
+      document.querySelectorAll('mark.user-highlight').forEach(mark => {
+        mark.replaceWith(document.createTextNode(mark.textContent));
+      });
+      chapters.forEach(chapter => chapter.normalize());
+    }
+
+    function wrapHighlight(item) {
+      const chapter = document.getElementById(item.chapterId);
+      if (!chapter) return;
+
+      const walker = document.createTreeWalker(chapter, NodeFilter.SHOW_TEXT);
+      const segments = [];
+      let position = 0;
+      let node;
+
+      while ((node = walker.nextNode())) {
+        const nextPosition = position + node.data.length;
+        if (item.start < nextPosition && item.end > position) {
+          segments.push({
+            node,
+            start: Math.max(0, item.start - position),
+            end: Math.min(node.data.length, item.end - position)
+          });
+        }
+        position = nextPosition;
+        if (position >= item.end) break;
+      }
+
+      segments.reverse().forEach(segment => {
+        if (segment.end <= segment.start) return;
+        const range = document.createRange();
+        range.setStart(segment.node, segment.start);
+        range.setEnd(segment.node, segment.end);
+        const mark = document.createElement('mark');
+        mark.className = 'user-highlight';
+        mark.dataset.highlightId = item.id;
+        mark.dataset.color = item.color || 'yellow';
+        range.surroundContents(mark);
+      });
+    }
+
+    function renderHighlights() {
+      unwrapHighlights();
+      let repaired = false;
+
+      highlights.forEach(item => {
+        const chapter = document.getElementById(item.chapterId);
+        if (!chapter || !item.quote) return;
+        const chapterText = chapter.textContent;
+        if (chapterText.slice(item.start, item.end) !== item.quote) {
+          const newStart = chapterText.indexOf(item.quote);
+          if (newStart >= 0) {
+            item.start = newStart;
+            item.end = newStart + item.quote.length;
+            repaired = true;
+          } else {
+            const matches = chapters.map(candidate => ({
+              chapter: candidate,
+              start: candidate.textContent.indexOf(item.quote)
+            })).filter(match => match.start >= 0);
+
+            if (matches.length === 1) {
+              item.chapterId = matches[0].chapter.id;
+              item.start = matches[0].start;
+              item.end = matches[0].start + item.quote.length;
+              repaired = true;
+            }
+          }
+        }
+      });
+
+      [...highlights]
+        .sort((a, b) => a.chapterId.localeCompare(b.chapterId) || b.start - a.start)
+        .forEach(wrapHighlight);
+
+      if (repaired) saveHighlights();
+    }
+
+    function clearSelectedHighlight() {
+      document.querySelectorAll('mark.user-highlight.selected').forEach(mark => mark.classList.remove('selected'));
+    }
+
+    function renderHighlightControls() {
+      body.classList.toggle('highlight-mode', fixedHighlightMode);
+      highlightPin.classList.toggle('active', fixedHighlightMode);
+      highlightPin.setAttribute('aria-pressed', String(fixedHighlightMode));
+      highlightPin.setAttribute('aria-label', fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Dejar resaltador fijo');
+      highlightPin.title = fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Dejar resaltador fijo';
+      highlightPin.textContent = fixedHighlightMode ? 'Fijo' : 'Fijar';
+      highlightHelp.classList.toggle('active', fixedHighlightMode);
+      highlightHelp.setAttribute('aria-pressed', String(fixedHighlightMode));
+      highlightHelp.title = fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Activar resaltador fijo';
+      highlightColors.forEach(button => {
+        const active = button.dataset.color === activeHighlightColor;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function setActiveHighlightColor(color) {
+      activeHighlightColor = color;
+      localStorage.setItem(highlightColorStorageKey, color);
+      renderHighlightControls();
+    }
+
+    function closeHighlightToolbar(force = false) {
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      if (fixedHighlightMode && !force) {
+        showHighlightToolbar('fixed');
+        return;
+      }
+      highlightToolbar.hidden = true;
+    }
+
+    function showHighlightToolbar(mode) {
+      const editing = mode === 'edit';
+      const help = mode === 'help';
+      const fixed = mode === 'fixed';
+      highlightLabel.textContent = editing
+        ? 'Editar resaltado'
+        : help
+          ? 'Seleccioná texto para resaltarlo'
+          : fixed
+            ? 'Resaltador fijo'
+            : 'Resaltar selección';
+      highlightRemove.hidden = !editing;
+      highlightColors.forEach(button => { button.disabled = help; });
+      renderHighlightControls();
+      highlightToolbar.hidden = false;
+    }
+
+    function setFixedHighlightMode(enabled) {
+      fixedHighlightMode = enabled;
+      localStorage.setItem(highlightModeStorageKey, String(enabled));
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      renderHighlightControls();
+      if (enabled) showHighlightToolbar('fixed');
+      else closeHighlightToolbar(true);
+      body.classList.remove('nav-open');
+    }
+
+    function chapterOffset(chapter, node, offset) {
+      const range = document.createRange();
+      range.selectNodeContents(chapter);
+      range.setEnd(node, offset);
+      return range.toString().length;
+    }
+
+    function isWordCharacter(character) {
+      return Boolean(character) && /[\p{L}\p{N}\p{M}_]/u.test(character);
+    }
+
+    function snapToWholeWords(text, start, end) {
+      while (start > 0 && isWordCharacter(text[start - 1])) start -= 1;
+      while (end < text.length && isWordCharacter(text[end])) end += 1;
+      return { start, end };
+    }
+
+    function captureHighlightSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return;
+
+      const range = selection.getRangeAt(0);
+      const startElement = range.startContainer.nodeType === Node.TEXT_NODE
+        ? range.startContainer.parentElement
+        : range.startContainer;
+      const endElement = range.endContainer.nodeType === Node.TEXT_NODE
+        ? range.endContainer.parentElement
+        : range.endContainer;
+      const startChapter = startElement?.closest?.('.chapter');
+      const endChapter = endElement?.closest?.('.chapter');
+      if (!startChapter || startChapter !== endChapter || !content.contains(startChapter)) return;
+
+      const rawText = range.toString();
+      const leadingSpace = rawText.length - rawText.trimStart().length;
+      const trailingSpace = rawText.length - rawText.trimEnd().length;
+      if (!rawText.trim()) return;
+
+      const chapterText = startChapter.textContent;
+      const selectionStart = chapterOffset(startChapter, range.startContainer, range.startOffset) + leadingSpace;
+      const selectionEnd = chapterOffset(startChapter, range.endContainer, range.endOffset) - trailingSpace;
+      const { start, end } = snapToWholeWords(chapterText, selectionStart, selectionEnd);
+      if (end <= start) return;
+
+      pendingHighlight = {
+        chapterId: startChapter.id,
+        start,
+        end,
+        quote: chapterText.slice(start, end)
+      };
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      if (fixedHighlightMode) addHighlight(activeHighlightColor);
+      else showHighlightToolbar('selection');
+    }
+
+    function makeHighlightId() {
+      return `hl-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function addHighlight(color) {
+      if (!pendingHighlight) return;
+      recordHighlightState();
+      setActiveHighlightColor(color);
+      let start = pendingHighlight.start;
+      let end = pendingHighlight.end;
+
+      const overlaps = highlights.filter(item =>
+        item.chapterId === pendingHighlight.chapterId &&
+        item.start < end &&
+        item.end > start
+      );
+      overlaps.forEach(item => {
+        start = Math.min(start, item.start);
+        end = Math.max(end, item.end);
+      });
+
+      const chapter = document.getElementById(pendingHighlight.chapterId);
+      const overlapIds = new Set(overlaps.map(item => item.id));
+      highlights = highlights.filter(item => !overlapIds.has(item.id));
+      highlights.push({
+        id: makeHighlightId(),
+        chapterId: pendingHighlight.chapterId,
+        start,
+        end,
+        quote: chapter.textContent.slice(start, end),
+        color
+      });
+      saveHighlights();
+      renderHighlights();
+      window.getSelection()?.removeAllRanges();
+      closeHighlightToolbar();
+    }
+
+    function recolorHighlight(color) {
+      const item = highlights.find(highlight => highlight.id === activeHighlightId);
+      if (!item) return;
+      recordHighlightState();
+      setActiveHighlightColor(color);
+      item.color = color;
+      saveHighlights();
+      renderHighlights();
+      closeHighlightToolbar();
+    }
+
+    highlightColors.forEach(button => button.addEventListener('click', () => {
+      const color = button.dataset.color;
+      if (activeHighlightId) recolorHighlight(color);
+      else if (pendingHighlight) addHighlight(color);
+      else {
+        setActiveHighlightColor(color);
+        if (fixedHighlightMode) showHighlightToolbar('fixed');
+      }
+    }));
+
+    highlightRemove.addEventListener('click', () => {
+      if (!activeHighlightId) return;
+      recordHighlightState();
+      highlights = highlights.filter(item => item.id !== activeHighlightId);
+      saveHighlights();
+      renderHighlights();
+      closeHighlightToolbar();
+    });
+
+    function restoreHighlightState(state) {
+      highlights = cloneHighlights(state);
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      saveHighlights();
+      renderHighlights();
+      if (fixedHighlightMode) showHighlightToolbar('fixed');
+      else closeHighlightToolbar(true);
+    }
+
+    function undoHighlight() {
+      if (!highlightHistory.length) return;
+      highlightRedo.push(cloneHighlights());
+      restoreHighlightState(highlightHistory.pop());
+    }
+
+    function redoHighlight() {
+      if (!highlightRedo.length) return;
+      highlightHistory.push(cloneHighlights());
+      restoreHighlightState(highlightRedo.pop());
+    }
+
+    document.addEventListener('keydown', event => {
+      const target = event.target;
+      const isEditable = target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target.isContentEditable;
+      if (isEditable || !(event.ctrlKey || event.metaKey)) return;
+
+      const key = event.key.toLowerCase();
+      if (key === 'z' && event.shiftKey) {
+        event.preventDefault();
+        redoHighlight();
+      } else if (key === 'z') {
+        event.preventDefault();
+        undoHighlight();
+      } else if (key === 'y') {
+        event.preventDefault();
+        redoHighlight();
+      }
+    });
+
+    highlightPin.addEventListener('click', () => setFixedHighlightMode(!fixedHighlightMode));
+    document.getElementById('highlight-close').addEventListener('click', () => {
+      if (fixedHighlightMode) setFixedHighlightMode(false);
+      else closeHighlightToolbar(true);
+    });
+    highlightHelp.addEventListener('click', () => setFixedHighlightMode(!fixedHighlightMode));
+
+    content.addEventListener('click', event => {
+      const mark = event.target.closest('mark.user-highlight');
+      if (!mark) return;
+      event.preventDefault();
+      window.getSelection()?.removeAllRanges();
+      pendingHighlight = null;
+      activeHighlightId = mark.dataset.highlightId;
+      clearSelectedHighlight();
+      document.querySelectorAll(`mark.user-highlight[data-highlight-id="${activeHighlightId}"]`)
+        .forEach(part => part.classList.add('selected'));
+      showHighlightToolbar('edit');
+    });
+
+    let pointerSelecting = false;
+    document.addEventListener('pointerdown', event => {
+      pointerSelecting = content.contains(event.target);
+      if (highlightToolbar.contains(event.target)) return;
+      if (!event.target.closest('mark.user-highlight')) closeHighlightToolbar();
+    });
+    document.addEventListener('pointerup', event => {
+      pointerSelecting = false;
+      if (highlightToolbar.contains(event.target) || event.target.closest('mark.user-highlight')) return;
+      window.setTimeout(captureHighlightSelection, 20);
+    });
+    document.addEventListener('pointercancel', () => { pointerSelecting = false; });
+    document.addEventListener('keyup', event => {
+      if (event.key.startsWith('Arrow') || event.key === 'Shift') captureHighlightSelection();
+    });
+    let selectionTimer;
+    document.addEventListener('selectionchange', () => {
+      window.clearTimeout(selectionTimer);
+      selectionTimer = window.setTimeout(() => {
+        if (pointerSelecting) return;
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed) captureHighlightSelection();
+      }, 120);
+    });
+
+    renderHighlights();
+    renderHighlightControls();
+    if (fixedHighlightMode) showHighlightToolbar('fixed');
+  </script>
+  <script>
+    const studyNotes = document.getElementById('study-notes');
+    const notesHeader = document.getElementById('notes-header');
+    const notesCollapse = document.getElementById('notes-collapse');
+    const notesExpand = document.getElementById('notes-expand');
+    const notesImport = document.getElementById('notes-import');
+    const notesFile = document.getElementById('notes-file');
+    const notesDownload = document.getElementById('notes-download');
+    const notesPreview = document.getElementById('notes-preview');
+    const notesSaved = document.querySelector('.notes-saved');
+    const notesPreviewToggle = document.getElementById('notes-preview-toggle');
+    const notesCommandButtons = [...document.querySelectorAll('[data-note-command]')];
+    const notesStorageKey = 'aa-study-notes-v1';
+    const notesStateKey = 'aa-study-notes-collapsed-v1';
+    let notesAnimationTimer;
+    let notesSaveTimer;
+    let notesPreviewVisible = false;
+
+    studyNotes.value = localStorage.getItem(notesStorageKey) || '';
+
+    function setNotesOpen(open, animate = true) {
+      window.clearTimeout(notesAnimationTimer);
+      localStorage.setItem(notesStateKey, String(!open));
+      document.body.classList.remove('notes-opening', 'notes-closing');
+
+      if (open) {
+        document.body.classList.remove('notes-collapsed');
+        document.body.classList.add('notes-open');
+        if (animate) {
+          document.body.classList.add('notes-opening');
+          notesAnimationTimer = window.setTimeout(() => document.body.classList.remove('notes-opening'), 210);
+        }
+        window.setTimeout(() => studyNotes.focus(), animate ? 220 : 0);
+        return;
+      }
+
+      if (!animate) {
+        document.body.classList.remove('notes-open');
+        document.body.classList.add('notes-collapsed');
+        return;
+      }
+
+      document.body.classList.add('notes-closing');
+      notesAnimationTimer = window.setTimeout(() => {
+        document.body.classList.remove('notes-open', 'notes-closing');
+        document.body.classList.add('notes-collapsed');
+      }, 180);
+    }
+
+    if (localStorage.getItem(notesStateKey) === 'true') setNotesOpen(false, false);
+    notesCollapse.addEventListener('click', () => setNotesOpen(false));
+    notesExpand.addEventListener('click', () => setNotesOpen(true));
+    notesHeader.addEventListener('click', event => {
+      if (!event.target.closest('button')) setNotesOpen(false);
+    });
+
+    function saveNotes() {
+      window.clearTimeout(notesSaveTimer);
+      localStorage.setItem(notesStorageKey, studyNotes.value);
+      notesSaved.classList.remove('is-saving');
+      notesSaved.setAttribute('aria-label', 'Guardado automáticamente');
+      notesSaved.title = 'Guardado automáticamente';
+    }
+
+    studyNotes.addEventListener('input', () => {
+      window.clearTimeout(notesSaveTimer);
+      notesSaved.classList.add('is-saving');
+      notesSaved.setAttribute('aria-label', 'Guardando notas');
+      notesSaved.title = 'Guardando notas';
+      notesSaveTimer = window.setTimeout(saveNotes, 450);
+    });
+    window.addEventListener('pagehide', saveNotes);
+
+    function appendInlineMarkdown(parent, text) {
+      const tokenPattern = /(\*\*[^*\n]+\*\*|`[^`\n]+`|\*[^*\n]+\*)/g;
+      let cursor = 0;
+      for (const match of text.matchAll(tokenPattern)) {
+        parent.append(document.createTextNode(text.slice(cursor, match.index)));
+        const token = match[0];
+        let element;
+        if (token.startsWith('**')) {
+          element = document.createElement('strong');
+          element.textContent = token.slice(2, -2);
+        } else if (token.startsWith('`')) {
+          element = document.createElement('code');
+          element.textContent = token.slice(1, -1);
+        } else {
+          element = document.createElement('em');
+          element.textContent = token.slice(1, -1);
+        }
+        parent.append(element);
+        cursor = match.index + token.length;
+      }
+      parent.append(document.createTextNode(text.slice(cursor)));
+    }
+
+    function renderNotesPreview() {
+      notesPreview.replaceChildren();
+      const markdown = studyNotes.value;
+      if (!markdown.trim()) {
+        const empty = document.createElement('p');
+        empty.textContent = 'Todavía no hay notas.';
+        empty.style.color = 'var(--muted)';
+        notesPreview.append(empty);
+        return;
+      }
+
+      let currentList = null;
+      let currentListType = '';
+      let inCodeBlock = false;
+      let codeLines = [];
+
+      function resetList() {
+        currentList = null;
+        currentListType = '';
+      }
+
+      function appendCodeBlock() {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = codeLines.join('\n');
+        pre.append(code);
+        notesPreview.append(pre);
+        codeLines = [];
+      }
+
+      function getList(type) {
+        if (currentList && currentListType === type) return currentList;
+        currentList = document.createElement(type === 'ordered' ? 'ol' : 'ul');
+        currentListType = type;
+        notesPreview.append(currentList);
+        return currentList;
+      }
+
+      for (const line of markdown.split(/\r?\n/)) {
+        if (/^```/.test(line)) {
+          resetList();
+          if (inCodeBlock) appendCodeBlock();
+          inCodeBlock = !inCodeBlock;
+          continue;
+        }
+        if (inCodeBlock) {
+          codeLines.push(line);
+          continue;
+        }
+        if (!line.trim()) {
+          resetList();
+          continue;
+        }
+
+        const heading = line.match(/^(#{1,3})\s+(.+)$/);
+        if (heading) {
+          resetList();
+          const element = document.createElement(`h${heading[1].length}`);
+          appendInlineMarkdown(element, heading[2]);
+          notesPreview.append(element);
+          continue;
+        }
+
+        const task = line.match(/^[-*]\s+\[([ xX])\]\s+(.+)$/);
+        if (task) {
+          const item = document.createElement('li');
+          item.className = 'notes-task';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = task[1].toLowerCase() === 'x';
+          checkbox.disabled = true;
+          const label = document.createElement('span');
+          appendInlineMarkdown(label, task[2]);
+          item.append(checkbox, label);
+          getList('task').append(item);
+          continue;
+        }
+
+        const unordered = line.match(/^[-*]\s+(.+)$/);
+        if (unordered) {
+          const item = document.createElement('li');
+          appendInlineMarkdown(item, unordered[1]);
+          getList('unordered').append(item);
+          continue;
+        }
+
+        const ordered = line.match(/^\d+\.\s+(.+)$/);
+        if (ordered) {
+          const item = document.createElement('li');
+          appendInlineMarkdown(item, ordered[1]);
+          getList('ordered').append(item);
+          continue;
+        }
+
+        resetList();
+        const quote = line.match(/^>\s?(.*)$/);
+        const element = document.createElement(quote ? 'blockquote' : 'p');
+        appendInlineMarkdown(element, quote ? quote[1] : line);
+        notesPreview.append(element);
+      }
+
+      if (inCodeBlock || codeLines.length) appendCodeBlock();
+    }
+
+    function setNotesPreview(visible) {
+      notesPreviewVisible = visible;
+      if (visible) renderNotesPreview();
+      studyNotes.hidden = visible;
+      notesPreview.hidden = !visible;
+      notesPreviewToggle.textContent = visible ? 'Editar' : 'Vista';
+      notesPreviewToggle.classList.toggle('active', visible);
+      if (!visible) studyNotes.focus();
+    }
+
+    function dispatchNotesInput() {
+      studyNotes.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    function wrapNotesSelection(before, after, placeholder) {
+      if (notesPreviewVisible) setNotesPreview(false);
+      const start = studyNotes.selectionStart;
+      const end = studyNotes.selectionEnd;
+      const selected = studyNotes.value.slice(start, end) || placeholder;
+      const replacement = `${before}${selected}${after}`;
+      studyNotes.setRangeText(replacement, start, end, 'end');
+      studyNotes.setSelectionRange(start + before.length, start + before.length + selected.length);
+      dispatchNotesInput();
+      studyNotes.focus();
+    }
+
+    function prefixNotesLines(prefix) {
+      if (notesPreviewVisible) setNotesPreview(false);
+      const value = studyNotes.value;
+      const start = studyNotes.selectionStart;
+      const end = studyNotes.selectionEnd;
+      const blockStart = value.lastIndexOf('\n', Math.max(0, start - 1)) + 1;
+      const nextBreak = value.indexOf('\n', end);
+      const blockEnd = nextBreak === -1 ? value.length : nextBreak;
+      const replacement = value.slice(blockStart, blockEnd).split('\n').map(line => `${prefix}${line}`).join('\n');
+      studyNotes.setRangeText(replacement, blockStart, blockEnd, 'end');
+      studyNotes.setSelectionRange(blockStart, blockStart + replacement.length);
+      dispatchNotesInput();
+      studyNotes.focus();
+    }
+
+    notesCommandButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const command = button.dataset.noteCommand;
+        if (command === 'heading') prefixNotesLines('## ');
+        if (command === 'bold') wrapNotesSelection('**', '**', 'texto');
+        if (command === 'italic') wrapNotesSelection('*', '*', 'texto');
+        if (command === 'list') prefixNotesLines('- ');
+        if (command === 'task') prefixNotesLines('- [ ] ');
+        if (command === 'code') wrapNotesSelection('`', '`', 'código');
+      });
+    });
+
+    studyNotes.addEventListener('keydown', event => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+      const key = event.key.toLowerCase();
+      let handled = true;
+
+      if (!event.shiftKey && key === 'b') wrapNotesSelection('**', '**', 'texto');
+      else if (!event.shiftKey && key === 'i') wrapNotesSelection('*', '*', 'texto');
+      else if (!event.shiftKey && event.key === '`') wrapNotesSelection('`', '`', 'código');
+      else if (event.shiftKey && event.code === 'Digit7') prefixNotesLines('1. ');
+      else if (event.shiftKey && event.code === 'Digit8') prefixNotesLines('- ');
+      else handled = false;
+
+      if (handled) event.preventDefault();
+    });
+
+    notesPreviewToggle.addEventListener('click', () => setNotesPreview(!notesPreviewVisible));
+    notesImport.addEventListener('click', () => notesFile.click());
+    notesFile.addEventListener('change', async () => {
+      const [file] = notesFile.files;
+      if (!file) return;
+      studyNotes.value = await file.text();
+      dispatchNotesInput();
+      if (notesPreviewVisible) renderNotesPreview();
+      notesFile.value = '';
+    });
+    notesDownload.addEventListener('click', () => {
+      const blob = new Blob([studyNotes.value], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'notas-aprendizaje-automatico.md';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+  <script>
+    const installAppButton = document.getElementById('install-app');
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    let installPrompt = null;
+
+    if (!isStandalone && isIOS) installAppButton.hidden = false;
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      installPrompt = event;
+      installAppButton.hidden = false;
+    });
+
+    installAppButton.addEventListener('click', async () => {
+      if (installPrompt) {
+        installPrompt.prompt();
+        const choice = await installPrompt.userChoice;
+        installPrompt = null;
+        if (choice.outcome === 'accepted') installAppButton.hidden = true;
+        return;
+      }
+      if (isIOS) window.alert('En Safari, tocá Compartir y después Agregar a inicio.');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installPrompt = null;
+      installAppButton.hidden = true;
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: 'loose',
+      theme: 'base',
+      themeVariables: {
+        background: '#f6faf9',
+        primaryColor: '#d2efe9',
+        primaryBorderColor: '#0d9488',
+        primaryTextColor: '#0f2a25',
+        secondaryColor: '#e7ecfb',
+        tertiaryColor: '#eaf1ef',
+        lineColor: '#5f7a73',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '15px'
+      },
+      flowchart: { htmlLabels: true, curve: 'basis' },
+      sequence: { useMaxWidth: true }
+    });
+  </script>
+  <script>
+    (function () {
+      var KEY = 'ebt2-hide-code';
+      var btn = document.getElementById('code-toggle');
+      var lbl = document.getElementById('code-toggle-label');
+      function apply(hidden) {
+        document.body.classList.toggle('hide-code', hidden);
+        if (btn) { btn.classList.toggle('active', hidden); btn.setAttribute('aria-pressed', hidden ? 'true' : 'false'); }
+        if (lbl) { lbl.textContent = hidden ? 'Fórmulas ocultas' : 'Fórmulas'; }
+      }
+      var hidden = localStorage.getItem(KEY) === '1';
+      apply(hidden);
+      if (btn) btn.addEventListener('click', function () {
+        hidden = !hidden;
+        localStorage.setItem(KEY, hidden ? '1' : '0');
+        apply(hidden);
+      });
+    })();
+  </script>
+</body>
+</html>

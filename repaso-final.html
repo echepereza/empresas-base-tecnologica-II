@@ -1,0 +1,2455 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Repaso final de EBT II (Empresas de Base Tecnológica), FIUBA: el mínimo para aprobar los parciales y el final.">
+  <link rel="icon" href="pwa-icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="pwa-icon.svg">
+  <meta name="theme-color" content="#0d9488">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="EBT II">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Repaso final | EBT II</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f6;
+      --surface: #ffffff;
+      --surface-2: #eaf1ef;
+      --ink: #14201d;
+      --muted: #5d6b66;
+      --line: #dbe6e2;
+      --accent: #0d9488;
+      --accent-2: #d2efe9;
+      --accent-ink: #0f766e;
+      --warm: #9b5f1d;
+      --warm-bg: #fbe4c9;
+      --danger: #a23b3b;
+      --danger-bg: #fbe3e0;
+      --blue: #3f5bb2;
+      --blue-bg: #e7ecfb;
+      --hl-yellow: #ffe08a;
+      --hl-mint: #b7ecc6;
+      --hl-pink: #ffc1d2;
+      --hl-blue: #bcd7ff;
+      --shadow: 0 18px 55px rgba(15, 60, 50, .10);
+      --radius: 18px;
+      --sidebar: 300px;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #0e1614;
+      --surface: #14201d;
+      --surface-2: #1c2a27;
+      --ink: #eef4f1;
+      --muted: #9fb1ab;
+      --line: #26332f;
+      --accent: #2dd4bf;
+      --accent-2: #123029;
+      --accent-ink: #99f6e4;
+      --warm: #f0b766;
+      --warm-bg: #3b2c19;
+      --danger: #f3a29a;
+      --danger-bg: #3e2422;
+      --blue: #9bb0f7;
+      --blue-bg: #1e2440;
+      --hl-yellow: #725d19;
+      --hl-mint: #1f5a37;
+      --hl-pink: #71384b;
+      --hl-blue: #294f78;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .30);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.68;
+      text-rendering: optimizeLegibility;
+    }
+
+    a { color: inherit; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    code, .formula {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
+    }
+
+    .progress {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 100;
+      height: 3px;
+      background: transparent;
+    }
+    .progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .layout { min-height: 100vh; }
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar);
+      padding: 26px 20px 24px;
+      border-right: 1px solid var(--line);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(18px);
+      overflow-y: auto;
+      z-index: 30;
+    }
+
+    .brand {
+      margin: 0 8px 14px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand strong { display: block; line-height: 1.2; }
+    #menu-close { display: none; }
+
+    .search-wrap { position: relative; margin-bottom: 18px; }
+    .search-wrap svg {
+      position: absolute;
+      left: 13px;
+      top: 12px;
+      width: 18px;
+      color: var(--muted);
+    }
+    #search {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px 10px 39px;
+      color: var(--ink);
+      background: var(--surface);
+      outline: none;
+    }
+    #search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-2); }
+    .search-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      z-index: 60;
+      max-height: min(440px, 62vh);
+      overflow-y: auto;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .search-results[hidden] { display: none; }
+    .search-summary {
+      padding: 7px 9px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .search-result {
+      display: block;
+      width: 100%;
+      padding: 10px 9px;
+      border: 0;
+      border-radius: 9px;
+      color: var(--ink);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+    }
+    .search-result:hover,
+    .search-result.active { background: var(--surface-2); }
+    .search-result small {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--accent-ink);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .search-result span {
+      display: -webkit-box;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+    .search-result mark {
+      padding: 0 2px;
+      border-radius: 3px;
+      color: var(--ink);
+      background: var(--accent-2);
+    }
+    .search-empty {
+      padding: 14px 9px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .search-target { animation: search-pulse 2.2s ease; }
+    @keyframes search-pulse {
+      0%, 35% { background: var(--accent-2); box-shadow: 0 0 0 5px var(--accent-2); }
+      100% { background: transparent; box-shadow: none; }
+    }
+
+    .nav-title {
+      margin: 18px 10px 8px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .toc { display: grid; gap: 3px; }
+    .toc-item {
+      position: relative;
+      border-radius: 9px;
+      transition: .18s ease;
+    }
+    .toc a {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 7px;
+      align-items: baseline;
+      padding: 7px 9px 7px 36px;
+      border-radius: 9px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      text-decoration: none;
+      transition: .18s ease;
+    }
+    .toc a span { color: color-mix(in srgb, var(--muted) 70%, transparent); font-variant-numeric: tabular-nums; }
+    .toc-item:hover, .toc-item.active { background: var(--surface-2); }
+    .toc a:hover, .toc a.active { color: var(--ink); }
+    .toc a.active span { color: var(--accent); }
+    .nav-check {
+      position: absolute;
+      top: 50%;
+      left: 9px;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      color: var(--surface);
+      background: transparent;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: .18s ease;
+    }
+    .nav-check:hover { border-color: var(--accent); }
+    .toc-item.prepared .nav-check { border-color: var(--accent); background: var(--accent); }
+    .toc-item.prepared a {
+      opacity: .58;
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+    }
+
+    .side-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 20px;
+    }
+    .icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .icon-button:hover { border-color: var(--accent); }
+    .icon-button.active { border-color: var(--accent); color: var(--accent-ink); background: var(--accent-2); }
+    .icon-button[hidden] { display: none; }
+    .icon-button svg { width: 17px; }
+    .icon-button.wide { grid-column: 1 / -1; }
+    .side-actions a { text-decoration: none; }
+
+    mark.user-highlight {
+      padding: .04em .05em;
+      border-radius: 4px;
+      color: inherit;
+      cursor: pointer;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    mark.user-highlight[data-color="yellow"] { background: var(--hl-yellow); }
+    mark.user-highlight[data-color="mint"] { background: var(--hl-mint); }
+    mark.user-highlight[data-color="pink"] { background: var(--hl-pink); }
+    mark.user-highlight[data-color="blue"] { background: var(--hl-blue); }
+    mark.user-highlight.selected { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .highlight-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: calc(100vw - 28px);
+      padding: 9px 10px 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      box-shadow: 0 16px 48px rgba(15, 25, 22, .2);
+      backdrop-filter: blur(16px);
+      transform: translateX(-50%);
+    }
+    .highlight-toolbar[hidden] { display: none; }
+    .highlight-label {
+      margin-right: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .highlight-colors { display: flex; gap: 6px; }
+    .highlight-color {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 2px solid var(--surface);
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px var(--line);
+      cursor: pointer;
+    }
+    .highlight-color[data-color="yellow"] { background: var(--hl-yellow); }
+    .highlight-color[data-color="mint"] { background: var(--hl-mint); }
+    .highlight-color[data-color="pink"] { background: var(--hl-pink); }
+    .highlight-color[data-color="blue"] { background: var(--hl-blue); }
+    .highlight-color:hover { transform: translateY(-1px) scale(1.06); }
+    .highlight-color.active { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .highlight-color:disabled { opacity: .35; cursor: default; transform: none; }
+    .highlight-tool-button {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      color: var(--muted);
+      background: transparent;
+      cursor: pointer;
+    }
+    .highlight-tool-button.active { color: var(--surface); background: var(--accent); }
+    .highlight-pin { width: auto; padding: 0 9px; font-size: 11px; font-weight: 800; }
+    .highlight-tool-button:hover { color: var(--ink); background: var(--surface-2); }
+    .highlight-tool-button svg { width: 17px; height: 17px; }
+    #highlight-remove { color: var(--danger); }
+
+    .main { margin-left: var(--sidebar); transition: margin-left .22s ease; }
+    .content { width: min(1080px, calc(100% - 64px)); margin: 0 auto; padding: 54px 0 110px; }
+
+    .desktop-nav-toggle { display: none; }
+
+    .notes-panel { display: none; }
+    @media (min-width: 1051px) {
+      .sidebar { transition: transform .22s ease; }
+      body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
+      body.sidebar-collapsed .main { margin-left: 0; }
+      .desktop-nav-toggle {
+        position: fixed;
+        top: 24px;
+        left: calc(var(--sidebar) - 48px);
+        z-index: 35;
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        color: var(--muted);
+        background: var(--surface);
+        box-shadow: none;
+        cursor: pointer;
+        transition: left .22s ease, color .15s ease, border-color .15s ease;
+      }
+      .desktop-nav-toggle:hover { color: var(--ink); border-color: var(--accent); }
+      .desktop-nav-toggle svg {
+        display: block;
+        width: 16px;
+        height: 16px;
+        transition: transform .22s ease;
+      }
+      body.sidebar-collapsed .desktop-nav-toggle {
+        left: 14px;
+        box-shadow: 0 6px 18px rgba(18, 44, 58, .1);
+      }
+      body.sidebar-collapsed .desktop-nav-toggle svg { transform: rotate(180deg); }
+      .notes-panel {
+        position: fixed;
+        right: 18px;
+        bottom: 0;
+        z-index: 40;
+        display: flex;
+        height: min(430px, calc(100vh - 36px));
+        width: clamp(280px, 24vw, 340px);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-bottom: 0;
+        border-radius: 16px 16px 0 0;
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .notes-panel-content {
+        display: flex;
+        min-width: 0;
+        width: 100%;
+        flex-direction: column;
+      }
+      body.notes-opening .notes-panel { animation: notes-rise-in .2s ease-out both; }
+      body.notes-closing .notes-panel { animation: notes-drop-out .18s ease-in both; }
+      @keyframes notes-rise-in {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+      }
+      @keyframes notes-drop-out {
+        from { transform: translateY(0); }
+        to { transform: translateY(100%); }
+      }
+      .notes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 7px 9px 7px 14px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+      }
+      .notes-heading strong { line-height: 1.25; }
+      .notes-header-actions { display: flex; gap: 6px; }
+      .notes-saved {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        color: var(--accent);
+        place-items: center;
+      }
+      .notes-saved .notes-saving-icon { display: none; }
+      .notes-saved.is-saving .notes-saved-icon { display: none; }
+      .notes-saved.is-saving .notes-saving-icon {
+        display: block;
+        animation: notes-spin .7s linear infinite;
+      }
+      @keyframes notes-spin { to { transform: rotate(360deg); } }
+      .notes-collapse,
+      .notes-import,
+      .notes-download,
+      .notes-tab {
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--surface);
+        cursor: pointer;
+      }
+      .notes-collapse {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        flex: 0 0 auto;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-download {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-import {
+        display: grid;
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        place-items: center;
+        border-radius: 9px;
+        line-height: 0;
+      }
+      .notes-collapse:hover,
+      .notes-import:hover,
+      .notes-download:hover,
+      .notes-tab:hover { color: var(--ink); border-color: var(--accent); }
+      .notes-collapse svg,
+      .notes-import svg,
+      .notes-download svg,
+      .notes-tab svg { width: 17px; }
+      .notes-collapse svg,
+      .notes-import svg,
+      .notes-download svg,
+      .notes-saved svg { display: block; width: 16px; height: 16px; }
+      .notes-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 7px 10px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-2);
+      }
+      .notes-tool-button {
+        display: grid;
+        min-width: 30px;
+        height: 30px;
+        padding: 0 7px;
+        place-items: center;
+        border: 0;
+        border-radius: 7px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 13px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .notes-tool-button:hover,
+      .notes-tool-button.active { color: var(--accent-ink); background: var(--accent-2); }
+      .notes-tool-button svg { width: 16px; }
+      .notes-preview-toggle { margin-left: auto; font-weight: 650; }
+      .notes-editor { min-height: 0; flex: 1; }
+      .notes-textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        border: 0;
+        padding: 18px;
+        outline: 0;
+        color: var(--ink);
+        background: var(--surface);
+        font: inherit;
+        font-size: 15px;
+        line-height: 1.55;
+      }
+      .notes-textarea::placeholder { color: var(--muted); opacity: .72; }
+      .notes-textarea[hidden] { display: none; }
+      .notes-preview {
+        height: 100%;
+        overflow-y: auto;
+        padding: 15px 18px 22px;
+        color: var(--ink);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .notes-preview[hidden] { display: none; }
+      .notes-preview > :first-child { margin-top: 0; }
+      .notes-preview > :last-child { margin-bottom: 0; }
+      .notes-preview h1,
+      .notes-preview h2,
+      .notes-preview h3 { margin: 16px 0 7px; line-height: 1.25; }
+      .notes-preview h1 { font-size: 20px; }
+      .notes-preview h2 { font-size: 17px; }
+      .notes-preview h3 { font-size: 15px; }
+      .notes-preview p,
+      .notes-preview ul,
+      .notes-preview ol,
+      .notes-preview pre,
+      .notes-preview blockquote { margin: 8px 0; }
+      .notes-preview ul,
+      .notes-preview ol { padding-left: 21px; }
+      .notes-preview blockquote { padding-left: 11px; border-left: 3px solid var(--accent); color: var(--muted); }
+      .notes-preview code { padding: 1px 4px; border-radius: 4px; background: var(--surface-2); }
+      .notes-preview pre { overflow-x: auto; padding: 10px; border-radius: 8px; background: var(--surface-2); }
+      .notes-preview pre code { padding: 0; background: transparent; }
+      .notes-task { display: flex; align-items: flex-start; gap: 7px; list-style: none; }
+      .notes-task input { margin-top: 5px; }
+      .notes-tab {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 0 14px;
+        border-bottom: 0;
+        border-radius: 11px 11px 0 0;
+        color: var(--ink);
+        font-weight: 750;
+        box-shadow: var(--shadow);
+      }
+      body.notes-collapsed .notes-panel {
+        height: auto;
+        width: auto;
+        border: 0;
+        overflow: visible;
+        background: transparent;
+        box-shadow: none;
+      }
+      body.notes-collapsed .notes-panel-content { display: none; }
+      body.notes-collapsed .notes-tab { display: flex; }
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(30px, 5vw, 54px);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .hero:after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -180px;
+      top: -220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-2), transparent 68%);
+      pointer-events: none;
+    }
+    h1 {
+      max-width: 780px;
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .chapter {
+      padding-top: 82px;
+      scroll-margin-top: 10px;
+    }
+    .chapter-head {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 28px;
+    }
+    .chapter-number {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      color: var(--accent);
+      background: var(--surface);
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -.038em;
+    }
+    h3 { margin: 34px 0 13px; font-size: 23px; line-height: 1.25; letter-spacing: -.02em; }
+    h4 { margin: 24px 0 9px; font-size: 17px; }
+    p { margin: 0 0 14px; }
+    ul, ol { padding-left: 22px; }
+    li { margin: 6px 0; }
+    strong { letter-spacing: -.01em; }
+
+    .study-list { margin: 10px 0 22px; }
+    .study-list li { margin: 10px 0; padding-left: 3px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      color: var(--accent-ink);
+      background: var(--accent-2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .tag.warm { color: var(--warm); background: var(--warm-bg); }
+    .tag.blue { color: var(--blue); background: var(--blue-bg); }
+    .tag.red { color: var(--danger); background: var(--danger-bg); }
+
+    .callout {
+      margin: 20px 0;
+      padding: 20px 22px;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 14px 14px 0;
+      background: var(--accent-2);
+      color: var(--accent-ink);
+    }
+    .callout.warning { border-color: var(--warm); background: var(--warm-bg); color: var(--warm); }
+    .callout.danger { border-color: var(--danger); background: var(--danger-bg); color: var(--danger); }
+    .callout.blue { border-color: var(--blue); background: var(--blue-bg); color: var(--blue); }
+    .callout strong { color: inherit; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    .table-wrap { overflow-x: auto; margin: 18px 0 24px; border: 1px solid var(--line); border-radius: 15px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); font-size: 14px; }
+    th, td { padding: 13px 15px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); background: var(--surface-2); font-size: 11px; letter-spacing: .07em; text-transform: uppercase; }
+    tr:last-child td { border-bottom: 0; }
+
+    .formula { display: inline-block; padding: 7px 9px; border-radius: 8px; color: var(--accent-ink); background: var(--accent-2); }
+
+    details {
+      margin: 10px 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      overflow: clip;
+    }
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 17px 19px;
+      cursor: pointer;
+      font-weight: 700;
+      list-style: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary:after { content: "+"; color: var(--accent); font-size: 22px; font-weight: 400; }
+    details[open] summary:after { content: "x"; font-size: 15px; }
+    .details-body { padding: 0 20px 20px; color: var(--muted); }
+    .details-body strong { color: var(--ink); }
+
+    .exam-answer {
+      position: relative;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .top-mobile { display: none; }
+    .nav-backdrop { display: none; }
+    @media (max-width: 1050px) {
+      .sidebar { transform: translateX(-100%); transition: transform .22s ease; box-shadow: var(--shadow); }
+      body.nav-open .sidebar { transform: translateX(0); }
+      body.nav-open { overflow: hidden; }
+      .main { margin-left: 0; }
+      .nav-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 25;
+        background: rgba(7, 23, 31, .36);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .22s ease;
+      }
+      body.nav-open .nav-backdrop { opacity: 1; pointer-events: auto; }
+      .top-mobile {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 18px;
+        border-bottom: 1px solid var(--line);
+        background: color-mix(in srgb, var(--bg) 90%, transparent);
+        backdrop-filter: blur(16px);
+      }
+      .top-mobile button { border: 0; background: transparent; cursor: pointer; }
+      .top-mobile strong { font-size: 14px; }
+      #menu-close {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 4px 8px;
+        color: var(--muted);
+        background: var(--surface);
+        font-size: 12px;
+        line-height: 1.2;
+        cursor: pointer;
+      }
+      #menu-close:hover { color: var(--ink); border-color: var(--accent); }
+    }
+
+    @media (max-width: 720px) {
+      .content { width: min(100% - 28px, 1080px); padding-top: 20px; }
+      .hero { padding: 32px 24px; border-radius: 21px; }
+      .chapter { padding-top: 62px; }
+      .chapter-head { grid-template-columns: 44px 1fr; gap: 12px; }
+      .chapter-number { width: 42px; height: 42px; border-radius: 12px; }
+      .highlight-toolbar { bottom: 14px; flex-wrap: wrap; justify-content: center; }
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 15mm 16mm 17mm;
+    }
+
+    @media print {
+      :root {
+        --bg: #fff;
+        --surface: #fff;
+        --surface-2: #f2f5f7;
+        --ink: #101820;
+        --muted: #384650;
+        --line: #cbd4da;
+        --accent: #176b87;
+        --accent-2: #eaf4f7;
+        --accent-ink: #164f62;
+        --warm-bg: #fbf4e5;
+        --danger-bg: #f9eded;
+        --blue-bg: #edf3fa;
+      }
+      *, *:before, *:after {
+        box-sizing: border-box;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      html { font-size: 9.5pt; }
+      body {
+        color: var(--ink);
+        background: #fff;
+        font-size: 9.5pt;
+        line-height: 1.43;
+      }
+      .sidebar, .desktop-nav-toggle, .top-mobile, .progress, .side-actions, .search-wrap,
+      .highlight-toolbar, .nav-backdrop, .notes-panel { display: none !important; }
+      .main { margin: 0; }
+      .content {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0;
+      }
+      .hero {
+        overflow: visible;
+        margin: 0 0 7mm;
+        padding: 0 0 5mm;
+        border: 0;
+        border-bottom: 1.5pt solid var(--accent);
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+      .hero:after, .hero p { display: none; }
+      h1 {
+        max-width: none;
+        font-size: 25pt;
+        line-height: 1.05;
+        letter-spacing: -.025em;
+      }
+      .chapter {
+        padding-top: 7mm;
+        break-before: auto;
+      }
+      .hero + .chapter { padding-top: 0; }
+      .chapter-head {
+        grid-template-columns: 8mm 1fr;
+        gap: 3mm;
+        align-items: center;
+        margin: 0 0 4mm;
+        break-after: avoid-page;
+      }
+      .chapter-number {
+        width: 8mm;
+        height: 8mm;
+        border: 1pt solid var(--line);
+        border-radius: 2mm;
+        font-size: 8pt;
+      }
+      h2 {
+        font-size: 16pt;
+        line-height: 1.12;
+        letter-spacing: -.02em;
+      }
+      h3 {
+        margin: 5mm 0 1.8mm;
+        font-size: 12pt;
+        line-height: 1.2;
+      }
+      h4 {
+        margin: 3.5mm 0 1.2mm;
+        font-size: 10pt;
+      }
+      h1, h2, h3, h4 { break-after: avoid-page; }
+      p { margin: 0 0 2.3mm; orphans: 3; widows: 3; }
+      ul, ol { margin: 1.5mm 0 3mm; padding-left: 5mm; }
+      li { margin: 1.1mm 0; orphans: 2; widows: 2; }
+      .study-list { margin: 1.5mm 0 3.5mm; }
+      .study-list li { margin: 1.4mm 0; padding-left: 0; }
+      a { color: inherit; text-decoration: none; }
+      .tag {
+        padding: .6mm 1.5mm;
+        font-size: 7pt;
+        letter-spacing: .04em;
+      }
+      .callout {
+        margin: 3mm 0;
+        padding: 2.5mm 3mm;
+        border-left-width: 2.5pt;
+        border-radius: 0 2mm 2mm 0;
+        break-inside: avoid-page;
+      }
+      .table-wrap {
+        overflow: visible;
+        margin: 3mm 0 4mm;
+        border: 1pt solid var(--line);
+        border-radius: 0;
+      }
+      table { font-size: 8pt; line-height: 1.3; }
+      thead { display: table-header-group; }
+      tfoot { display: table-footer-group; }
+      tr { break-inside: avoid-page; }
+      th, td { padding: 1.7mm 2mm; }
+      th { font-size: 7pt; letter-spacing: .045em; }
+      .formula { padding: 1mm 1.4mm; border-radius: 1mm; }
+      details {
+        margin: 2mm 0;
+        border-radius: 2mm;
+        overflow: visible;
+      }
+      summary {
+        padding: 2.5mm 3mm 1.5mm;
+        break-after: avoid-page;
+      }
+      summary:after { display: none; }
+      .details-body { padding: 0 3mm 2.5mm; }
+      details > .details-body,
+      details:not([open]) > .details-body { display: block !important; }
+      .exam-answer {
+        padding: 2.5mm 3mm;
+        border-radius: 2mm;
+        break-inside: avoid-page;
+      }
+      mark.user-highlight {
+        color: inherit;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+  <style>
+    pre.code { margin: 16px 0; padding: 15px 18px; overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); font-size: 13.5px; line-height: 1.55; -webkit-overflow-scrolling: touch; }
+    pre.code code { padding: 0; background: transparent; font-size: inherit; }
+    .diagram { margin: 22px 0; padding: 16px 14px 12px; overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; }
+    .diagram .mermaid { display: flex; justify-content: center; min-width: 0; text-align: center; }
+    .diagram img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+    .diagram figcaption { margin-top: 10px; color: #4a5a55; font-size: 12.5px; line-height: 1.45; text-align: center; }
+    html[data-theme="dark"] .diagram { background: #eef4f1; border-color: #b9c8c3; }
+    html[data-theme="dark"] .diagram figcaption { color: #4a5a55; }
+    .exam-answer { margin: 18px 0; padding: 15px 18px; border-left: 4px solid var(--accent); border-radius: 0 12px 12px 0; background: var(--accent-2); color: var(--accent-ink); }
+    .exam-answer strong { color: inherit; }
+    .cmp { display: grid; gap: 12px; margin: 18px 0; }
+    @media (min-width: 720px) { .cmp.two { grid-template-columns: 1fr 1fr; } }
+    .formula { margin: 14px 0; padding: 12px 16px; border: 1px dashed var(--accent); border-radius: 12px; background: var(--surface-2); font-size: 15px; text-align: center; }
+    .example-box { margin: 18px 0; padding: 14px 18px; border-left: 4px solid var(--warm); border-radius: 0 12px 12px 0; background: var(--warm-bg); color: var(--ink); }
+    .example-box strong { color: inherit; }
+    .cmp.two > figure.diagram { margin: 0; }
+    /* Circulos concentricos TAM/SAM/SOM */
+    .circles { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; display: grid; gap: 16px; align-items: center; }
+    html[data-theme="dark"] .circles { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    @media (min-width: 720px) { .circles { grid-template-columns: 260px 1fr; } }
+    .circles svg { width: 100%; height: auto; max-width: 260px; margin: 0 auto; display: block; }
+    .circles ul { margin: 0; }
+    /* Grafico de linea (oferta/demanda) */
+    .chart { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; }
+    html[data-theme="dark"] .chart { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    .chart svg { width: 100%; height: auto; max-width: 460px; display: block; margin: 0 auto; }
+    /* Piramide inline con hover */
+    .pyramid-block { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; display: grid; gap: 18px; align-items: center; overflow: visible; }
+    html[data-theme="dark"] .pyramid-block { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    @media (min-width: 720px) { .pyramid-block { grid-template-columns: 1fr 1fr; } }
+    .pyr { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .pyr-band { position: relative; padding: 12px 10px; text-align: center; color: #fff; font-weight: 600; border-radius: 6px; cursor: help; transition: transform .15s; }
+    .pyr-band:hover { transform: scale(1.03); }
+    .pyr-tip { display: none; position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); width: 160px; background: #fff; color: #14201d; border: 1px solid #cbd5d1; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 400; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,.15); z-index: 6; }
+    .pyr-band:hover .pyr-tip { display: block; }
+    .pyr-desc p { margin: .35em 0; }
+    @media (max-width: 719px) { .pyr-tip { display: none !important; } }
+    /* Taza de cafe (estructura de costos) */
+    .cup-block { margin: 22px 0; padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: #f6faf9; overflow: visible; }
+    html[data-theme="dark"] .cup-block { background: #eef4f1; border-color: #b9c8c3; color: #14201d; }
+    .cup-top { text-align: center; font-weight: 700; color: var(--accent-ink); border: 2px dashed #7fbdb3; border-radius: 10px; padding: 8px; margin: 0 auto 8px; max-width: 340px; }
+    .cup { max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .cup-lid { width: 100%; height: 14px; background: #dfece9; border: 1px solid #b9c8c3; border-radius: 8px 8px 3px 3px; }
+    .cup-band { position: relative; text-align: center; color: #fff; font-weight: 600; font-size: 13px; padding: 12px 8px; cursor: help; border-radius: 3px; }
+    .cup-band:hover { filter: brightness(1.08); }
+    .cup-tip { display: none; position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); width: 190px; background: #fff; color: #14201d; border: 1px solid #cbd5d1; border-radius: 8px; padding: 8px 10px; font-size: 12px; font-weight: 400; text-align: left; box-shadow: 0 8px 24px rgba(0,0,0,.15); z-index: 6; }
+    .cup-band:hover .cup-tip { display: block; }
+    @media (max-width: 719px) { .cup-tip { left: auto; right: 4px; top: 108%; transform: none; width: auto; max-width: 78vw; } }
+    /* Tarjetas TRL */
+    .trl-row { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 12px; -webkit-overflow-scrolling: touch; }
+    .trl-card { flex: 0 0 150px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--surface-2); }
+    .trl-card .trl-n { display: inline-block; font-weight: 700; color: #fff; background: var(--accent); border-radius: 6px; padding: 2px 10px; margin-bottom: 8px; font-size: 13px; }
+    .trl-card p { margin: 0; font-size: 12.5px; line-height: 1.4; }
+    /* Matriz ERIC 2x2 */
+    .eric { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+    .eric .q { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface-2); }
+    .eric .q h4 { margin: 0 0 .3em; }
+    body.hide-code pre.code { display: none; }
+    body.hide-code pre.code + p { margin-top: 0; }
+  </style>
+</head>
+<body class="notes-open">
+  <div class="progress" aria-hidden="true"><span id="reading-progress"></span></div>
+  <div class="nav-backdrop" id="nav-backdrop" aria-hidden="true"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-row">
+        <strong>EBT II</strong>
+        <button id="menu-close" type="button" aria-label="Cerrar navegación">Cerrar</button>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+      <input id="search" type="search" placeholder="Buscar concepto..." autocomplete="off" aria-label="Buscar en el apunte" aria-controls="search-results" aria-expanded="false">
+      <div class="search-results" id="search-results" role="listbox" aria-label="Resultados de búsqueda" hidden></div>
+    </div>
+
+    <div class="nav-title">Panorama</div>
+    <nav class="toc" aria-label="Panorama">
+      <a href="#rf-examen"><span>00</span>Cómo son los parciales</a>
+    </nav>
+    <div class="nav-title">Primer parcial</div>
+    <nav class="toc" aria-label="Primer parcial">
+      <a href="#rf-comercio"><span>01</span>Comercio internacional</a>
+      <a href="#rf-empresa"><span>02</span>Empresa</a>
+      <a href="#rf-impuestos"><span>03</span>Impuestos</a>
+      <a href="#rf-contratos"><span>04</span>Contratos</a>
+      <a href="#rf-derecho"><span>05</span>Derecho comercial y PI</a>
+      <a href="#rf-datos"><span>06</span>Datos personales</a>
+      <a href="#rf-rse"><span>07</span>RSE</a>
+    </nav>
+    <div class="nav-title">Segundo parcial</div>
+    <nav class="toc" aria-label="Segundo parcial">
+      <a href="#rf-economia"><span>08</span>Economía</a>
+      <a href="#rf-evaluacion"><span>09</span>Evaluación de negocio</a>
+      <a href="#rf-planificacion"><span>10</span>Planificación</a>
+      <a href="#rf-startups"><span>11</span>Start-ups</a>
+    </nav>
+    <div class="nav-title">Cierre</div>
+    <nav class="toc" aria-label="Cierre">
+      <a href="#rf-machete"><span>12</span>Machete de fórmulas y definiciones</a>
+    </nav>
+
+    <div class="side-actions">
+      <button class="icon-button" id="theme-toggle" type="button" title="Cambiar tema">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
+        Tema
+      </button>
+      <button class="icon-button" id="print-button" type="button" title="Imprimir o guardar como PDF">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 14h12v8H6z"></path></svg>
+        PDF
+      </button>
+      <button class="icon-button wide" id="highlight-help" type="button" title="Seleccioná texto para resaltarlo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 11-6 6v4h4l6-6"></path><path d="m14 4 6 6-7 7-6-6z"></path><path d="M3 21h18"></path></svg>
+        Resaltador
+      </button>
+      <button class="icon-button wide" id="install-app" type="button" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+        Instalar app
+      </button>
+      <button class="icon-button wide" id="code-toggle" type="button" aria-pressed="false" title="Mostrar u ocultar los bloques de fórmulas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m8 6-6 6 6 6"></path><path d="m16 6 6 6-6 6"></path></svg>
+        <span id="code-toggle-label">Fórmulas</span>
+      </button>
+      <a class="icon-button wide" href="index.html" title="Volver al apunte completo">Apunte</a>
+    </div>
+  </aside>
+
+  <button class="desktop-nav-toggle" id="desktop-nav-toggle" type="button" aria-label="Contraer navegación" aria-expanded="true" title="Contraer navegación">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+  </button>
+
+  <aside class="notes-panel" id="notes-panel" aria-label="Mis notas de estudio">
+    <button class="notes-tab" id="notes-expand" type="button" aria-label="Abrir mis notas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16v16H4z"></path><path d="M8 9h8M8 13h8M8 17h5"></path></svg>
+      Notas
+    </button>
+    <div class="notes-panel-content">
+      <div class="notes-header" id="notes-header" title="Contraer notas">
+        <div class="notes-heading">
+          <strong>Mis notas</strong>
+        </div>
+        <div class="notes-header-actions">
+          <span class="notes-saved" aria-label="Guardado automáticamente" title="Guardado automáticamente">
+            <svg class="notes-saved-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+            <svg class="notes-saving-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"></path></svg>
+          </span>
+          <button class="notes-import" id="notes-import" type="button" aria-label="Importar notas desde Markdown" title="Importar Markdown">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21V9"></path><path d="m7 14 5-5 5 5"></path><path d="M5 3h14"></path></svg>
+          </button>
+          <input id="notes-file" type="file" accept=".md,text/markdown,text/plain" hidden>
+          <button class="notes-download" id="notes-download" type="button" aria-label="Descargar notas en Markdown" title="Descargar Markdown">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+          </button>
+          <button class="notes-collapse" id="notes-collapse" type="button" aria-label="Contraer mis notas" title="Contraer notas">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 12h10"></path></svg>
+          </button>
+        </div>
+      </div>
+      <div class="notes-toolbar" aria-label="Formato Markdown">
+        <button class="notes-tool-button" type="button" data-note-command="heading" title="Título">H</button>
+        <button class="notes-tool-button" type="button" data-note-command="bold" title="Negrita">B</button>
+        <button class="notes-tool-button" type="button" data-note-command="italic" title="Cursiva"><em>I</em></button>
+        <button class="notes-tool-button" type="button" data-note-command="list" title="Lista">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"></path><path d="M3 6h.01M3 12h.01M3 18h.01"></path></svg>
+        </button>
+        <button class="notes-tool-button" type="button" data-note-command="task" title="Tarea">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        </button>
+        <button class="notes-tool-button" type="button" data-note-command="code" title="Código">&lt;/&gt;</button>
+        <button class="notes-tool-button notes-preview-toggle" id="notes-preview-toggle" type="button">Vista</button>
+      </div>
+      <div class="notes-editor">
+        <textarea class="notes-textarea" id="study-notes" aria-label="Notas de estudio en Markdown" placeholder="Escribí tus notas en Markdown..." spellcheck="true"></textarea>
+        <div class="notes-preview" id="notes-preview" aria-label="Vista previa de las notas" hidden></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="top-mobile">
+      <button id="menu-toggle" type="button" aria-label="Abrir navegación" aria-expanded="false">Menu</button>
+      <strong>EBT II</strong>
+      <button id="mobile-theme" type="button" aria-label="Cambiar tema">Tema</button>
+    </div>
+
+    <main class="content" id="content">
+      <header class="hero">
+        <h1>Repaso final · EBT II</h1>
+        <p><strong>El mínimo indispensable para aprobar. Sin relleno.</strong> Definiciones exactas, clasificaciones y fórmulas de lo que <em>siempre</em> cae. Buscá con el buscador, navegá con el índice, y cuando algo no cierre abrí el <a href="index.html">apunte completo</a>.</p>
+      </header>
+
+      <section class="chapter" id="rf-examen" data-title="como son los parciales examen estrategia primer segundo definir clasificar comparar justificar">
+        <div class="chapter-head">
+          <div class="chapter-number">00</div>
+          <div><h2>Cómo son los parciales</h2></div>
+        </div>
+        <div class="callout blue"><strong>Molde de la materia.</strong> No se codea: se <em>define, clasifica, compara y justifica</em>. Dos parciales:
+          <ul>
+            <li><strong>1.º parcial (legal/fiscal):</strong> comercio internacional, empresa, impuestos, contratos, derecho comercial/PI, datos personales, RSE.</li>
+            <li><strong>2.º parcial (económico/negocio):</strong> economía, evaluación de negocio, planificación, start-ups.</li>
+          </ul>
+          <strong>Estrategia:</strong> definición precisa primero, después el ejemplo/tabla y el trade-off. Los puntos están en las palabras exactas: cada impuesto con su cuádrupla, cada instrumento de PI con su vigencia, cada fórmula lista para aplicar.
+        </div>
+      </section>
+
+      <section class="chapter" id="rf-comercio" data-title="comercio internacional exterior aduana incoterms ventaja competitiva comparativa balanza de pagos broker trader despachante freight forwarder">
+        <div class="chapter-head">
+          <div class="chapter-number">01</div>
+          <div><h2>Comercio internacional</h2></div>
+        </div>
+        <ul>
+          <li><strong>Internacional vs exterior:</strong> internacional = intercambio entre países y sus economías; exterior = de <em>un país</em> con el mundo.</li>
+          <li><strong>Actores:</strong> Aduana (aplica leyes impo/expo, tributación, control); despachante (trámites aduaneros); freight forwarder (logística puerta a puerta); <em>broker</em> (une comprador/vendedor, comisión) vs <em>trader</em> (compra y revende, asume riesgo).</li>
+          <li><strong>Incoterms:</strong> acuerdos de venta internacional; definen dónde se transfiere responsabilidad/costo/riesgo del vendedor al comprador.</li>
+          <li><strong>Ventaja competitiva</strong> (empresa: liderazgo en costos o diferenciación) vs <strong>comparativa</strong> (país: menor <em>costo de oportunidad</em>).</li>
+        </ul>
+        <div class="formula">BP = CCo + CCap + CF + EuO · Saldo comercial = Exportaciones − Importaciones</div>
+        <p>Cuenta corriente (bienes, servicios, rentas, transferencias) · capital (activos no financieros) · financiera (inversiones).</p>
+      </section>
+
+      <section class="chapter" id="rf-empresa" data-title="empresa sociedad modelo de negocio plan de negocio elementos materiales inmateriales">
+        <div class="chapter-head">
+          <div class="chapter-number">02</div>
+          <div><h2>Empresa</h2></div>
+        </div>
+        <ul>
+          <li><strong>Empresa</strong> = actividad económica con fin de lucro (sin definición jurídica propia). <strong>Sociedad</strong> = forma jurídica, persona jurídica regulada.</li>
+          <li><strong>Elementos:</strong> materiales, humanos, inmateriales (valor llave, clientela, PI).</li>
+          <li><strong>Modelo de negocio</strong> = <em>qué/cómo</em> crea/entrega/captura valor. <strong>Plan de negocio</strong> = <em>cuándo/dónde</em>, documento detallado para financiamiento.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-impuestos" data-title="impuestos tributos tasas contribuciones capacidad contributiva hecho imponible iva iibb bbpp sellos idcb iigg retencion percepcion directo indirecto progresivo regresivo">
+        <div class="chapter-head">
+          <div class="chapter-number">03</div>
+          <div><h2>Impuestos</h2></div>
+        </div>
+        <ul>
+          <li><strong>Tributos:</strong> no vinculados (<em>impuestos</em>, ej. IVA) vs vinculados (<em>tasas</em> ej. ABL, <em>contribuciones</em> ej. obras).</li>
+          <li><strong>Capacidad contributiva:</strong> real (ingresos IIGG, patrimonio BBPP) vs potencial (consumo IVA, actividad Sellos).</li>
+          <li><strong>Hecho imponible:</strong> circunstancia prevista por ley que genera la obligación.</li>
+        </ul>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Impuesto</th><th>Jurisd.</th><th>D/I</th><th>Trasl.</th><th>Progr.</th></tr></thead>
+            <tbody>
+              <tr><td>IVA</td><td>Nacional</td><td>Indirecto</td><td>Sí</td><td>Regresivo</td></tr>
+              <tr><td>IIBB</td><td>Provincial</td><td>Directo</td><td>No</td><td>Regresivo</td></tr>
+              <tr><td>BBPP</td><td>Nacional</td><td>Directo</td><td>No</td><td>Progresivo</td></tr>
+              <tr><td>Sellos</td><td>Provincial</td><td>Directo</td><td>No</td><td>Regresivo</td></tr>
+              <tr><td>IDCB</td><td>Nacional</td><td>Directo</td><td>No</td><td>Regresivo</td></tr>
+              <tr><td>IIGG</td><td>Nacional</td><td>Directo</td><td>No</td><td>Progresivo</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Retención</strong> = sobre el pago (al acreedor). <strong>Percepción</strong> = sobre el cobro (al deudor). Ingreso al fisco vía <strong>SICORE</strong>. RI descuenta IVA crédito; el monotributo, no.</p>
+      </section>
+
+      <section class="chapter" id="rf-contratos" data-title="contrato nda confidencialidad distribucion agencia eula site id serie clausulas cesion jurisdiccion limitacion responsabilidad no renuncia">
+        <div class="chapter-head">
+          <div class="chapter-number">04</div>
+          <div><h2>Contratos</h2></div>
+        </div>
+        <ul>
+          <li><strong>Contrato</strong> = acuerdo voluntario recíproco; es <em>ley para las partes</em>, limitado por leyes y orden público. Consentimiento explícito/tácito o por <em>Teoría de los Actos Propios</em>.</li>
+          <li><strong>Tipos:</strong> prestación de servicios (medios/resultados); <strong>NDA</strong> (confidencialidad, responsabilidad solidaria); distribución (con/sin exclusividad); agencia (intermediario sin vínculo laboral, cobra por venta); <strong>EULA</strong> (requiere Site ID + N.º de serie).</li>
+          <li><strong>Cláusulas:</strong> cesión de derechos (pedir aceptación), jurisdicción (CABA), limitación de responsabilidad, cierre, no renuncia, excesos. <em>Regla: todo por escrito.</em></li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-derecho" data-title="propiedad intelectual industrial marca inpi patente diseño modelo de utilidad know how derechos de autor copyright software vigencia">
+        <div class="chapter-head">
+          <div class="chapter-number">05</div>
+          <div><h2>Derecho comercial y PI</h2></div>
+        </div>
+        <ul>
+          <li><strong>PI</strong> es territorial. Ramas: <em>industrial</em> y <em>derechos de autor</em>.</li>
+          <li><strong>Marca</strong> (INPI): 10 años renovables +10 (uso efectivo últimos 5). <strong>Patente</strong>: novedad + actividad inventiva + aplicación industrial. <strong>Diseño industrial</strong>: 5 años +2 períodos. <strong>Modelo de utilidad</strong>: novedad + aplicación industrial. <strong>Know-how</strong>: secreto, no se registra (ej. Coca-Cola).</li>
+          <li><strong>Derecho de autor</strong> (moral irrenunciable, vida + 70) vs <strong>copyright</strong> (económico, work made for hire).</li>
+          <li><strong>Software:</strong> se protege por <em>derecho de autor</em>, NO por patente. Con empleados, la titularidad favorece al empleador salvo pacto → firmar contratos de cesión.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-datos" data-title="datos personales sensibles habeas data consentimiento libre expreso informado derechos acceso rectificacion supresion aaip bases de datos">
+        <div class="chapter-head">
+          <div class="chapter-number">06</div>
+          <div><h2>Datos personales</h2></div>
+        </div>
+        <ul>
+          <li><strong>Dato personal:</strong> info vinculable a una persona. <strong>Sensible:</strong> raza, política, religión, salud, vida sexual, sindicato.</li>
+          <li><strong>Habeas data:</strong> acceder a los datos propios y exigir supresión/rectificación/confidencialidad/actualización.</li>
+          <li><strong>Consentimiento válido:</strong> libre, expreso e informado. No se necesita para datos públicos, obligaciones legales o info básica.</li>
+          <li><strong>Derechos:</strong> oposición, información, acceso, contenido, rectificación/supresión, consulta. Autoridad: <strong>AAIP</strong>. Sin respuesta en 5 días → vía administrativa o amparo (habeas data).</li>
+          <li><strong>Compra/venta de BDD lícita si:</strong> consentimiento explícito + infraestructura segura + base registrada.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-rse" data-title="rse sostenibilidad ambiental economica social esg greenwashing acuerdo de paris agenda 2030 ley yolanda 25675 ods">
+        <div class="chapter-head">
+          <div class="chapter-number">07</div>
+          <div><h2>RSE</h2></div>
+        </div>
+        <ul>
+          <li><strong>Sostenibilidad:</strong> cubrir el presente sin comprometer el futuro. Dimensiones: <em>ambiental, económica, social</em>.</li>
+          <li><strong>ESG</strong> (Environmental, Social, Governance) → lo priorizan inversores/VC.</li>
+          <li><strong>Marcos:</strong> Acuerdo de París, Agenda 2030; Ley 25.675 (General del Ambiente), Ley 27.592 (Yolanda), FONTAR. Riesgo: <em>greenwashing</em>.</li>
+          <li><strong>Plan de sustentabilidad:</strong> diagnóstico → objetivos (ODS) → acciones → KPIs → reporting.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-economia" data-title="economia pbi desempleo inflacion ipc tasa real fisher salario real mercado oferta demanda equilibrio">
+        <div class="chapter-head">
+          <div class="chapter-number">08</div>
+          <div><h2>Economía</h2></div>
+        </div>
+        <ul>
+          <li><strong>Macro:</strong> PBI; desempleo (cíclico, estructural, friccional); tipo de cambio; inflación (demanda, costos, inercial, estructural, monetaria), se mide con IPC.</li>
+          <li><strong>Micro:</strong> mercado = oferentes + demandantes; el precio coordina. Equilibrio = cruce oferta/demanda.</li>
+        </ul>
+        <div class="formula">1 + TR = (1 + TE) / (1 + TI) · Salario real = Nominal / (1 + inflación)</div>
+        <p>La inflación redistribuye ingresos (trabajadores/empresas/Estado), baja el consumo y desincentiva la inversión por incertidumbre.</p>
+      </section>
+
+      <section class="chapter" id="rf-evaluacion" data-title="porter cinco fuerzas canvas tam sam som oceano azul plan de negocio 4p 4c costeo absorcion variable punto de equilibrio van periodo de repago">
+        <div class="chapter-head">
+          <div class="chapter-number">09</div>
+          <div><h2>Evaluación de negocio</h2></div>
+        </div>
+        <ul>
+          <li><strong>5 fuerzas de Porter:</strong> rivalidad, nuevos competidores, poder de proveedores, poder de clientes, sustitutos.</li>
+          <li><strong>Canvas (9 bloques):</strong> segmento, propuesta de valor, canales, relaciones, ingresos, recursos, actividades, alianzas, costos. Mercado: <strong>TAM ⊃ SAM ⊃ SOM</strong>. B2B/B2C/B2B2C.</li>
+          <li><strong>Océano azul:</strong> crear mercado nuevo sin competencia (vs océano rojo saturado). Herramienta: Matriz ERIC.</li>
+          <li><strong>Plan de negocio:</strong> resumen ejecutivo, análisis competitivo (FODA), propuesta de valor, marketing (4P/4C), operaciones, capital humano, económico-financiero, contingencia.</li>
+        </ul>
+        <div class="formula">PE(u) = CF/(PV−CV) · PE($) = CF/(1−CV/PV) · VAN = Σ CFₜ/(1+r)ᵗ − Inv₀ · Repago = Inv₀/CF anual</div>
+        <p><strong>Costeo:</strong> por absorción (todos los costos) vs variable (solo variables). <strong>Margen de seguridad</strong> = (VA−VE)/VA.</p>
+      </section>
+
+      <section class="chapter" id="rf-planificacion" data-title="administracion planificacion organizacion direccion control foda presupuesto estado de resultados ebitda ebit resultado neto opex capex reforecast">
+        <div class="chapter-head">
+          <div class="chapter-number">10</div>
+          <div><h2>Planificación</h2></div>
+        </div>
+        <ul>
+          <li><strong>Administración:</strong> Planificar → Organizar → Dirigir → Controlar. Niveles de control: estratégico, táctico, operativo.</li>
+          <li><strong>FODA:</strong> Fortalezas/Debilidades (internas), Oportunidades/Amenazas (externas).</li>
+          <li><strong>Presupuesto:</strong> económico (transacción) vs financiero (pago/cobro); parte de <em>premisas</em>. Control presupuestario = presupuestado vs real; reforecast = reajuste.</li>
+        </ul>
+        <div class="formula">Ingresos → (−Costos) Bruto → (−Gastos) EBITDA → (−Amort.) EBIT → (+Res. financ. −Impuestos) Neto</div>
+        <p>OPEX = costos y gastos; CAPEX = amortizaciones de activos fijos.</p>
+      </section>
+
+      <section class="chapter" id="rf-startups" data-title="start up pyme bootstrapping venture capital semilla lean startup construir medir aprender mvp pivotar innovacion abierta push pull matriz eric">
+        <div class="chapter-head">
+          <div class="chapter-number">11</div>
+          <div><h2>Start-ups</h2></div>
+        </div>
+        <ul>
+          <li><strong>Start-up vs PYME:</strong> modelo escalable/repetible en incertidumbre vs modelo conocido en mercado establecido.</li>
+          <li><strong>Financiamiento:</strong> bootstrapping (propio, control total) vs venture capital (semilla: menor a 1M · emprendedor: mayor a 1M · privado: mayoritario).</li>
+          <li><strong>Innovación:</strong> abierta (dentro/fuera); PUSH (tecnología empuja) vs PULL (demanda tracciona); ecosistema Estado–Empresa–SCT.</li>
+          <li><strong>Lean Startup:</strong> Construir → Medir → Aprender (Lean Manufacturing + Customer Development). <strong>MVP</strong> valida con lo mínimo (conserje, Mago de Oz, smoke test) → <em>pivotar o perseverar</em>.</li>
+          <li><strong>Herramientas:</strong> Running Lean, Value Stick, Job To Be Done, Demand Side Sales, Matriz ERIC.</li>
+        </ul>
+      </section>
+
+      <section class="chapter" id="rf-machete" data-title="machete formulas definiciones balanza de pagos punto de equilibrio van fisher salario real estado de resultados impuestos vigencias propiedad intelectual">
+        <div class="chapter-head">
+          <div class="chapter-number">12</div>
+          <div><h2>Machete de fórmulas y definiciones</h2></div>
+        </div>
+        <h3>Fórmulas</h3>
+        <div class="formula">BP = CCo + CCap + CF + EuO</div>
+        <div class="formula">Tasa real: 1 + TR = (1 + TE)/(1 + TI) · Salario real = Nominal/(1 + inflación)</div>
+        <div class="formula">PE(unidades) = CF/(PV − CV) · PE(valor) = CF/(1 − CV/PV)</div>
+        <div class="formula">Margen de seguridad = (VA − VE)/VA · VAN = Σ CFₜ/(1+r)ᵗ − Inv₀ · Repago = Inv₀/CF anual</div>
+        <div class="formula">IVA = IVA débito (ventas) − IVA crédito (compras)</div>
+        <h3>Vigencias de PI</h3>
+        <ul>
+          <li>Marca: 10 años + 10 (renovable indefinidamente, uso efectivo últimos 5).</li>
+          <li>Diseño industrial: 5 años + 2 períodos.</li>
+          <li>Patente: sin plazo fijo en el apunte; requisitos novedad + inventiva + aplicación industrial.</li>
+          <li>Derecho de autor: vida del autor + 70 años.</li>
+        </ul>
+        <h3>Clasificaciones de un vistazo</h3>
+        <ul>
+          <li><strong>Impuesto:</strong> jurisdicción / directo-indirecto / trasladable / progresivo-regresivo.</li>
+          <li><strong>Tributo:</strong> vinculado (tasa, contribución) o no vinculado (impuesto).</li>
+          <li><strong>Estructura de mercado, financiamiento, costeo:</strong> ver apunte para los cuadros completos.</li>
+        </ul>
+        <p class="exam-answer"><strong>Última pasada antes de entrar:</strong> las 6 líneas de la tabla de impuestos, las vigencias de PI, las 4 fórmulas financieras y la cascada del estado de resultados. Con eso cubrís el grueso de lo que puntúa la cátedra.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="highlight-toolbar" id="highlight-toolbar" role="toolbar" aria-label="Resaltador de estudio" hidden>
+    <span class="highlight-label" id="highlight-label" aria-live="polite">Resaltar selección</span>
+    <div class="highlight-colors" aria-label="Color del resaltado">
+      <button class="highlight-color" type="button" data-color="yellow" aria-label="Resaltar en amarillo"></button>
+      <button class="highlight-color" type="button" data-color="mint" aria-label="Resaltar en verde"></button>
+      <button class="highlight-color" type="button" data-color="pink" aria-label="Resaltar en rosa"></button>
+      <button class="highlight-color" type="button" data-color="blue" aria-label="Resaltar en azul"></button>
+    </div>
+    <button class="highlight-tool-button highlight-pin" id="highlight-pin" type="button" aria-label="Dejar resaltador fijo" aria-pressed="false" title="Dejar resaltador fijo">Fijar</button>
+    <button class="highlight-tool-button" id="highlight-remove" type="button" aria-label="Quitar resaltado" title="Quitar resaltado" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 15H6L5 6"></path><path d="M10 11v6M14 11v6"></path></svg>
+    </button>
+    <button class="highlight-tool-button" id="highlight-close" type="button" aria-label="Cerrar resaltador" title="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const body = document.body;
+    const chapters = [...document.querySelectorAll('.chapter')];
+    const navLinks = [...document.querySelectorAll('.toc a')];
+    const search = document.getElementById('search');
+    const searchResults = document.getElementById('search-results');
+    const searchWrap = document.querySelector('.search-wrap');
+    const progress = document.getElementById('reading-progress');
+    const content = document.getElementById('content');
+    const highlightToolbar = document.getElementById('highlight-toolbar');
+    const highlightLabel = document.getElementById('highlight-label');
+    const highlightRemove = document.getElementById('highlight-remove');
+    const highlightPin = document.getElementById('highlight-pin');
+    const highlightHelp = document.getElementById('highlight-help');
+    const highlightColors = [...document.querySelectorAll('.highlight-color')];
+    const highlightStorageKey = 'aa-highlights-v1';
+    const highlightModeStorageKey = 'aa-highlight-fixed-v1';
+    const highlightColorStorageKey = 'aa-highlight-color-v1';
+    const preparedStorageKey = 'aa-prepared-topics-v1';
+
+    function loadPreparedTopics() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(preparedStorageKey) || '[]');
+        return new Set(Array.isArray(stored) ? stored.filter(topic => typeof topic === 'string') : []);
+      } catch (error) {
+        return new Set();
+      }
+    }
+
+    const preparedTopics = loadPreparedTopics();
+
+    function savePreparedTopics() {
+      localStorage.setItem(preparedStorageKey, JSON.stringify([...preparedTopics]));
+    }
+
+    navLinks.forEach(link => {
+      const topicId = link.getAttribute('href').slice(1);
+      const topicName = link.textContent.replace(/\s+/g, ' ').trim().replace(/^(?:\d+|[A-Z])\s*/, '');
+      const item = document.createElement('div');
+      const button = document.createElement('button');
+      item.className = 'toc-item';
+      button.className = 'nav-check';
+      button.type = 'button';
+
+      link.before(item);
+      item.append(button, link);
+
+      function renderPreparedState() {
+        const prepared = preparedTopics.has(topicId);
+        item.classList.toggle('prepared', prepared);
+        button.textContent = prepared ? '✓' : '';
+        button.setAttribute('aria-pressed', String(prepared));
+        button.setAttribute('aria-label', `${prepared ? 'Volver a pendiente' : 'Marcar como preparado'}: ${topicName}`);
+        button.title = prepared ? 'Volver a pendiente' : 'Marcar como preparado';
+      }
+
+      button.addEventListener('click', () => {
+        if (preparedTopics.has(topicId)) preparedTopics.delete(topicId);
+        else preparedTopics.add(topicId);
+        savePreparedTopics();
+        renderPreparedState();
+      });
+
+      renderPreparedState();
+    });
+
+    function setTheme(theme) {
+      root.dataset.theme = theme;
+      localStorage.setItem('aa-theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('aa-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+    function toggleTheme() {
+      setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+    document.getElementById('mobile-theme').addEventListener('click', toggleTheme);
+    document.getElementById('print-button').addEventListener('click', () => window.print());
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const navBackdrop = document.getElementById('nav-backdrop');
+    const desktopNavToggle = document.getElementById('desktop-nav-toggle');
+    const sidebarStateKey = 'aa-sidebar-collapsed-v1';
+
+    function setSidebarCollapsed(collapsed) {
+      body.classList.toggle('sidebar-collapsed', collapsed);
+      localStorage.setItem(sidebarStateKey, String(collapsed));
+      desktopNavToggle.setAttribute('aria-expanded', String(!collapsed));
+      desktopNavToggle.setAttribute('aria-label', collapsed ? 'Expandir navegación' : 'Contraer navegación');
+      desktopNavToggle.title = collapsed ? 'Expandir navegación' : 'Contraer navegación';
+    }
+
+    setSidebarCollapsed(localStorage.getItem(sidebarStateKey) === 'true');
+    desktopNavToggle.addEventListener('click', () => {
+      setSidebarCollapsed(!body.classList.contains('sidebar-collapsed'));
+    });
+
+    function setNavOpen(open) {
+      body.classList.toggle('nav-open', open);
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.setAttribute('aria-label', open ? 'Cerrar navegación' : 'Abrir navegación');
+    }
+
+    menuToggle.addEventListener('click', () => setNavOpen(!body.classList.contains('nav-open')));
+    menuClose.addEventListener('click', () => setNavOpen(false));
+    navBackdrop.addEventListener('click', () => setNavOpen(false));
+
+    navLinks.forEach(link => link.addEventListener('click', () => setNavOpen(false)));
+
+    function updateProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const value = max > 0 ? (window.scrollY / max) * 100 : 0;
+      progress.style.width = `${Math.min(100, Math.max(0, value))}%`;
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach(link => {
+        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        link.classList.toggle('active', active);
+        link.closest('.toc-item')?.classList.toggle('active', active);
+      });
+    }, { rootMargin: '-12% 0px -72% 0px', threshold: [0, .1, .5] });
+
+    chapters.forEach(chapter => observer.observe(chapter));
+
+    function normalize(value) {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    const seenSearchEntries = new Set();
+    const searchIndex = chapters.flatMap(chapter => {
+      const chapterTitle = chapter.querySelector('h2')?.textContent.trim() || chapter.id;
+      return [...chapter.querySelectorAll('h2, h3, h4, p, li, td, summary')].map((node, index) => {
+        const text = node.textContent.replace(/\s+/g, ' ').trim();
+        const normalized = normalize(text);
+        const key = `${chapter.id}:${normalized}`;
+        if (text.length < 3 || seenSearchEntries.has(key)) return null;
+        seenSearchEntries.add(key);
+        if (!node.id) node.id = `search-${chapter.id}-${index}`;
+        return {
+          node,
+          text,
+          normalized,
+          chapterTitle,
+          priority: /^H[2-4]$/.test(node.tagName) ? 0 : node.tagName === 'SUMMARY' ? 1 : 2
+        };
+      }).filter(Boolean);
+    });
+
+    let activeResult = -1;
+    let currentMatches = [];
+
+    function foldWithMap(value) {
+      let folded = '';
+      const map = [];
+      [...value].forEach((character, rawIndex) => {
+        const part = character.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        [...part].forEach(unit => {
+          folded += unit;
+          map.push(rawIndex);
+        });
+      });
+      return { folded, map };
+    }
+
+    function makeSnippet(text, query) {
+      const { folded, map } = foldWithMap(text);
+      const matchAt = folded.indexOf(query);
+      if (matchAt < 0) return text.slice(0, 180);
+      const rawStart = map[matchAt] ?? 0;
+      const rawEnd = (map[matchAt + query.length - 1] ?? rawStart) + 1;
+      const start = Math.max(0, rawStart - 62);
+      const end = Math.min(text.length, rawEnd + 105);
+      return `${start > 0 ? '...' : ''}${text.slice(start, end)}${end < text.length ? '...' : ''}`;
+    }
+
+    function addHighlightedText(container, text, query) {
+      const { folded, map } = foldWithMap(text);
+      const matchAt = folded.indexOf(query);
+      if (matchAt < 0) {
+        container.textContent = text;
+        return;
+      }
+      const start = map[matchAt];
+      const end = (map[matchAt + query.length - 1] ?? start) + 1;
+      container.append(document.createTextNode(text.slice(0, start)));
+      const mark = document.createElement('mark');
+      mark.textContent = text.slice(start, end);
+      container.append(mark, document.createTextNode(text.slice(end)));
+    }
+
+    function closeSearch() {
+      searchResults.hidden = true;
+      search.setAttribute('aria-expanded', 'false');
+      activeResult = -1;
+    }
+
+    function setActiveResult(index) {
+      const buttons = [...searchResults.querySelectorAll('.search-result')];
+      if (!buttons.length) return;
+      activeResult = (index + buttons.length) % buttons.length;
+      buttons.forEach((button, buttonIndex) => {
+        const active = buttonIndex === activeResult;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+      });
+      buttons[activeResult].scrollIntoView({ block: 'nearest' });
+    }
+
+    function goToSearchResult(result) {
+      result.node.closest('details')?.setAttribute('open', '');
+      result.node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      result.node.classList.remove('search-target');
+      void result.node.offsetWidth;
+      result.node.classList.add('search-target');
+      window.setTimeout(() => result.node.classList.remove('search-target'), 2300);
+      body.classList.remove('nav-open');
+      closeSearch();
+    }
+
+    function renderSearch(rawQuery) {
+      const query = normalize(rawQuery);
+      searchResults.replaceChildren();
+      activeResult = -1;
+      if (!query) {
+        closeSearch();
+        return;
+      }
+
+      currentMatches = searchIndex
+        .filter(item => item.normalized.includes(query))
+        .sort((a, b) => {
+          const startDifference = Number(!a.normalized.startsWith(query)) - Number(!b.normalized.startsWith(query));
+          return startDifference || a.priority - b.priority || a.text.length - b.text.length;
+        })
+        .slice(0, 10);
+
+      if (!currentMatches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'search-empty';
+        empty.textContent = 'No encontré coincidencias. Probá con una palabra más general o una sigla.';
+        searchResults.append(empty);
+      } else {
+        const summary = document.createElement('div');
+        summary.className = 'search-summary';
+        summary.textContent = `${currentMatches.length}${currentMatches.length === 10 ? '+' : ''} coincidencias`;
+        searchResults.append(summary);
+
+        currentMatches.forEach((result, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'search-result';
+          button.setAttribute('role', 'option');
+          button.setAttribute('aria-selected', 'false');
+
+          const chapterLabel = document.createElement('small');
+          chapterLabel.textContent = result.chapterTitle;
+          const snippet = document.createElement('span');
+          addHighlightedText(snippet, makeSnippet(result.text, query), query);
+          button.append(chapterLabel, snippet);
+          button.addEventListener('click', () => goToSearchResult(result));
+          button.addEventListener('mouseenter', () => setActiveResult(index));
+          searchResults.append(button);
+        });
+      }
+
+      searchResults.hidden = false;
+      search.setAttribute('aria-expanded', 'true');
+    }
+
+    search.addEventListener('input', event => renderSearch(event.target.value));
+    search.addEventListener('focus', () => {
+      if (search.value) renderSearch(search.value);
+    });
+    search.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeSearch();
+        return;
+      }
+      if (!currentMatches.length || searchResults.hidden) return;
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        setActiveResult(activeResult + 1);
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        setActiveResult(activeResult - 1);
+      } else if (event.key === 'Enter' && activeResult >= 0) {
+        event.preventDefault();
+        goToSearchResult(currentMatches[activeResult]);
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!searchWrap.contains(event.target)) closeSearch();
+    });
+
+    const initialQuery = new URLSearchParams(window.location.search).get('buscar');
+    if (initialQuery) {
+      search.value = initialQuery;
+      renderSearch(initialQuery);
+    }
+
+    function loadHighlights() {
+      try {
+        const stored = JSON.parse(localStorage.getItem(highlightStorageKey) || '[]');
+        return Array.isArray(stored) ? stored.filter(item =>
+          item &&
+          typeof item.id === 'string' &&
+          typeof item.chapterId === 'string' &&
+          Number.isInteger(item.start) &&
+          Number.isInteger(item.end) &&
+          item.start >= 0 &&
+          item.end > item.start
+        ) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    let highlights = loadHighlights();
+    let pendingHighlight = null;
+    let activeHighlightId = null;
+    let fixedHighlightMode = localStorage.getItem(highlightModeStorageKey) === 'true';
+    let activeHighlightColor = localStorage.getItem(highlightColorStorageKey) || 'yellow';
+    if (!highlightColors.some(button => button.dataset.color === activeHighlightColor)) activeHighlightColor = 'yellow';
+    const highlightHistory = [];
+    const highlightRedo = [];
+
+    function saveHighlights() {
+      localStorage.setItem(highlightStorageKey, JSON.stringify(highlights));
+    }
+
+    function cloneHighlights(items = highlights) {
+      return items.map(item => ({ ...item }));
+    }
+
+    function recordHighlightState() {
+      highlightHistory.push(cloneHighlights());
+      if (highlightHistory.length > 100) highlightHistory.shift();
+      highlightRedo.length = 0;
+    }
+
+    function unwrapHighlights() {
+      document.querySelectorAll('mark.user-highlight').forEach(mark => {
+        mark.replaceWith(document.createTextNode(mark.textContent));
+      });
+      chapters.forEach(chapter => chapter.normalize());
+    }
+
+    function wrapHighlight(item) {
+      const chapter = document.getElementById(item.chapterId);
+      if (!chapter) return;
+
+      const walker = document.createTreeWalker(chapter, NodeFilter.SHOW_TEXT);
+      const segments = [];
+      let position = 0;
+      let node;
+
+      while ((node = walker.nextNode())) {
+        const nextPosition = position + node.data.length;
+        if (item.start < nextPosition && item.end > position) {
+          segments.push({
+            node,
+            start: Math.max(0, item.start - position),
+            end: Math.min(node.data.length, item.end - position)
+          });
+        }
+        position = nextPosition;
+        if (position >= item.end) break;
+      }
+
+      segments.reverse().forEach(segment => {
+        if (segment.end <= segment.start) return;
+        const range = document.createRange();
+        range.setStart(segment.node, segment.start);
+        range.setEnd(segment.node, segment.end);
+        const mark = document.createElement('mark');
+        mark.className = 'user-highlight';
+        mark.dataset.highlightId = item.id;
+        mark.dataset.color = item.color || 'yellow';
+        range.surroundContents(mark);
+      });
+    }
+
+    function renderHighlights() {
+      unwrapHighlights();
+      let repaired = false;
+
+      highlights.forEach(item => {
+        const chapter = document.getElementById(item.chapterId);
+        if (!chapter || !item.quote) return;
+        const chapterText = chapter.textContent;
+        if (chapterText.slice(item.start, item.end) !== item.quote) {
+          const newStart = chapterText.indexOf(item.quote);
+          if (newStart >= 0) {
+            item.start = newStart;
+            item.end = newStart + item.quote.length;
+            repaired = true;
+          } else {
+            const matches = chapters.map(candidate => ({
+              chapter: candidate,
+              start: candidate.textContent.indexOf(item.quote)
+            })).filter(match => match.start >= 0);
+
+            if (matches.length === 1) {
+              item.chapterId = matches[0].chapter.id;
+              item.start = matches[0].start;
+              item.end = matches[0].start + item.quote.length;
+              repaired = true;
+            }
+          }
+        }
+      });
+
+      [...highlights]
+        .sort((a, b) => a.chapterId.localeCompare(b.chapterId) || b.start - a.start)
+        .forEach(wrapHighlight);
+
+      if (repaired) saveHighlights();
+    }
+
+    function clearSelectedHighlight() {
+      document.querySelectorAll('mark.user-highlight.selected').forEach(mark => mark.classList.remove('selected'));
+    }
+
+    function renderHighlightControls() {
+      body.classList.toggle('highlight-mode', fixedHighlightMode);
+      highlightPin.classList.toggle('active', fixedHighlightMode);
+      highlightPin.setAttribute('aria-pressed', String(fixedHighlightMode));
+      highlightPin.setAttribute('aria-label', fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Dejar resaltador fijo');
+      highlightPin.title = fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Dejar resaltador fijo';
+      highlightPin.textContent = fixedHighlightMode ? 'Fijo' : 'Fijar';
+      highlightHelp.classList.toggle('active', fixedHighlightMode);
+      highlightHelp.setAttribute('aria-pressed', String(fixedHighlightMode));
+      highlightHelp.title = fixedHighlightMode ? 'Desactivar resaltador fijo' : 'Activar resaltador fijo';
+      highlightColors.forEach(button => {
+        const active = button.dataset.color === activeHighlightColor;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+    }
+
+    function setActiveHighlightColor(color) {
+      activeHighlightColor = color;
+      localStorage.setItem(highlightColorStorageKey, color);
+      renderHighlightControls();
+    }
+
+    function closeHighlightToolbar(force = false) {
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      if (fixedHighlightMode && !force) {
+        showHighlightToolbar('fixed');
+        return;
+      }
+      highlightToolbar.hidden = true;
+    }
+
+    function showHighlightToolbar(mode) {
+      const editing = mode === 'edit';
+      const help = mode === 'help';
+      const fixed = mode === 'fixed';
+      highlightLabel.textContent = editing
+        ? 'Editar resaltado'
+        : help
+          ? 'Seleccioná texto para resaltarlo'
+          : fixed
+            ? 'Resaltador fijo'
+            : 'Resaltar selección';
+      highlightRemove.hidden = !editing;
+      highlightColors.forEach(button => { button.disabled = help; });
+      renderHighlightControls();
+      highlightToolbar.hidden = false;
+    }
+
+    function setFixedHighlightMode(enabled) {
+      fixedHighlightMode = enabled;
+      localStorage.setItem(highlightModeStorageKey, String(enabled));
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      renderHighlightControls();
+      if (enabled) showHighlightToolbar('fixed');
+      else closeHighlightToolbar(true);
+      body.classList.remove('nav-open');
+    }
+
+    function chapterOffset(chapter, node, offset) {
+      const range = document.createRange();
+      range.selectNodeContents(chapter);
+      range.setEnd(node, offset);
+      return range.toString().length;
+    }
+
+    function isWordCharacter(character) {
+      return Boolean(character) && /[\p{L}\p{N}\p{M}_]/u.test(character);
+    }
+
+    function snapToWholeWords(text, start, end) {
+      while (start > 0 && isWordCharacter(text[start - 1])) start -= 1;
+      while (end < text.length && isWordCharacter(text[end])) end += 1;
+      return { start, end };
+    }
+
+    function captureHighlightSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return;
+
+      const range = selection.getRangeAt(0);
+      const startElement = range.startContainer.nodeType === Node.TEXT_NODE
+        ? range.startContainer.parentElement
+        : range.startContainer;
+      const endElement = range.endContainer.nodeType === Node.TEXT_NODE
+        ? range.endContainer.parentElement
+        : range.endContainer;
+      const startChapter = startElement?.closest?.('.chapter');
+      const endChapter = endElement?.closest?.('.chapter');
+      if (!startChapter || startChapter !== endChapter || !content.contains(startChapter)) return;
+
+      const rawText = range.toString();
+      const leadingSpace = rawText.length - rawText.trimStart().length;
+      const trailingSpace = rawText.length - rawText.trimEnd().length;
+      if (!rawText.trim()) return;
+
+      const chapterText = startChapter.textContent;
+      const selectionStart = chapterOffset(startChapter, range.startContainer, range.startOffset) + leadingSpace;
+      const selectionEnd = chapterOffset(startChapter, range.endContainer, range.endOffset) - trailingSpace;
+      const { start, end } = snapToWholeWords(chapterText, selectionStart, selectionEnd);
+      if (end <= start) return;
+
+      pendingHighlight = {
+        chapterId: startChapter.id,
+        start,
+        end,
+        quote: chapterText.slice(start, end)
+      };
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      if (fixedHighlightMode) addHighlight(activeHighlightColor);
+      else showHighlightToolbar('selection');
+    }
+
+    function makeHighlightId() {
+      return `hl-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function addHighlight(color) {
+      if (!pendingHighlight) return;
+      recordHighlightState();
+      setActiveHighlightColor(color);
+      let start = pendingHighlight.start;
+      let end = pendingHighlight.end;
+
+      const overlaps = highlights.filter(item =>
+        item.chapterId === pendingHighlight.chapterId &&
+        item.start < end &&
+        item.end > start
+      );
+      overlaps.forEach(item => {
+        start = Math.min(start, item.start);
+        end = Math.max(end, item.end);
+      });
+
+      const chapter = document.getElementById(pendingHighlight.chapterId);
+      const overlapIds = new Set(overlaps.map(item => item.id));
+      highlights = highlights.filter(item => !overlapIds.has(item.id));
+      highlights.push({
+        id: makeHighlightId(),
+        chapterId: pendingHighlight.chapterId,
+        start,
+        end,
+        quote: chapter.textContent.slice(start, end),
+        color
+      });
+      saveHighlights();
+      renderHighlights();
+      window.getSelection()?.removeAllRanges();
+      closeHighlightToolbar();
+    }
+
+    function recolorHighlight(color) {
+      const item = highlights.find(highlight => highlight.id === activeHighlightId);
+      if (!item) return;
+      recordHighlightState();
+      setActiveHighlightColor(color);
+      item.color = color;
+      saveHighlights();
+      renderHighlights();
+      closeHighlightToolbar();
+    }
+
+    highlightColors.forEach(button => button.addEventListener('click', () => {
+      const color = button.dataset.color;
+      if (activeHighlightId) recolorHighlight(color);
+      else if (pendingHighlight) addHighlight(color);
+      else {
+        setActiveHighlightColor(color);
+        if (fixedHighlightMode) showHighlightToolbar('fixed');
+      }
+    }));
+
+    highlightRemove.addEventListener('click', () => {
+      if (!activeHighlightId) return;
+      recordHighlightState();
+      highlights = highlights.filter(item => item.id !== activeHighlightId);
+      saveHighlights();
+      renderHighlights();
+      closeHighlightToolbar();
+    });
+
+    function restoreHighlightState(state) {
+      highlights = cloneHighlights(state);
+      pendingHighlight = null;
+      activeHighlightId = null;
+      clearSelectedHighlight();
+      saveHighlights();
+      renderHighlights();
+      if (fixedHighlightMode) showHighlightToolbar('fixed');
+      else closeHighlightToolbar(true);
+    }
+
+    function undoHighlight() {
+      if (!highlightHistory.length) return;
+      highlightRedo.push(cloneHighlights());
+      restoreHighlightState(highlightHistory.pop());
+    }
+
+    function redoHighlight() {
+      if (!highlightRedo.length) return;
+      highlightHistory.push(cloneHighlights());
+      restoreHighlightState(highlightRedo.pop());
+    }
+
+    document.addEventListener('keydown', event => {
+      const target = event.target;
+      const isEditable = target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target.isContentEditable;
+      if (isEditable || !(event.ctrlKey || event.metaKey)) return;
+
+      const key = event.key.toLowerCase();
+      if (key === 'z' && event.shiftKey) {
+        event.preventDefault();
+        redoHighlight();
+      } else if (key === 'z') {
+        event.preventDefault();
+        undoHighlight();
+      } else if (key === 'y') {
+        event.preventDefault();
+        redoHighlight();
+      }
+    });
+
+    highlightPin.addEventListener('click', () => setFixedHighlightMode(!fixedHighlightMode));
+    document.getElementById('highlight-close').addEventListener('click', () => {
+      if (fixedHighlightMode) setFixedHighlightMode(false);
+      else closeHighlightToolbar(true);
+    });
+    highlightHelp.addEventListener('click', () => setFixedHighlightMode(!fixedHighlightMode));
+
+    content.addEventListener('click', event => {
+      const mark = event.target.closest('mark.user-highlight');
+      if (!mark) return;
+      event.preventDefault();
+      window.getSelection()?.removeAllRanges();
+      pendingHighlight = null;
+      activeHighlightId = mark.dataset.highlightId;
+      clearSelectedHighlight();
+      document.querySelectorAll(`mark.user-highlight[data-highlight-id="${activeHighlightId}"]`)
+        .forEach(part => part.classList.add('selected'));
+      showHighlightToolbar('edit');
+    });
+
+    let pointerSelecting = false;
+    document.addEventListener('pointerdown', event => {
+      pointerSelecting = content.contains(event.target);
+      if (highlightToolbar.contains(event.target)) return;
+      if (!event.target.closest('mark.user-highlight')) closeHighlightToolbar();
+    });
+    document.addEventListener('pointerup', event => {
+      pointerSelecting = false;
+      if (highlightToolbar.contains(event.target) || event.target.closest('mark.user-highlight')) return;
+      window.setTimeout(captureHighlightSelection, 20);
+    });
+    document.addEventListener('pointercancel', () => { pointerSelecting = false; });
+    document.addEventListener('keyup', event => {
+      if (event.key.startsWith('Arrow') || event.key === 'Shift') captureHighlightSelection();
+    });
+    let selectionTimer;
+    document.addEventListener('selectionchange', () => {
+      window.clearTimeout(selectionTimer);
+      selectionTimer = window.setTimeout(() => {
+        if (pointerSelecting) return;
+        const selection = window.getSelection();
+        if (selection && !selection.isCollapsed) captureHighlightSelection();
+      }, 120);
+    });
+
+    renderHighlights();
+    renderHighlightControls();
+    if (fixedHighlightMode) showHighlightToolbar('fixed');
+  </script>
+  <script>
+    const studyNotes = document.getElementById('study-notes');
+    const notesHeader = document.getElementById('notes-header');
+    const notesCollapse = document.getElementById('notes-collapse');
+    const notesExpand = document.getElementById('notes-expand');
+    const notesImport = document.getElementById('notes-import');
+    const notesFile = document.getElementById('notes-file');
+    const notesDownload = document.getElementById('notes-download');
+    const notesPreview = document.getElementById('notes-preview');
+    const notesSaved = document.querySelector('.notes-saved');
+    const notesPreviewToggle = document.getElementById('notes-preview-toggle');
+    const notesCommandButtons = [...document.querySelectorAll('[data-note-command]')];
+    const notesStorageKey = 'aa-study-notes-v1';
+    const notesStateKey = 'aa-study-notes-collapsed-v1';
+    let notesAnimationTimer;
+    let notesSaveTimer;
+    let notesPreviewVisible = false;
+
+    studyNotes.value = localStorage.getItem(notesStorageKey) || '';
+
+    function setNotesOpen(open, animate = true) {
+      window.clearTimeout(notesAnimationTimer);
+      localStorage.setItem(notesStateKey, String(!open));
+      document.body.classList.remove('notes-opening', 'notes-closing');
+
+      if (open) {
+        document.body.classList.remove('notes-collapsed');
+        document.body.classList.add('notes-open');
+        if (animate) {
+          document.body.classList.add('notes-opening');
+          notesAnimationTimer = window.setTimeout(() => document.body.classList.remove('notes-opening'), 210);
+        }
+        window.setTimeout(() => studyNotes.focus(), animate ? 220 : 0);
+        return;
+      }
+
+      if (!animate) {
+        document.body.classList.remove('notes-open');
+        document.body.classList.add('notes-collapsed');
+        return;
+      }
+
+      document.body.classList.add('notes-closing');
+      notesAnimationTimer = window.setTimeout(() => {
+        document.body.classList.remove('notes-open', 'notes-closing');
+        document.body.classList.add('notes-collapsed');
+      }, 180);
+    }
+
+    if (localStorage.getItem(notesStateKey) === 'true') setNotesOpen(false, false);
+    notesCollapse.addEventListener('click', () => setNotesOpen(false));
+    notesExpand.addEventListener('click', () => setNotesOpen(true));
+    notesHeader.addEventListener('click', event => {
+      if (!event.target.closest('button')) setNotesOpen(false);
+    });
+
+    function saveNotes() {
+      window.clearTimeout(notesSaveTimer);
+      localStorage.setItem(notesStorageKey, studyNotes.value);
+      notesSaved.classList.remove('is-saving');
+      notesSaved.setAttribute('aria-label', 'Guardado automáticamente');
+      notesSaved.title = 'Guardado automáticamente';
+    }
+
+    studyNotes.addEventListener('input', () => {
+      window.clearTimeout(notesSaveTimer);
+      notesSaved.classList.add('is-saving');
+      notesSaved.setAttribute('aria-label', 'Guardando notas');
+      notesSaved.title = 'Guardando notas';
+      notesSaveTimer = window.setTimeout(saveNotes, 450);
+    });
+    window.addEventListener('pagehide', saveNotes);
+
+    function appendInlineMarkdown(parent, text) {
+      const tokenPattern = /(\*\*[^*\n]+\*\*|`[^`\n]+`|\*[^*\n]+\*)/g;
+      let cursor = 0;
+      for (const match of text.matchAll(tokenPattern)) {
+        parent.append(document.createTextNode(text.slice(cursor, match.index)));
+        const token = match[0];
+        let element;
+        if (token.startsWith('**')) {
+          element = document.createElement('strong');
+          element.textContent = token.slice(2, -2);
+        } else if (token.startsWith('`')) {
+          element = document.createElement('code');
+          element.textContent = token.slice(1, -1);
+        } else {
+          element = document.createElement('em');
+          element.textContent = token.slice(1, -1);
+        }
+        parent.append(element);
+        cursor = match.index + token.length;
+      }
+      parent.append(document.createTextNode(text.slice(cursor)));
+    }
+
+    function renderNotesPreview() {
+      notesPreview.replaceChildren();
+      const markdown = studyNotes.value;
+      if (!markdown.trim()) {
+        const empty = document.createElement('p');
+        empty.textContent = 'Todavía no hay notas.';
+        empty.style.color = 'var(--muted)';
+        notesPreview.append(empty);
+        return;
+      }
+
+      let currentList = null;
+      let currentListType = '';
+      let inCodeBlock = false;
+      let codeLines = [];
+
+      function resetList() {
+        currentList = null;
+        currentListType = '';
+      }
+
+      function appendCodeBlock() {
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.textContent = codeLines.join('\n');
+        pre.append(code);
+        notesPreview.append(pre);
+        codeLines = [];
+      }
+
+      function getList(type) {
+        if (currentList && currentListType === type) return currentList;
+        currentList = document.createElement(type === 'ordered' ? 'ol' : 'ul');
+        currentListType = type;
+        notesPreview.append(currentList);
+        return currentList;
+      }
+
+      for (const line of markdown.split(/\r?\n/)) {
+        if (/^```/.test(line)) {
+          resetList();
+          if (inCodeBlock) appendCodeBlock();
+          inCodeBlock = !inCodeBlock;
+          continue;
+        }
+        if (inCodeBlock) {
+          codeLines.push(line);
+          continue;
+        }
+        if (!line.trim()) {
+          resetList();
+          continue;
+        }
+
+        const heading = line.match(/^(#{1,3})\s+(.+)$/);
+        if (heading) {
+          resetList();
+          const element = document.createElement(`h${heading[1].length}`);
+          appendInlineMarkdown(element, heading[2]);
+          notesPreview.append(element);
+          continue;
+        }
+
+        const task = line.match(/^[-*]\s+\[([ xX])\]\s+(.+)$/);
+        if (task) {
+          const item = document.createElement('li');
+          item.className = 'notes-task';
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.checked = task[1].toLowerCase() === 'x';
+          checkbox.disabled = true;
+          const label = document.createElement('span');
+          appendInlineMarkdown(label, task[2]);
+          item.append(checkbox, label);
+          getList('task').append(item);
+          continue;
+        }
+
+        const unordered = line.match(/^[-*]\s+(.+)$/);
+        if (unordered) {
+          const item = document.createElement('li');
+          appendInlineMarkdown(item, unordered[1]);
+          getList('unordered').append(item);
+          continue;
+        }
+
+        const ordered = line.match(/^\d+\.\s+(.+)$/);
+        if (ordered) {
+          const item = document.createElement('li');
+          appendInlineMarkdown(item, ordered[1]);
+          getList('ordered').append(item);
+          continue;
+        }
+
+        resetList();
+        const quote = line.match(/^>\s?(.*)$/);
+        const element = document.createElement(quote ? 'blockquote' : 'p');
+        appendInlineMarkdown(element, quote ? quote[1] : line);
+        notesPreview.append(element);
+      }
+
+      if (inCodeBlock || codeLines.length) appendCodeBlock();
+    }
+
+    function setNotesPreview(visible) {
+      notesPreviewVisible = visible;
+      if (visible) renderNotesPreview();
+      studyNotes.hidden = visible;
+      notesPreview.hidden = !visible;
+      notesPreviewToggle.textContent = visible ? 'Editar' : 'Vista';
+      notesPreviewToggle.classList.toggle('active', visible);
+      if (!visible) studyNotes.focus();
+    }
+
+    function dispatchNotesInput() {
+      studyNotes.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    function wrapNotesSelection(before, after, placeholder) {
+      if (notesPreviewVisible) setNotesPreview(false);
+      const start = studyNotes.selectionStart;
+      const end = studyNotes.selectionEnd;
+      const selected = studyNotes.value.slice(start, end) || placeholder;
+      const replacement = `${before}${selected}${after}`;
+      studyNotes.setRangeText(replacement, start, end, 'end');
+      studyNotes.setSelectionRange(start + before.length, start + before.length + selected.length);
+      dispatchNotesInput();
+      studyNotes.focus();
+    }
+
+    function prefixNotesLines(prefix) {
+      if (notesPreviewVisible) setNotesPreview(false);
+      const value = studyNotes.value;
+      const start = studyNotes.selectionStart;
+      const end = studyNotes.selectionEnd;
+      const blockStart = value.lastIndexOf('\n', Math.max(0, start - 1)) + 1;
+      const nextBreak = value.indexOf('\n', end);
+      const blockEnd = nextBreak === -1 ? value.length : nextBreak;
+      const replacement = value.slice(blockStart, blockEnd).split('\n').map(line => `${prefix}${line}`).join('\n');
+      studyNotes.setRangeText(replacement, blockStart, blockEnd, 'end');
+      studyNotes.setSelectionRange(blockStart, blockStart + replacement.length);
+      dispatchNotesInput();
+      studyNotes.focus();
+    }
+
+    notesCommandButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const command = button.dataset.noteCommand;
+        if (command === 'heading') prefixNotesLines('## ');
+        if (command === 'bold') wrapNotesSelection('**', '**', 'texto');
+        if (command === 'italic') wrapNotesSelection('*', '*', 'texto');
+        if (command === 'list') prefixNotesLines('- ');
+        if (command === 'task') prefixNotesLines('- [ ] ');
+        if (command === 'code') wrapNotesSelection('`', '`', 'código');
+      });
+    });
+
+    studyNotes.addEventListener('keydown', event => {
+      if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
+      const key = event.key.toLowerCase();
+      let handled = true;
+
+      if (!event.shiftKey && key === 'b') wrapNotesSelection('**', '**', 'texto');
+      else if (!event.shiftKey && key === 'i') wrapNotesSelection('*', '*', 'texto');
+      else if (!event.shiftKey && event.key === '`') wrapNotesSelection('`', '`', 'código');
+      else if (event.shiftKey && event.code === 'Digit7') prefixNotesLines('1. ');
+      else if (event.shiftKey && event.code === 'Digit8') prefixNotesLines('- ');
+      else handled = false;
+
+      if (handled) event.preventDefault();
+    });
+
+    notesPreviewToggle.addEventListener('click', () => setNotesPreview(!notesPreviewVisible));
+    notesImport.addEventListener('click', () => notesFile.click());
+    notesFile.addEventListener('change', async () => {
+      const [file] = notesFile.files;
+      if (!file) return;
+      studyNotes.value = await file.text();
+      dispatchNotesInput();
+      if (notesPreviewVisible) renderNotesPreview();
+      notesFile.value = '';
+    });
+    notesDownload.addEventListener('click', () => {
+      const blob = new Blob([studyNotes.value], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'notas-aprendizaje-automatico.md';
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+  <script>
+    const installAppButton = document.getElementById('install-app');
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+    let installPrompt = null;
+
+    if (!isStandalone && isIOS) installAppButton.hidden = false;
+
+    window.addEventListener('beforeinstallprompt', event => {
+      event.preventDefault();
+      installPrompt = event;
+      installAppButton.hidden = false;
+    });
+
+    installAppButton.addEventListener('click', async () => {
+      if (installPrompt) {
+        installPrompt.prompt();
+        const choice = await installPrompt.userChoice;
+        installPrompt = null;
+        if (choice.outcome === 'accepted') installAppButton.hidden = true;
+        return;
+      }
+      if (isIOS) window.alert('En Safari, tocá Compartir y después Agregar a inicio.');
+    });
+
+    window.addEventListener('appinstalled', () => {
+      installPrompt = null;
+      installAppButton.hidden = true;
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+  </script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      securityLevel: 'loose',
+      theme: 'base',
+      themeVariables: {
+        background: '#f6faf9',
+        primaryColor: '#d2efe9',
+        primaryBorderColor: '#0d9488',
+        primaryTextColor: '#0f2a25',
+        secondaryColor: '#e7ecfb',
+        tertiaryColor: '#eaf1ef',
+        lineColor: '#5f7a73',
+        fontFamily: 'Inter, system-ui, sans-serif',
+        fontSize: '15px'
+      },
+      flowchart: { htmlLabels: true, curve: 'basis' },
+      sequence: { useMaxWidth: true }
+    });
+  </script>
+  <script>
+    (function () {
+      var KEY = 'ebt2-hide-code';
+      var btn = document.getElementById('code-toggle');
+      var lbl = document.getElementById('code-toggle-label');
+      function apply(hidden) {
+        document.body.classList.toggle('hide-code', hidden);
+        if (btn) { btn.classList.toggle('active', hidden); btn.setAttribute('aria-pressed', hidden ? 'true' : 'false'); }
+        if (lbl) { lbl.textContent = hidden ? 'Fórmulas ocultas' : 'Fórmulas'; }
+      }
+      var hidden = localStorage.getItem(KEY) === '1';
+      apply(hidden);
+      if (btn) btn.addEventListener('click', function () {
+        hidden = !hidden;
+        localStorage.setItem(KEY, hidden ? '1' : '0');
+        apply(hidden);
+      });
+    })();
+  </script>
+</body>
+</html>
