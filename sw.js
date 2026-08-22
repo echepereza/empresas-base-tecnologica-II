@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ebt-2-v3';
+const CACHE_NAME = 'ebt-2-v4';
 const APP_SHELL = [
   './',
   './index.html',

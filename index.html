@@ -3246,6 +3246,10 @@
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
       startOnLoad: true,
+      // Mermaid saca el id del SVG de Date.now(): los diagramas que se renderizan
+      // en el MISMO milisegundo comparten id y se apilan todos dentro del primero
+      // (el resto queda vacio). deterministicIds usa un contador y los separa.
+      deterministicIds: true,
       securityLevel: 'loose',
       theme: 'base',
       themeVariables: {
